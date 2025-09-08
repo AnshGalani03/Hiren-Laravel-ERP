@@ -40,25 +40,30 @@
                 ajax: "{{ route('dealers.index') }}",
                 columns: [{
                         data: 'dealer_name',
-                        name: 'dealer_name'
+                        name: 'dealer_name',
+                        responsivePriority: 1
                     },
                     {
                         data: 'mobile_no',
-                        name: 'mobile_no'
+                        name: 'mobile_no',
+                        responsivePriority: 2
                     },
                     {
                         data: 'gst',
-                        name: 'gst'
+                        name: 'gst',
+                        responsivePriority: 3
                     },
                     {
                         data: 'address',
-                        name: 'address'
+                        name: 'address',
+                        responsivePriority: 4
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1
                     },
                 ]
             });

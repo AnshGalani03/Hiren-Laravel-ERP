@@ -50,33 +50,40 @@
                     // },
                     {
                         data: 'contractor_name',
-                        name: 'contractor_name'
+                        name: 'contractor_name',
+                        responsivePriority: 1
                     },
                     {
                         data: 'department_name',
-                        name: 'department_name'
+                        name: 'department_name',
+                        responsivePriority: 2
                     },
                     {
                         data: 'amount_project',
-                        name: 'amount_project'
+                        name: 'amount_project',
+                        responsivePriority: 3
                     },
                     {
                         data: 'date',
-                        name: 'date'
+                        name: 'date',
+                        responsivePriority: 4
                     },
                     {
                         data: 'time_limit',
-                        name: 'time_limit'
+                        name: 'time_limit',
+                        responsivePriority: 5
                     },
                     {
                         data: 'work_order_date',
-                        name: 'work_order_date'
+                        name: 'work_order_date',
+                        responsivePriority: 6
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1
                     },
                 ]
             });

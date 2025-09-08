@@ -42,33 +42,40 @@
                 ajax: "{{ route('employees.index') }}",
                 columns: [{
                         data: 'name',
-                        name: 'name'
+                        name: 'name',
+                        responsivePriority: 1
                     },
                     {
                         data: 'designation',
-                        name: 'designation'
+                        name: 'designation',
+                        responsivePriority: 3
                     },
                     {
                         data: 'mobile_no',
-                        name: 'mobile_no'
+                        name: 'mobile_no',
+                        responsivePriority: 2
                     },
                     {
                         data: 'alt_contact_no',
-                        name: 'alt_contact_no'
+                        name: 'alt_contact_no',
+                        responsivePriority: 4
                     },
                     {
                         data: 'pan_no',
-                        name: 'pan_no'
+                        name: 'pan_no',
+                        responsivePriority: 5
                     },
                     {
                         data: 'aadhar_no',
-                        name: 'aadhar_no'
+                        name: 'aadhar_no',
+                        responsivePriority: 6
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1
                     },
                 ]
             });

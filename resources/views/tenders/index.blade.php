@@ -43,11 +43,13 @@
                 ajax: "{{ route('tenders.index') }}",
                 columns: [{
                         data: 'work_name',
-                        name: 'work_name'
+                        name: 'work_name',
+                        responsivePriority: 1
                     },
                     {
                         data: 'department',
-                        name: 'department'
+                        name: 'department',
+                        responsivePriority: 2
                     },
                     {
                         data: 'amount_emd_fdr',
@@ -56,7 +58,8 @@
                             return '₹' + parseFloat(data).toLocaleString('en-IN', {
                                 minimumFractionDigits: 2
                             });
-                        }
+                        },
+                        responsivePriority: 3
                     },
                     {
                         data: 'amount_dd',
@@ -65,25 +68,30 @@
                             return '₹' + parseFloat(data).toLocaleString('en-IN', {
                                 minimumFractionDigits: 2
                             });
-                        }
+                        },
+                        responsivePriority: 4
                     },
                     {
                         data: 'above_below',
-                        name: 'above_below'
+                        name: 'above_below',
+                        responsivePriority: 5
                     },
                     {
                         data: 'date',
-                        name: 'date'
+                        name: 'date',
+                        responsivePriority: 6
                     },
                     {
                         data: 'result',
-                        name: 'result'
+                        name: 'result',
+                        responsivePriority: 7
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1
                     },
                 ]
             });
