@@ -5,9 +5,9 @@
                 {{ __('Dealer Details: ') . $dealer->dealer_name }}
             </h2>
             <div>
-                <a href="{{ route('invoices.create', ['dealer_id' => $dealer->id]) }}" class="btn btn-success">Add Invoice</a>
-                <a href="{{ route('transactions.create', ['type' => 'incoming', 'dealer_id' => $dealer->id]) }}" class="btn btn-info">Add Transaction</a>
-                <a href="{{ route('dealers.edit', $dealer) }}" class="btn btn-warning">Edit Dealer</a>
+                <a href="{{ route('invoices.create', ['dealer_id' => $dealer->id]) }}" class="btn btn-success btn-sm">Add Invoice</a>
+                <a href="{{ route('transactions.create', ['type' => 'incoming', 'dealer_id' => $dealer->id]) }}" class="btn btn-info btn-sm">Add Transaction</a>
+                <a href="{{ route('dealers.edit', $dealer) }}" class="btn btn-warning btn-sm">Edit Dealer</a>
             </div>
         </div>
     </x-slot>
@@ -55,8 +55,8 @@
         <!-- Dealer Information Card -->
         <div class="col-md-6 mb-3">
             <div class="card h-100">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-user"></i> Dealer Information</h5>
+                <div class="card-header">
+                    <h5 class="mb-0">Dealer Information</h5>
                 </div>
                 <div class="card-body">
                     <table class="table table-borderless mb-0">
@@ -84,8 +84,8 @@
         <!-- Bank Details Card -->
         <div class="col-md-6 mb-3">
             <div class="card h-100">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-university"></i> Bank Details</h5>
+                <div class="card-header">
+                    <h5 class="mb-0">Bank Details</h5>
                 </div>
                 <div class="card-body">
                     <table class="table table-borderless mb-0">
