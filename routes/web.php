@@ -99,8 +99,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('sub-contractor-bills/{subContractorBill}', [SubContractorBillController::class, 'update'])->name('sub-contractor-bills.update');
     Route::delete('sub-contractor-bills/{subContractorBill}', [SubContractorBillController::class, 'destroy'])->name('sub-contractor-bills.destroy');
 
-    // Project Transactions Data
+    // Project Transactions Data in Data table
     Route::get('projects/{project}/transactions-data', [ProjectController::class, 'transactionsData'])->name('projects.transactions-data');
+
+    // Dealer Invoices and Transactions Data in Data table
+    Route::get('dealers/{dealer}/invoices-data', [DealerController::class, 'invoicesData'])->name('dealers.invoices-data');
+    Route::get('dealers/{dealer}/transactions-data', [DealerController::class, 'transactionsData'])->name('dealers.transactions-data');
 });
 
 require __DIR__ . '/auth.php';
