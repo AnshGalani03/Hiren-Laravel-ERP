@@ -8,6 +8,7 @@ use App\Models\Outgoing;
 use App\Models\Incoming;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Carbon\Carbon;
 
 class ProjectController extends Controller
 {
@@ -186,5 +187,100 @@ class ProjectController extends Controller
 
         $status = $project->active ? 'activated' : 'deactivated';
         return redirect()->route('projects.index')->with('success', "Project has been {$status} successfully.");
+    }
+
+    public function transactionsData(Request $request, Project $project)
+    {
+        if ($request->ajax()) {
+            $baseQuery = $project->transactions()->with(['dealer', 'incoming', 'outgoing']);
+
+            // Apply filters to base query
+            if ($request->filled('type')) {
+                $baseQuery->where('type', $request->type);
+            }
+
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $baseQuery->whereBetween('date', [
+                    Carbon::parse($request->from_date)->startOfDay(),
+                    Carbon::parse($request->to_date)->endOfDay(),
+                ]);
+            }
+
+            // Calculate summary using separate queries to avoid conflicts
+            $summaryBaseQuery = $project->transactions();
+
+            // Apply same filters to summary
+            if ($request->filled('type')) {
+                $summaryBaseQuery->where('type', $request->type);
+            }
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $summaryBaseQuery->whereBetween('date', [
+                    Carbon::parse($request->from_date)->startOfDay(),
+                    Carbon::parse($request->to_date)->endOfDay(),
+                ]);
+            }
+
+            // Calculate totals with separate queries
+            $totalIncoming = (clone $summaryBaseQuery)->where('type', 'incoming')->sum('amount') ?: 0;
+            $totalOutgoing = (clone $summaryBaseQuery)->where('type', 'outgoing')->sum('amount') ?: 0;
+            $incomingCount = (clone $summaryBaseQuery)->where('type', 'incoming')->count() ?: 0;
+            $outgoingCount = (clone $summaryBaseQuery)->where('type', 'outgoing')->count() ?: 0;
+            $netBalance = $totalIncoming - $totalOutgoing;
+
+            $dataTable = DataTables::of($baseQuery)
+                ->addIndexColumn()
+                ->editColumn('amount', function ($tx) {
+                    $sign = $tx->type === 'incoming' ? '+' : '-';
+                    $class = $tx->type === 'incoming' ? 'text-success' : 'text-danger';
+                    return "<span class='{$class}' data-amount='{$tx->amount}' data-type='{$tx->type}'>" . $sign . "₹" . number_format($tx->amount, 2) . "</span>";
+                })
+                ->editColumn('date', function ($tx) {
+                    return $tx->date->format('d/m/Y');
+                })
+                ->addColumn('category', function ($tx) {
+                    return $tx->type === 'incoming' ?
+                        ($tx->incoming->name ?? 'N/A') : ($tx->outgoing->name ?? 'N/A');
+                })
+                ->addColumn('linked_to', function ($tx) {
+                    $links = [];
+                    if ($tx->project) {
+                        $links[] = "<span class='badge bg-info'>Project: {$tx->project->name}</span>";
+                    }
+                    if ($tx->dealer) {
+                        $links[] = "<span class='badge bg-secondary'>Dealer: {$tx->dealer->dealer_name}</span>";
+                    }
+                    return implode('<br>', $links) ?: '<span class="text-muted">None</span>';
+                })
+                ->editColumn('type', function ($tx) {
+                    $icon = $tx->type === 'incoming' ? 'fa-arrow-up' : 'fa-arrow-down';
+                    $class = $tx->type === 'incoming' ? 'success' : 'danger';
+                    return "<span class='badge bg-{$class}'><i class='fas {$icon}'></i> " . ucfirst($tx->type) . "</span>";
+                })
+                ->addColumn('action', function ($tx) {
+                    return '
+                    <a href="' . route('transactions.edit', $tx->id) . '" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <button class="btn btn-danger btn-sm delete-transaction" data-id="' . $tx->id . '">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                ';
+                })
+                ->rawColumns(['amount', 'linked_to', 'type', 'action'])
+                ->with([
+                    'summary' => [
+                        'total_incoming' => $totalIncoming,
+                        'total_outgoing' => $totalOutgoing,
+                        'net_balance' => $netBalance,
+                        'incoming_count' => $incomingCount,
+                        'outgoing_count' => $outgoingCount,
+                        'total_count' => $incomingCount + $outgoingCount
+                    ]
+                ]);
+
+            return $dataTable->make(true);
+        }
+
+        return response()->json(['error' => 'Invalid request'], 400);
     }
 }

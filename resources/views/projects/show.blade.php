@@ -259,84 +259,349 @@
         </div>
     </div>
 
-
-    <!-- Rest of existing sections (Assigned Employees, Project Expenses, Project Incomes) -->
-    <!-- ... existing code ... -->
-
-    <!-- NEW: All Transactions Section -->
+    <!-- All Transactions Section -->
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">All Transactions ({{ $transactions->count() }})</h5>
+            <h5 class="mb-0"><i class="fas fa-exchange-alt text-info"></i> All Transactions</h5>
             <div>
-                <a href="{{ route('transactions.create', ['type' => 'incoming', 'project_id' => $project->id]) }}" class="btn btn-sm btn-success">Add Income</a>
-                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'project_id' => $project->id]) }}" class="btn btn-sm btn-danger">Add Expense</a>
+                @if($project->active)
+                <a href="{{ route('transactions.create', ['type' => 'incoming', 'project_id' => $project->id]) }}" class="btn btn-success btn-sm">
+                    <i class="fas fa-plus"></i> Add Income
+                </a>
+                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'project_id' => $project->id]) }}" class="btn btn-danger btn-sm">
+                    <i class="fas fa-plus"></i> Add Expense
+                </a>
+                @endif
             </div>
         </div>
+
+        <!-- Filters Section -->
+        <div class="card-body border-bottom">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="transaction_type_filter" class="form-label">Type</label>
+                    <select class="form-control" id="transaction_type_filter">
+                        <option value="">All Types</option>
+                        <option value="incoming">Incoming</option>
+                        <option value="outgoing">Outgoing</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="transaction_from_date" class="form-label">From Date</label>
+                    <input type="date" class="form-control" id="transaction_from_date">
+                </div>
+                <div class="col-md-3">
+                    <label for="transaction_to_date" class="form-label">To Date</label>
+                    <input type="date" class="form-control" id="transaction_to_date">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <div>
+                        <button type="button" class="btn btn-secondary w-100" id="reset_transaction_filters">
+                            <i class="fas fa-sync"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="card-body border-bottom bg-light">
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="card bg-success text-white h-100">
+                        <div class="card-body p-3">
+                            <h6 class="card-title"><i class="fas fa-arrow-up"></i> Total Incoming</h6>
+                            <h4 class="mb-0" id="project_total_incoming">₹0.00</h4>
+                            <small id="project_incoming_count">(0 transactions)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white h-100">
+                        <div class="card-body p-3">
+                            <h6 class="card-title"><i class="fas fa-arrow-down"></i> Total Outgoing</h6>
+                            <h4 class="mb-0" id="project_total_outgoing">₹0.00</h4>
+                            <small id="project_outgoing_count">(0 transactions)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white h-100">
+                        <div class="card-body p-3">
+                            <h6 class="card-title"><i class="fas fa-balance-scale"></i> Net Balance</h6>
+                            <h4 class="mb-0" id="project_net_balance">₹0.00</h4>
+                            <small id="project_total_count">(0 total)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-secondary text-white h-100">
+                        <div class="card-body p-3">
+                            <h6 class="card-title"><i class="fas fa-chart-pie"></i> Balance %</h6>
+                            <h4 class="mb-0" id="project_balance_percentage">0%</h4>
+                            <small>(Profit/Loss)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DataTable -->
         <div class="card-body">
-            @if($transactions->count() > 0)
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>Category</th>
-                            <th>Description</th>
-                            <th>Amount</th>
-                            <th>Date</th>
-                            <th>Linked Dealer</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($transactions as $transaction)
-                        <tr>
-                            <td>
-                                <span class="badge bg-{{ $transaction->type == 'incoming' ? 'success' : 'danger' }}">
-                                    {{ ucfirst($transaction->type) }}
-                                </span>
-                            </td>
-                            <td>
-                                @if($transaction->type == 'incoming' && $transaction->incoming)
-                                {{ $transaction->incoming->name }}
-                                @elseif($transaction->type == 'outgoing' && $transaction->outgoing)
-                                {{ $transaction->outgoing->name }}
-                                @else
-                                N/A
-                                @endif
-                            </td>
-                            <td>{{ $transaction->description }}</td>
-                            <td>₹{{ number_format($transaction->amount, 2) }}</td>
-                            <td>@formatDate($transaction->date)</td>
-                            <td>{{ $transaction->dealer ? $transaction->dealer->dealer_name : 'N/A' }}</td>
-                            <td>
-                                <a href="{{ route('transactions.edit', $transaction) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('transactions.destroy', $transaction) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3"><strong>Transaction Totals</strong></td>
-                            <td><strong>Income: ₹{{ number_format($totalTransactionIncomes, 2) }} | Expense: ₹{{ number_format($totalTransactionExpenses, 2) }}</strong></td>
-                            <td colspan="3"></td>
-                        </tr>
-                    </tfoot>
-                </table>
+            <div class="table-responsive-wrapper">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="project-transactions-table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Sr. No</th>
+                                <th>Type</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th class="d-none d-md-table-cell">Linked To</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr class="table-dark">
+                                <th>Total</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th id="footer_amount_total">₹0.00</th>
+                                <th></th>
+                                <th class="d-none d-md-table-cell"></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
-            @else
-            <div class="text-center py-4">
-                <p class="text-muted">No transactions found for this project.</p>
-                <a href="{{ route('transactions.create', ['type' => 'incoming', 'project_id' => $project->id]) }}" class="btn btn-success me-2">Add First Income</a>
-                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'project_id' => $project->id]) }}" class="btn btn-danger">Add First Expense</a>
-            </div>
-            @endif
         </div>
     </div>
 
-    <!-- Rest of existing modals and content -->
+
+    @push('scripts')
+    <script>
+        $(document).ready(function() {
+            // Initialize Project Transactions DataTable
+            var transactionsTable = $('#project-transactions-table').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                scrollX: true,
+                autoWidth: false,
+                ajax: {
+                    url: "{{ route('projects.transactions-data', $project) }}",
+                    data: function(d) {
+                        d.type = $('#transaction_type_filter').val();
+                        d.from_date = $('#transaction_from_date').val();
+                        d.to_date = $('#transaction_to_date').val();
+                    },
+                    dataSrc: function(json) {
+                        // Update summary cards with data from server
+                        if (json.summary) {
+                            updateSummaryCards(json.summary);
+                        }
+                        return json.data;
+                    },
+                    error: function(xhr, error, thrown) {
+                        console.log('DataTable AJAX Error:', xhr.responseText);
+                        alert('Error loading transactions data.');
+                    }
+                },
+                columnDefs: [{
+                        responsivePriority: 1,
+                        targets: 0
+                    }, // Sr. No
+                    {
+                        responsivePriority: 2,
+                        targets: 1
+                    }, // Type
+                    {
+                        responsivePriority: 3,
+                        targets: 4
+                    }, // Amount
+                    {
+                        responsivePriority: 4,
+                        targets: 5
+                    }, // Date
+                    {
+                        responsivePriority: 5,
+                        targets: 2
+                    }, // Category
+                    {
+                        responsivePriority: 6,
+                        targets: 3
+                    }, // Description
+                    {
+                        responsivePriority: 7,
+                        targets: 6
+                    }, // Linked To
+                    {
+                        responsivePriority: 1,
+                        targets: 7
+                    } // Actions
+                ],
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
+                    },
+                    {
+                        data: 'category',
+                        name: 'category'
+                    },
+                    {
+                        data: 'description',
+                        name: 'description'
+                    },
+                    {
+                        data: 'amount',
+                        name: 'amount'
+                    },
+                    {
+                        data: 'date',
+                        name: 'date'
+                    },
+                    {
+                        data: 'linked_to',
+                        name: 'linked_to',
+                        className: 'd-none d-md-table-cell'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                order: [
+                    [5, 'desc']
+                ], // Order by date descending
+                pageLength: 25,
+                lengthMenu: [
+                    [10, 25, 50, 100],
+                    [10, 25, 50, 100]
+                ],
+                language: {
+                    processing: '<div class="d-flex justify-content-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>',
+                    search: "Search Transactions:",
+                    lengthMenu: "Show _MENU_ transactions",
+                    info: "Showing _START_ to _END_ of _TOTAL_ transactions",
+                    infoEmpty: "Showing 0 to 0 of 0 transactions",
+                    zeroRecords: "No transactions found for this project",
+                    emptyTable: "No transactions available for this project"
+                },
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api();
+                    var pageIncoming = 0;
+                    var pageOutgoing = 0;
+
+                    // Calculate page totals
+                    for (var i = 0; i < data.length; i++) {
+                        var $amount = $(data[i].amount);
+                        var amount = parseFloat($amount.attr('data-amount')) || 0;
+                        var type = $amount.attr('data-type');
+
+                        if (type === 'incoming') {
+                            pageIncoming += amount;
+                        } else if (type === 'outgoing') {
+                            pageOutgoing += amount;
+                        }
+                    }
+
+                    var pageTotal = pageIncoming - pageOutgoing;
+                    $('#footer_amount_total').html('₹' + numberFormat(Math.abs(pageTotal)) + ' (' + (pageTotal >= 0 ? 'Profit' : 'Loss') + ')');
+                }
+            });
+
+            // Filter event handlers
+            $('#transaction_type_filter, #transaction_from_date, #transaction_to_date').change(function() {
+                transactionsTable.draw();
+            });
+
+            // Reset filters
+            $('#reset_transaction_filters').click(function() {
+                $('#transaction_type_filter').val('');
+                $('#transaction_from_date').val('');
+                $('#transaction_to_date').val('');
+                transactionsTable.draw();
+            });
+
+            // Update summary cards function
+            function updateSummaryCards(summary) {
+                if (summary) {
+                    $('#project_total_incoming').text('₹' + numberFormat(summary.total_incoming));
+                    $('#project_total_outgoing').text('₹' + numberFormat(summary.total_outgoing));
+                    $('#project_net_balance').text('₹' + numberFormat(summary.net_balance));
+                    $('#project_incoming_count').text('(' + summary.incoming_count + ' transactions)');
+                    $('#project_outgoing_count').text('(' + summary.outgoing_count + ' transactions)');
+                    $('#project_total_count').text('(' + summary.total_count + ' total)');
+
+                    // Calculate balance percentage
+                    var percentage = summary.total_incoming > 0 ?
+                        ((summary.net_balance / summary.total_incoming) * 100).toFixed(1) : 0;
+                    $('#project_balance_percentage').text(percentage + '%');
+
+                    // Update net balance card color based on profit/loss
+                    var netCard = $('#project_net_balance').closest('.card');
+                    netCard.removeClass('bg-success bg-danger bg-warning bg-info');
+                    if (summary.net_balance > 0) {
+                        netCard.addClass('bg-success');
+                    } else if (summary.net_balance < 0) {
+                        netCard.addClass('bg-danger');
+                    } else {
+                        netCard.addClass('bg-warning');
+                    }
+                }
+            }
+
+            // Number formatting function
+            function numberFormat(num) {
+                return parseFloat(num || 0).toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+
+            // Delete transaction handler
+            $(document).on('click', '.delete-transaction', function() {
+                var transactionId = $(this).data('id');
+                var deleteUrl = "{{ route('transactions.index') }}/" + transactionId;
+
+                if (confirm('Are you sure you want to delete this transaction?')) {
+                    $.ajax({
+                        url: deleteUrl,
+                        type: 'DELETE',
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                transactionsTable.ajax.reload(null, false);
+                                alert('Transaction deleted successfully!');
+                            } else {
+                                alert('Error: ' + response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            console.log('Delete Error:', xhr.responseText);
+                            alert('Error deleting transaction. Please try again.');
+                        }
+                    });
+                }
+            });
+
+            // Initial load
+            transactionsTable.draw();
+        });
+    </script>
+    @endpush
+
 </x-app-layout>
