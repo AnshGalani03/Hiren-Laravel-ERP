@@ -10,17 +10,19 @@
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="outgoings-table">
-                    <thead>
-                        <tr>
-                            <th>Sr. No</th>
-                            <th>Name</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                </table>
+            <div class="table-responsive-wrapper">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="outgoings-table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="d-none d-md-table-cell">Sr. No</th>
+                                <th>Name</th>
+                                <!-- <th>Created At</th> -->
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -31,28 +33,35 @@
             $('#outgoings-table').DataTable({
                 processing: true,
                 serverSide: true,
+                responsive: true,
+                scrollX: true,
+                autoWidth: false,
                 ajax: "{{ route('outgoings.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         searchable: false,
-                        orderable: false
+                        orderable: false,
+                        responsivePriority: 3,
+                        className: 'd-none d-md-table-cell'
                     },
                     {
                         data: 'name',
-                        name: 'name'
+                        name: 'name',
+                        responsivePriority: 1,
                     },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
+                    // {
+                    //     data: 'created_at',
+                    //     name: 'created_at'
+                    // },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 2,
                     },
-                ]
+                ],
             });
         });
     </script>

@@ -10,36 +10,59 @@
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900">
-            <table class="table table-bordered" id="dealers-table">
-                <thead>
-                    <tr>
-                        <th>Dealer Name</th>
-                        <th>Mobile No</th>
-                        <th>GST</th>
-                        <th>Address</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-            </table>
+            <div class="table-responsive-wrapper">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dealers-table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Dealer Name</th>
+                                <th>Mobile No</th>
+                                <th>GST</th>
+                                <th>Address</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
     @push('scripts')
     <script>
-    $(document).ready(function() {
-        $('#dealers-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('dealers.index') }}",
-            columns: [
-                {data: 'dealer_name', name: 'dealer_name'},
-                {data: 'mobile_no', name: 'mobile_no'},
-                {data: 'gst', name: 'gst'},
-                {data: 'address', name: 'address'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+        $(document).ready(function() {
+            $('#dealers-table').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                scrollX: true,
+                autoWidth: false,
+                ajax: "{{ route('dealers.index') }}",
+                columns: [{
+                        data: 'dealer_name',
+                        name: 'dealer_name'
+                    },
+                    {
+                        data: 'mobile_no',
+                        name: 'mobile_no'
+                    },
+                    {
+                        data: 'gst',
+                        name: 'gst'
+                    },
+                    {
+                        data: 'address',
+                        name: 'address'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
         });
-    });
     </script>
     @endpush
 </x-app-layout>

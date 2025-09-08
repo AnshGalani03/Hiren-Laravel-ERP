@@ -116,20 +116,24 @@
             <h5 class="mb-0"><i class="fas fa-table"></i> Transactions List</h5>
         </div>
         <div class="p-6 text-gray-900">
-            <table class="table table-bordered" id="transactions-table">
-                <thead>
-                    <tr>
-                        <th>Sr. No</th>
-                        <th>Type</th>
-                        <th>Category</th>
-                        <th>Description</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Linked To</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-            </table>
+            <div class="table-responsive-wrapper">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="transactions-table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Sr. No</th>
+                                <th>Type</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Linked To</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -178,6 +182,9 @@
             var table = $('#transactions-table').DataTable({
                 processing: true,
                 serverSide: true,
+                responsive: true,
+                scrollX: true,
+                autoWidth: false,
                 ajax: {
                     url: "{{ route('transactions.index') }}",
                     data: function(d) {
@@ -196,42 +203,51 @@
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         searchable: false,
-                        orderable: false
+                        orderable: false,
+                        responsivePriority: 1
                     },
                     {
                         data: 'type',
-                        name: 'type'
+                        name: 'type',
+                        responsivePriority: 2
                     },
                     {
                         data: 'category',
-                        name: 'category'
+                        name: 'category',
+                        responsivePriority: 4
                     },
                     {
                         data: 'description',
-                        name: 'description'
+                        name: 'description',
+                        responsivePriority: 3
                     },
                     {
                         data: 'amount',
-                        name: 'amount'
+                        name: 'amount',
+                        responsivePriority: 2
                     },
                     {
                         data: 'date',
-                        name: 'date'
+                        name: 'date',
+                        responsivePriority: 3
                     },
                     {
                         data: 'linked_to',
-                        name: 'linked_to'
+                        name: 'linked_to',
+                        responsivePriority: 5
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1
                     },
                 ],
                 order: [
                     [5, 'desc']
                 ], // Order by date descending
+                pageLength: 25,
                 drawCallback: function(settings) {
                     updateSummary();
                 }

@@ -10,20 +10,24 @@
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900">
-            <table class="table table-bordered" id="sub-contractors-table">
-                <thead>
-                    <tr>
-                        <!-- <th>Sr. No</th> -->
-                        <th>Contractor Name</th>
-                        <th>Department</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Time Limit</th>
-                        <th>Work Order Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-            </table>
+            <div class="table-responsive-wrapper">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="sub-contractors-table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <!-- <th>Sr. No</th> -->
+                                <th>Contractor Name</th>
+                                <th>Department</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Time Limit</th>
+                                <th>Work Order Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -33,6 +37,9 @@
             $('#sub-contractors-table').DataTable({
                 processing: true,
                 serverSide: true,
+                responsive: true,
+                scrollX: true,
+                autoWidth: false,
                 ajax: "{{ route('sub-contractors.index') }}",
                 columns: [
                     // {

@@ -37,20 +37,24 @@
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900">
-            <table class="table table-bordered" id="projects-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Department</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Time Limit</th>
-                        <th>Work Order Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-            </table>
+            <div class="table-responsive-wrapper">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="projects-table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Time Limit</th>
+                                <th>Work Order Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -60,6 +64,9 @@
             var table = $('#projects-table').DataTable({
                 processing: true,
                 serverSide: true,
+                responsive: true,
+                scrollX: true,
+                autoWidth: false,
                 ajax: {
                     url: "{{ route('projects.index') }}",
                     data: function(d) {
@@ -68,37 +75,45 @@
                 },
                 columns: [{
                         data: 'name',
-                        name: 'name'
+                        name: 'name',
+                        responsivePriority: 1
                     },
                     {
                         data: 'department_name',
-                        name: 'department_name'
+                        name: 'department_name',
+                        responsivePriority: 2
                     },
                     {
                         data: 'amount_project',
-                        name: 'amount_project'
+                        name: 'amount_project',
+                        responsivePriority: 2
                     },
                     {
                         data: 'date',
-                        name: 'date'
+                        name: 'date',
+                        responsivePriority: 3
                     },
                     {
                         data: 'time_limit',
-                        name: 'time_limit'
+                        name: 'time_limit',
+                        responsivePriority: 4
                     },
                     {
                         data: 'work_order_date',
-                        name: 'work_order_date'
+                        name: 'work_order_date',
+                        responsivePriority: 5
                     },
                     {
                         data: 'status',
-                        name: 'status'
+                        name: 'status',
+                        responsivePriority: 2
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1
                     },
                 ]
             });
