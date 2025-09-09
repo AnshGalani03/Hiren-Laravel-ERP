@@ -53,6 +53,60 @@ class UpadController extends Controller
     {
         $employeeId = $upad->employee_id;
         $upad->delete();
-        return redirect()->route('employees.show', $employeeId)->with('success', 'Upad deleted successfully.');
+
+        // This will now work correctly
+        Upad::recalculatePendingAmounts($employeeId);
+
+        return redirect()->back()->with('success', 'Record deleted successfully and pending amounts recalculated.');
+    }
+
+
+    public function monthlyView(Request $request, Employee $employee)
+    {
+        $currentMonth = $request->get('month', date('n'));
+        $currentYear = $request->get('year', date('Y'));
+
+        $monthlyData = $employee->calculateMonthlySalary($currentMonth, $currentYear);
+        $monthlySummary = $employee->getMonthlySummary(12);
+
+        return view('upads.monthly', compact('employee', 'monthlyData', 'monthlySummary', 'currentMonth', 'currentYear'));
+    }
+
+    public function monthlyReport(Request $request)
+    {
+        $month = $request->get('month', date('n'));
+        $year = $request->get('year', date('Y'));
+
+        $employees = Employee::with(['upads' => function ($query) use ($month, $year) {
+            $query->whereMonth('date', $month)->whereYear('date', $year);
+        }])->get();
+
+        $reportData = [];
+        foreach ($employees as $employee) {
+            $reportData[] = $employee->calculateMonthlySalary($month, $year);
+        }
+
+        return view('upads.monthly-report', compact('reportData', 'month', 'year'));
+    }
+
+    public function updatePaymentStatus(Request $request, Upad $upad)
+    {
+        $request->validate([
+            'field' => 'required|in:salary_paid',
+            'value' => 'required'
+        ]);
+
+        $field = $request->field;
+        $value = filter_var($request->value, FILTER_VALIDATE_BOOLEAN);
+
+        $upad->update([$field => $value]);
+
+        // Recalculate pending amounts
+        Upad::recalculatePendingAmounts($upad->employee_id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment status updated successfully'
+        ]);
     }
 }

@@ -105,6 +105,20 @@ Route::middleware('auth')->group(function () {
     // Dealer Invoices and Transactions Data in Data table
     Route::get('dealers/{dealer}/invoices-data', [DealerController::class, 'invoicesData'])->name('dealers.invoices-data');
     Route::get('dealers/{dealer}/transactions-data', [DealerController::class, 'transactionsData'])->name('dealers.transactions-data');
+
+    // Add inside middleware('auth')->group():
+    Route::resource('upads', UpadController::class);
+
+    // Add these routes
+    Route::get('employees/{employee}/monthly-upads', [UpadController::class, 'monthlyView'])->name('employees.monthly-upads');
+    Route::get('upads/monthly-report', [UpadController::class, 'monthlyReport'])->name('upads.monthly-report');
+
+    // Add this inside middleware('auth')->group():
+    Route::patch('upads/{upad}/payment-status', [UpadController::class, 'updatePaymentStatus'])
+        ->name('upads.updatePaymentStatus');
+
+    Route::get('employees/{employee}/monthly-overview', [EmployeeController::class, 'monthlyOverview'])
+        ->name('employees.monthly-overview');
 });
 
 require __DIR__ . '/auth.php';

@@ -13,7 +13,7 @@ class EmployeeController extends Controller
     {
         if ($request->ajax()) {
             $employees = Employee::select(['id', 'name', 'designation', 'mobile_no', 'alt_contact_no', 'pan_no', 'aadhar_no']);
-            
+
             return DataTables::of($employees)
                 ->addColumn('action', function ($employee) {
                     return '
@@ -52,10 +52,33 @@ class EmployeeController extends Controller
         return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
     }
 
-    public function show(Employee $employee)
+    public function show(Employee $employee, Request $request)
     {
-        $upads = $employee->upads()->latest()->get();
-        return view('employees.show', compact('employee', 'upads'));
+        // Set current month as default if no month is selected
+        $selectedMonth = $request->get('month', now()->format('Y-m'));
+
+        // Filter records by selected month only
+        $upads = $employee->upads()
+            ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$selectedMonth])
+            ->orderBy('date')
+            ->get();
+
+        // Get available months for filter dropdown
+        $availableMonths = $employee->upads()
+            ->selectRaw("DATE_FORMAT(date, '%Y-%m') as month_key, DATE_FORMAT(date, '%M %Y') as month_name")
+            ->groupBy('month_key', 'month_name')
+            ->orderBy('month_key', 'desc')
+            ->get();
+
+        return view('employees.show', compact('employee', 'upads', 'availableMonths', 'selectedMonth'));
+    }
+
+
+    public function monthlyOverview(Employee $employee)
+    {
+        $monthlySummary = Upad::getMonthlySummary($employee->id);
+
+        return view('employees.monthly-overview', compact('employee', 'monthlySummary'));
     }
 
     public function edit(Employee $employee)
