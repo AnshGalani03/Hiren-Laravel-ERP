@@ -129,7 +129,7 @@
                             <i class="fas fa-calendar-alt"></i> Monthly Overview
                         </a>
                         <a href="{{ route('upads.create', ['employee_id' => $employee->id]) }}" class="btn btn-success btn-sm">
-                            <i class="fas fa-plus"></i> Add Record
+                            <i class="fas fa-plus"></i> Add Upad
                         </a>
                     </div>
                 </div>
@@ -152,10 +152,18 @@
                     </thead>
                     <tbody>
                         @php
-                        $showSalary = true; // Show salary for first record of the month
+                        $showSalary = true;
+                        $monthlySalary = $upads->first()->salary ?? 0; // Get salary for this month
+                        $cumulativePending = $monthlySalary; // Start with full salary
                         @endphp
 
                         @foreach($upads as $index => $upad)
+                        @php
+                        // Deduct current upad from cumulative pending
+                        $cumulativePending -= $upad->upad;
+                        // Ensure pending never goes below 0 (but can show negative if needed)
+                        $displayPending = $cumulativePending;
+                        @endphp
                         <tr>
                             <td>
                                 <strong>{{ $upad->date->format('d/m/Y') }}</strong>
@@ -175,11 +183,21 @@
                             <!-- Upad amount -->
                             <td class="text-danger">₹{{ number_format($upad->upad, 2) }}</td>
 
-                            <!-- Month-wise pending (not cumulative) -->
+                            <!-- Cumulative pending (shows remaining after each upad) -->
                             <td class="text-center">
-                                <span class="badge bg-{{ $upad->pending > 0 ? 'warning' : 'success' }} fs-6">
-                                    ₹{{ number_format($upad->pending, 2) }}
+                                @if($displayPending > 0)
+                                <span class="badge bg-warning text-dark fs-6">
+                                    ₹{{ number_format($displayPending, 2) }}
                                 </span>
+                                @elseif($displayPending == 0)
+                                <span class="badge bg-success fs-6">
+                                    ₹0.00
+                                </span>
+                                @else
+                                <span class="badge bg-danger fs-6">
+                                    -₹{{ number_format(abs($displayPending), 2) }}
+                                </span>
+                                @endif
                             </td>
 
                             <td>{{ Str::limit($upad->remark, 20) ?: 'N/A' }}</td>
@@ -203,7 +221,7 @@
                 @php
                 $monthSalary = $upads->first()->salary ?? 0;
                 $monthUpads = $upads->sum('upad');
-                $monthPending = max($monthSalary - $monthUpads, 0);
+                $finalPending = $monthSalary - $monthUpads; // Final calculation for summary
                 @endphp
                 <div class="row text-center">
                     <div class="col-md-3">
@@ -216,7 +234,13 @@
                     </div>
                     <div class="col-md-3">
                         <h6>This Month Pending</h6>
-                        <span class="text-warning">₹{{ number_format($monthPending, 2) }}</span>
+                        @if($finalPending > 0)
+                        <span class="text-warning">₹{{ number_format($finalPending, 2) }}</span>
+                        @elseif($finalPending == 0)
+                        <span class="text-success">₹0.00</span>
+                        @else
+                        <span class="text-danger">-₹{{ number_format(abs($finalPending), 2) }}</span>
+                        @endif
                     </div>
                     <div class="col-md-3">
                         <h6>Records Count</h6>
@@ -231,6 +255,7 @@
             </div>
             @endif
         </div>
+
     </div>
 
 </x-app-layout>
