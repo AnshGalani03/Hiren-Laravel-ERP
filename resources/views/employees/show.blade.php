@@ -5,7 +5,7 @@
                 {{ __('Employee Details: ') . $employee->name }}
             </h2>
             <div>
-                <a href="{{ route('upads.create', ['employee_id' => $employee->id]) }}" class="btn btn-success btn-sm">
+                <a href="{{ route('upads.create', ['employee_id' => $employee->id]) }}" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus"></i> Add Upad
                 </a>
                 <a href="{{ route('employees.edit', $employee) }}" class="btn btn-warning btn-sm">
@@ -128,7 +128,7 @@
                         <a href="{{ route('employees.monthly-overview', $employee) }}" class="btn btn-info btn-sm me-2">
                             <i class="fas fa-calendar-alt"></i> Monthly Overview
                         </a>
-                        <a href="{{ route('upads.create', ['employee_id' => $employee->id]) }}" class="btn btn-success btn-sm">
+                        <a href="{{ route('upads.create', ['employee_id' => $employee->id]) }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus"></i> Add Upad
                         </a>
                     </div>

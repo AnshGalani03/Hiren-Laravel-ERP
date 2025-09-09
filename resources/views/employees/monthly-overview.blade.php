@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Monthly Overview: {{ $employee->name }}
-            </h2>
             <a href="{{ route('employees.show', $employee) }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to Details
             </a>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Monthly Overview: {{ $employee->name }}
+            </h2>
         </div>
     </x-slot>
     <div class="row">
@@ -27,8 +27,8 @@
             <div class="row">
                 @foreach($monthlySummary as $month)
                 <div class="col-md-4 mb-3">
-                    <div class="card {{ $month['pending'] > 0 ? 'border-warning' : 'border-success' }}">
-                        <div class="card-header bg-{{ $month['pending'] > 0 ? 'warning' : 'success' }} text-white">
+                    <div class="card">
+                        <div class="card-header">
                             <h6 class="mb-0">{{ $month['month_name'] }}</h6>
                         </div>
                         <div class="card-body">

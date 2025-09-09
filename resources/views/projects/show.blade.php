@@ -9,7 +9,7 @@
             </h2>
             <div>
                 @if($project->active)
-                <a href="{{ route('transactions.create', ['type' => 'incoming', 'project_id' => $project->id]) }}" class="btn btn-success btn-sm">Add Income</a>
+                <a href="{{ route('transactions.create', ['type' => 'incoming', 'project_id' => $project->id]) }}" class="btn btn-primary btn-sm">Add Income</a>
                 <a href="{{ route('transactions.create', ['type' => 'outgoing', 'project_id' => $project->id]) }}" class="btn btn-danger btn-sm">Add Expense</a>
                 @endif
                 <a href="{{ route('projects.edit', $project) }}" class="btn btn-warning btn-sm">Edit Project</a>
@@ -265,7 +265,7 @@
             <h5 class="mb-0"><i class="fas fa-exchange-alt text-info"></i> All Transactions</h5>
             <div>
                 @if($project->active)
-                <a href="{{ route('transactions.create', ['type' => 'incoming', 'project_id' => $project->id]) }}" class="btn btn-success btn-sm">
+                <a href="{{ route('transactions.create', ['type' => 'incoming', 'project_id' => $project->id]) }}" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus"></i> Add Income
                 </a>
                 <a href="{{ route('transactions.create', ['type' => 'outgoing', 'project_id' => $project->id]) }}" class="btn btn-danger btn-sm">
@@ -491,15 +491,15 @@
                     [10, 25, 50, 100],
                     [10, 25, 50, 100]
                 ],
-                language: {
-                    processing: '<div class="d-flex justify-content-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>',
-                    search: "Search Transactions:",
-                    lengthMenu: "Show _MENU_ transactions",
-                    info: "Showing _START_ to _END_ of _TOTAL_ transactions",
-                    infoEmpty: "Showing 0 to 0 of 0 transactions",
-                    zeroRecords: "No transactions found for this project",
-                    emptyTable: "No transactions available for this project"
-                },
+                // language: {
+                //     processing: '<div class="d-flex justify-content-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>',
+                //     search: "Search Transactions:",
+                //     lengthMenu: "Show _MENU_ transactions",
+                //     info: "Showing _START_ to _END_ of _TOTAL_ transactions",
+                //     infoEmpty: "Showing 0 to 0 of 0 transactions",
+                //     zeroRecords: "No transactions found for this project",
+                //     emptyTable: "No transactions available for this project"
+                // },
                 footerCallback: function(row, data, start, end, display) {
                     var api = this.api();
                     var pageIncoming = 0;
