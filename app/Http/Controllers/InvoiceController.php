@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Dealer;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+// use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
+
 
 class InvoiceController extends Controller
 {
@@ -13,45 +15,50 @@ class InvoiceController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Invoice::with('dealer')->select(['id', 'dealer_id', 'bill_no', 'amount', 'date', 'remark']);
+            $dealerId = $request->input('dealer_id');
 
-            // Apply dealer filter
-            if ($request->filled('dealer_id') && $request->dealer_id != '') {
-                $query->where('dealer_id', $request->dealer_id);
+            $query = Invoice::with('dealer');
+
+            if ($dealerId) {
+                $query->where('dealer_id', $dealerId);
             }
 
-            return DataTables::of($query)
-                ->addIndexColumn()
+            return DataTables::eloquent($query)
+                ->filter(function ($query) use ($request) {
+                    if ($search = $request->input('search.value')) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('bill_no', 'like', "%{$search}%")
+                                ->orWhere('amount', 'like', "%{$search}%")
+                                ->orWhere('remark', 'like', "%{$search}%")
+                                ->orWhereHas('dealer', function ($dq) use ($search) {
+                                    $dq->where('dealer_name', 'like', "%{$search}%");
+                                });
+                        });
+                    }
+                })
                 ->addColumn('dealer_name', function ($invoice) {
                     return $invoice->dealer ? $invoice->dealer->dealer_name : 'N/A';
                 })
-                ->editColumn('amount', function ($invoice) {
-                    return '₹' . number_format($invoice->amount, 2);
-                })
+                // ADD THIS LINE: Format the date column
                 ->editColumn('date', function ($invoice) {
                     return $invoice->date ? $invoice->date->format('d/m/Y') : '';
                 })
-                ->editColumn('remark', function ($invoice) {
-                    return $invoice->remark ?: 'N/A';
-                })
                 ->addColumn('action', function ($invoice) {
                     return '
-                        <a href="' . route('invoices.edit', $invoice->id) . '" class="btn btn-warning btn-sm">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <button class="btn btn-danger btn-sm delete-invoice" data-id="' . $invoice->id . '">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
+                        <a href="' . route('invoices.edit', $invoice->id) . '" class="btn btn-warning btn-sm">Edit</a>
+                        <button class="btn btn-danger btn-sm delete-invoice" data-id="' . $invoice->id . '">Delete</button>
                     ';
                 })
+                ->addIndexColumn()
                 ->rawColumns(['action'])
                 ->make(true);
         }
 
-        // Load dealers for filter dropdown
         $dealers = Dealer::orderBy('dealer_name')->get();
         return view('invoices.index', compact('dealers'));
     }
+
+
 
     public function create(Request $request)
     {

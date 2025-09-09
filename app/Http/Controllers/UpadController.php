@@ -19,15 +19,17 @@ class UpadController extends Controller
     {
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
-            'month' => 'required|string|max:255',
             'date' => 'required|date',
             'salary' => 'required|numeric|min:0',
             'upad' => 'required|numeric|min:0',
-            'pending' => 'numeric|min:0',
+            'remark' => 'nullable|string|max:500'
         ]);
 
-        Upad::create($request->all());
-        return redirect()->route('employees.show', $request->employee_id)->with('success', 'Upad created successfully.');
+        // Only save fields that exist in database
+        Upad::create($request->only(['employee_id', 'date', 'salary', 'upad', 'remark']));
+
+        return redirect()->route('employees.show', $request->employee_id)
+            ->with('success', 'Upad created successfully.');
     }
 
     public function edit(Upad $upad)
@@ -38,15 +40,17 @@ class UpadController extends Controller
     public function update(Request $request, Upad $upad)
     {
         $request->validate([
-            'month' => 'required|string|max:255',
             'date' => 'required|date',
             'salary' => 'required|numeric|min:0',
             'upad' => 'required|numeric|min:0',
-            'pending' => 'numeric|min:0',
+            'remark' => 'nullable|string|max:500'
         ]);
 
-        $upad->update($request->all());
-        return redirect()->route('employees.show', $upad->employee_id)->with('success', 'Upad updated successfully.');
+        // Only update fields that exist in database
+        $upad->update($request->only(['date', 'salary', 'upad', 'remark']));
+
+        return redirect()->route('employees.show', $upad->employee_id)
+            ->with('success', 'Upad updated successfully.');
     }
 
     public function destroy(Upad $upad)
@@ -54,12 +58,10 @@ class UpadController extends Controller
         $employeeId = $upad->employee_id;
         $upad->delete();
 
-        // This will now work correctly
-        Upad::recalculatePendingAmounts($employeeId);
-
-        return redirect()->back()->with('success', 'Record deleted successfully and pending amounts recalculated.');
+        // No need to recalculate since we're using accessor
+        return redirect()->back()
+            ->with('success', 'Record deleted successfully.');
     }
-
 
     public function monthlyView(Request $request, Employee $employee)
     {
@@ -100,9 +102,6 @@ class UpadController extends Controller
         $value = filter_var($request->value, FILTER_VALIDATE_BOOLEAN);
 
         $upad->update([$field => $value]);
-
-        // Recalculate pending amounts
-        Upad::recalculatePendingAmounts($upad->employee_id);
 
         return response()->json([
             'success' => true,

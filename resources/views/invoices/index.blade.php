@@ -97,10 +97,8 @@
         </div>
     </div>
 
-    @push('scripts')
-    <!-- Include Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+    @push('scripts')
     <script>
         $(document).ready(function() {
             // CSRF Token setup
@@ -141,7 +139,7 @@
                     },
                     {
                         data: 'dealer_name',
-                        name: 'dealer_name',
+                        name: 'dealer.dealer_name', // Important: This enables search on relationship
                         responsivePriority: 2
                     },
                     {
@@ -165,16 +163,20 @@
                         orderable: false,
                         searchable: false,
                         responsivePriority: 1
-                    },
+                    }
                 ],
                 order: [
                     [4, 'desc']
                 ], // Order by date descending
-                dom: 'lrtip', // This removes the default buttons including create button
+
+                // Enable search box - remove the restrictive dom option
+                dom: 'Blfrtip', // This includes the search box ('f')
+
                 drawCallback: function(settings) {
                     updateSummary();
                 }
             });
+
 
             // Filter event handler
             $('#dealer_filter').change(function() {

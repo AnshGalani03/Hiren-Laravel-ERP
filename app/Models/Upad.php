@@ -6,19 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-
 class Upad extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'employee_id',
-        'month',
         'date',
         'salary',
         'salary_paid',
         'upad',
-        'pending',
         'remark'
     ];
 
@@ -26,8 +23,8 @@ class Upad extends Model
         'date' => 'date',
         'salary' => 'decimal:2',
         'upad' => 'decimal:2',
-        'pending' => 'decimal:2',
         'salary_paid' => 'boolean'
+        // Remove 'pending' from casts since column doesn't exist
     ];
 
     public function employee()
@@ -35,44 +32,34 @@ class Upad extends Model
         return $this->belongsTo(Employee::class);
     }
 
+    // Calculate pending dynamically using accessor
+    public function getPendingAttribute()
+    {
+        $monthYear = $this->date->format('Y-m');
+        $monthlyUpads = static::where('employee_id', $this->employee_id)
+            ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$monthYear])
+            ->sum('upad');
+
+        $pending = $this->salary - $monthlyUpads;
+        return max($pending, 0); // Never negative
+    }
+
+    // Remove the boot method that tries to update non-existent 'pending' column
     protected static function boot()
     {
         parent::boot();
 
-        static::saved(function ($upad) {
-            static::recalculatePendingAmounts($upad->employee_id);
-        });
+        // No longer need to recalculate since we're using accessor
+        // static::saved(function ($upad) {
+        //     static::recalculatePendingAmounts($upad->employee_id);
+        // });
 
-        static::deleted(function ($upad) {
-            static::recalculatePendingAmounts($upad->employee_id);
-        });
+        // static::deleted(function ($upad) {
+        //     static::recalculatePendingAmounts($upad->employee_id);
+        // });
     }
 
-    // Calculate pending month-wise (not cumulative)
-    public static function recalculatePendingAmounts($employeeId)
-    {
-        $records = static::where('employee_id', $employeeId)->orderBy('date')->get();
-
-        // Group by month-year only
-        $monthlyGroups = $records->groupBy(function ($record) {
-            return $record->date->format('Y-m');
-        });
-
-        foreach ($monthlyGroups as $monthYear => $monthRecords) {
-            // Calculate only for this month (not cumulative)
-            $monthlySalary = $monthRecords->first()->salary;
-            $monthlyUpads = $monthRecords->sum('upad');
-            $monthlyPending = max($monthlySalary - $monthlyUpads, 0);
-
-            // Update all records in this month with same pending
-            foreach ($monthRecords as $record) {
-                $record->pending = $monthlyPending;
-                $record->saveQuietly();
-            }
-        }
-    }
-
-    // Get monthly summary for an employee
+    // Keep this method for compatibility with existing views
     public static function getMonthlySummary($employeeId)
     {
         $records = static::where('employee_id', $employeeId)->get();

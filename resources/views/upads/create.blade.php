@@ -19,39 +19,15 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="month" class="form-label">Month <span class="text-danger">*</span></label>
-                        <select class="form-control @error('month') is-invalid @enderror" id="month" name="month" required>
-                            <option value="">Select Month</option>
-                            <option value="January" {{ old('month') == 'January' ? 'selected' : '' }}>January</option>
-                            <option value="February" {{ old('month') == 'February' ? 'selected' : '' }}>February</option>
-                            <option value="March" {{ old('month') == 'March' ? 'selected' : '' }}>March</option>
-                            <option value="April" {{ old('month') == 'April' ? 'selected' : '' }}>April</option>
-                            <option value="May" {{ old('month') == 'May' ? 'selected' : '' }}>May</option>
-                            <option value="June" {{ old('month') == 'June' ? 'selected' : '' }}>June</option>
-                            <option value="July" {{ old('month') == 'July' ? 'selected' : '' }}>July</option>
-                            <option value="August" {{ old('month') == 'August' ? 'selected' : '' }}>August</option>
-                            <option value="September" {{ old('month') == 'September' ? 'selected' : '' }}>September</option>
-                            <option value="October" {{ old('month') == 'October' ? 'selected' : '' }}>October</option>
-                            <option value="November" {{ old('month') == 'November' ? 'selected' : '' }}>November</option>
-                            <option value="December" {{ old('month') == 'December' ? 'selected' : '' }}>December</option>
-                        </select>
-                        @error('month')
+                        <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control @error('date') is-invalid @enderror"
+                            id="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required>
+                        @error('date')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control @error('date') is-invalid @enderror"
-                            id="date" name="date" value="{{ old('date') }}" required>
-                        @error('date')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4 mb-3">
                         <label for="salary" class="form-label">Salary <span class="text-danger">*</span></label>
                         <input type="number" step="0.01" class="form-control @error('salary') is-invalid @enderror"
                             id="salary" name="salary" value="{{ old('salary', $employee->salary) }}" required>
@@ -59,8 +35,10 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                </div>
 
-                    <div class="col-md-4 mb-3">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
                         <label for="upad" class="form-label">Upad Amount <span class="text-danger">*</span></label>
                         <input type="number" step="0.01" class="form-control @error('upad') is-invalid @enderror"
                             id="upad" name="upad" value="{{ old('upad') }}" required>
@@ -69,23 +47,14 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label for="pending" class="form-label">Pending Amount</label>
-                        <input type="number" step="0.01" class="form-control @error('pending') is-invalid @enderror"
-                            id="pending" name="pending" value="{{ old('pending', 0) }}">
-                        @error('pending')
+                    <div class="col-md-6 mb-3">
+                        <label for="remark" class="form-label">Remark</label>
+                        <textarea class="form-control @error('remark') is-invalid @enderror"
+                            id="remark" name="remark" rows="3">{{ old('remark') }}</textarea>
+                        @error('remark')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="remark" class="form-label">Remark</label>
-                    <textarea class="form-control @error('remark') is-invalid @enderror"
-                        id="remark" name="remark" rows="3">{{ old('remark') }}</textarea>
-                    @error('remark')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <div class="d-flex justify-content-between">
