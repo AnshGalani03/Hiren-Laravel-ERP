@@ -162,7 +162,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-uppercase mb-1">
-                                        Bills Invoices</div>
+                                        Bills</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{ \App\Models\Bill::count() }}</div>
                                 </div>
                                 <div class="col-auto">
@@ -175,10 +175,8 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
+
             <!-- Quick Actions -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">

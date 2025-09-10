@@ -115,7 +115,7 @@
 
                 </div>
                 <div class="row mb-3 mt-3">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <label for="notes" class="form-label">Notes</label>
                         <textarea class="form-control" id="notes" name="notes" rows="3"
                             placeholder="Additional notes...">{{ $bill->notes }}</textarea>
