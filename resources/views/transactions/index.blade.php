@@ -5,11 +5,11 @@
                 {{ __('All Transactions') }}
             </h2>
             <div>
-                <a href="{{ route('transactions.create', ['type' => 'incoming']) }}" class="btn btn-success">
-                    <i class="fas fa-plus"></i> Add Incoming
+                <a href="{{ route('transactions.create', ['type' => 'incoming']) }}" class="btn btn-primary">
+                    Add Incoming
                 </a>
                 <a href="{{ route('transactions.create', ['type' => 'outgoing']) }}" class="btn btn-danger">
-                    <i class="fas fa-plus"></i> Add Outgoing
+                    Add Outgoing
                 </a>
             </div>
         </div>

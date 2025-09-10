@@ -5,7 +5,7 @@
                 {{ __('Products Management') }}
             </h2>
             <a class="btn btn-primary" href="{{ route('products.create') }}">
-                <i class="fas fa-plus"></i> Create New Product
+                Add New Product
             </a>
         </div>
     </x-slot>

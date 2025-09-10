@@ -4,8 +4,8 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Bills Management') }}
             </h2>
-            <a class="btn btn-success" href="{{ route('bills.create') }}">
-                <i class="fas fa-plus"></i> Create New Bill
+            <a class="btn btn-primary" href="{{ route('bills.create') }}">
+                Create New Bill
             </a>
         </div>
     </x-slot>
