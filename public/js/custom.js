@@ -1,44 +1,5 @@
 // Custom JavaScript for ERP System
 $(document).ready(function () {
-    // Global Select2 initialization with enhanced options
-    function initializeSelect2() {
-        $(".select2").each(function () {
-            if (!$(this).hasClass("select2-hidden-accessible")) {
-                $(this).select2({
-                    theme: "bootstrap-5",
-                    width: "100%",
-                    placeholder: function () {
-                        return (
-                            $(this).data("placeholder") || "Select an option..."
-                        );
-                    },
-                    allowClear: true,
-                    escapeMarkup: function (markup) {
-                        return markup;
-                    },
-                });
-            }
-        });
-    }
-
-    // Initialize Select2 on page load
-    initializeSelect2();
-
-    // Re-initialize Select2 after AJAX content load
-    $(document).ajaxComplete(function () {
-        setTimeout(function () {
-            initializeSelect2();
-        }, 100);
-    });
-
-    // Handle form resets with Select2
-    $("form").on("reset", function () {
-        var $form = $(this);
-        setTimeout(function () {
-            $form.find(".select2").val(null).trigger("change");
-        }, 1);
-    });
-
     // Reset filters function for all filter forms
     $(document).on("click", "#reset_filters, .reset-filters", function (e) {
         e.preventDefault();
@@ -200,25 +161,6 @@ $(document).ready(function () {
         }, duration);
     };
 
-    // Handle Select2 in modals
-    $(document).on("shown.bs.modal", ".modal", function () {
-        $(this)
-            .find(".select2")
-            .each(function () {
-                if (!$(this).hasClass("select2-hidden-accessible")) {
-                    $(this).select2({
-                        theme: "bootstrap-5",
-                        width: "100%",
-                        dropdownParent: $(this).closest(".modal"),
-                        placeholder:
-                            $(this).data("placeholder") ||
-                            "Select an option...",
-                        allowClear: true,
-                    });
-                }
-            });
-    });
-
     // Back button functionality
     $(document).on("click", ".back-btn", function (e) {
         e.preventDefault();
@@ -233,7 +175,7 @@ $(document).ready(function () {
 
     // Auto-hide alerts
     setTimeout(function () {
-        $(".alert-success, .alert-info").fadeOut();
+        $(".alert-success, .alert-info, .alert-danger").fadeOut();
     }, 5000);
 
     // Form validation enhancement
@@ -247,23 +189,4 @@ $(document).ready(function () {
             $submitBtn.prop("disabled", false).removeClass("loading");
         }, 3000);
     });
-
-    // Console log for debugging
-    console.log("ERP Custom JS loaded successfully!");
 });
-
-// Utility function to reinitialize Select2 (can be called from anywhere)
-window.reinitializeSelect2 = function (container) {
-    var $container = container ? $(container) : $(document);
-    $container.find(".select2").each(function () {
-        if ($(this).hasClass("select2-hidden-accessible")) {
-            $(this).select2("destroy");
-        }
-        $(this).select2({
-            theme: "bootstrap-5",
-            width: "100%",
-            placeholder: $(this).data("placeholder") || "Select an option...",
-            allowClear: true,
-        });
-    });
-};
