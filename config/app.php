@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Shingala Hiren Nareshbhai'),
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +122,17 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+    /**
+     * Company Details
+     */
+
+    'company' => [
+        'name' => env('COMPANY_NAME', 'Shingala Hiren Nareshbhai'),
+        'gstin' => env('COMPANY_GSTIN', '27ABCDE1234F1Z5'),
+        'pan' => env('COMPANY_PAN', 'ABCDE1234F'),
+        'phone' => env('COMPANY_PHONE', '+91 9876543210'),
+        'address' => env('COMPANY_ADDRESS', '123 Business Street, City, State - 123456'),
+    ],
+
 
 ];

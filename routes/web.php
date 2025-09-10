@@ -18,7 +18,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\SubContractorController;
 use App\Http\Controllers\SubContractorBillController;
 use App\Http\Controllers\ProductController;
-
+use App\Http\Controllers\BillController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,6 +124,14 @@ Route::middleware('auth')->group(function () {
 
     //Product Route
     Route::resource('products', ProductController::class)->middleware('auth');
+
+    //Bills Route
+    Route::resource('bills', BillController::class)->middleware('auth');
+    Route::get('bills/{bill}/pdf/{type}', [BillController::class, 'generatePDF'])
+        ->name('bills.pdf')
+        ->middleware('auth');
+
+    Route::post('bills/{bill}/update-status', [BillController::class, 'updateStatus'])->name('bills.updateStatus');
 });
 
 require __DIR__ . '/auth.php';
