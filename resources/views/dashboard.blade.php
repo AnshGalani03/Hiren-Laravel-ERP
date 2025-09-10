@@ -155,6 +155,28 @@
                     </div>
                 </div>
 
+                <!-- All Bills Card -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card dashboard-card h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                        Bills Invoices</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ \App\Models\Bill::count() }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-receipt fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <a href="{{ route('bills.index') }}" class="btn dashboard-card-btn">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
 
             </div>
             <!-- Quick Actions -->
@@ -233,6 +255,21 @@
                                             </g>
                                         </svg>
                                         Add Product
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card mb-0 w-100 dashboard-quick-card">
+                                <div class="card-body">
+                                    <a href="{{ route('bills.create') }}" class="btn w-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <g fill="#000" stroke-width="0.5" stroke="#000">
+                                                <path d="m12 2l.117.007a1 1 0 0 1 .876.876L13 3v4l.005.15a2 2 0 0 0 1.838 1.844L15 9h4l.117.007a1 1 0 0 1 .876.876L20 10v9a3 3 0 0 1-2.824 2.995L17 22H7a3 3 0 0 1-2.995-2.824L4 19V5a3 3 0 0 1 2.824-2.995L7 2zm4 15h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2m0-4H8a1 1 0 0 0 0 2h8a1 1 0 0 0 0-2M9 6H8a1 1 0 1 0 0 2h1a1 1 0 1 0 0-2" />
+                                                <path d="M19 7h-4l-.001-4.001z" />
+                                            </g>
+                                        </svg>
+                                        Add Bill
                                     </a>
                                 </div>
                             </div>
