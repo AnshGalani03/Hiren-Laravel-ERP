@@ -17,6 +17,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\SubContractorController;
 use App\Http\Controllers\SubContractorBillController;
+use App\Http\Controllers\ProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -109,16 +111,19 @@ Route::middleware('auth')->group(function () {
     // Add inside middleware('auth')->group():
     Route::resource('upads', UpadController::class);
 
-    // Add these routes
+
     Route::get('employees/{employee}/monthly-upads', [UpadController::class, 'monthlyView'])->name('employees.monthly-upads');
     Route::get('upads/monthly-report', [UpadController::class, 'monthlyReport'])->name('upads.monthly-report');
 
-    // Add this inside middleware('auth')->group():
+
     Route::patch('upads/{upad}/payment-status', [UpadController::class, 'updatePaymentStatus'])
         ->name('upads.updatePaymentStatus');
 
     Route::get('employees/{employee}/monthly-overview', [EmployeeController::class, 'monthlyOverview'])
         ->name('employees.monthly-overview');
+
+    //Product Route
+    Route::resource('products', ProductController::class)->middleware('auth');
 });
 
 require __DIR__ . '/auth.php';

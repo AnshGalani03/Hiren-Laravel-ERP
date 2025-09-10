@@ -32,18 +32,20 @@
                         {{ __('Tenders') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                        {{ __('Products') }}
+                    </x-nav-link>
+
                     <x-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">
                         {{ __('All Invoices') }}
                     </x-nav-link>
-
 
                     <x-nav-link :href="route('sub-contractors.index')" :active="request()->routeIs('sub-contractors.*')">
                         {{ __('Sub-Contractors') }}
                     </x-nav-link>
 
-
                     <!-- Transactions Dropdown -->
-                    <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <div class="hidden sm:flex sm:items-center">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -71,7 +73,7 @@
                     </div>
 
                     <!-- Daily Kharcha Dropdown -->
-                    <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <div class="hidden sm:flex sm:items-center">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -97,7 +99,7 @@
                 </div>
             </div>
 
-            <!-- Settings Dropdown - THIS IS THE IMPORTANT PART FOR PROFILE/LOGOUT -->
+            <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -161,18 +163,58 @@
             <x-responsive-nav-link :href="route('tenders.index')" :active="request()->routeIs('tenders.*')">
                 {{ __('Tenders') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                {{ __('Products') }}
+            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">
                 {{ __('All Invoices') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('sub-contractors.index')" :active="request()->routeIs('sub-contractors.*')">
                 {{ __('Sub-Contractors') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('outgoings.index')" :active="request()->routeIs('outgoings.*')">
-                {{ __('Outgoings') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('incomings.index')" :active="request()->routeIs('incomings.*')">
-                {{ __('Incomings') }}
-            </x-responsive-nav-link>
+
+            <!-- Mobile Transactions Dropdown -->
+            <div x-data="{ openTransactions: false }" class="block">
+                <button @click="openTransactions = !openTransactions" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:text-gray-900 focus:bg-gray-50 transition duration-150 ease-in-out">
+                    <div class="flex justify-between items-center">
+                        <span>Transactions</span>
+                        <svg class="fill-current h-4 w-4 transition-transform duration-200" :class="{'rotate-180': openTransactions}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </button>
+                <div x-show="openTransactions" x-transition class="pl-4 pb-2 space-y-1">
+                    <x-responsive-nav-link :href="route('transactions.create', ['type' => 'incoming'])">
+                        {{ __('Add Incoming') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('transactions.create', ['type' => 'outgoing'])">
+                        {{ __('Add Outgoing') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('transactions.index')">
+                        {{ __('View All Transactions') }}
+                    </x-responsive-nav-link>
+                </div>
+            </div>
+
+            <!-- Mobile Daily Kharcha Dropdown -->
+            <div x-data="{ openKharcha: false }" class="block">
+                <button @click="openKharcha = !openKharcha" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:text-gray-900 focus:bg-gray-50 transition duration-150 ease-in-out">
+                    <div class="flex justify-between items-center">
+                        <span>Daily Kharcha</span>
+                        <svg class="fill-current h-4 w-4 transition-transform duration-200" :class="{'rotate-180': openKharcha}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </button>
+                <div x-show="openKharcha" x-transition class="pl-4 pb-2 space-y-1">
+                    <x-responsive-nav-link :href="route('outgoings.index')">
+                        {{ __('Outgoings') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('incomings.index')">
+                        {{ __('Incomings') }}
+                    </x-responsive-nav-link>
+                </div>
+            </div>
         </div>
 
         <!-- Responsive Settings Options -->
