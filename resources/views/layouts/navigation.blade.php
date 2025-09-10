@@ -36,10 +36,6 @@
                         {{ __('Products') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">
-                        {{ __('All Invoices') }}
-                    </x-nav-link>
-
                     <x-nav-link :href="route('sub-contractors.index')" :active="request()->routeIs('sub-contractors.*')">
                         {{ __('Sub-Contractors') }}
                     </x-nav-link>
@@ -167,7 +163,7 @@
                 {{ __('Products') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">
-                {{ __('All Invoices') }}
+                {{ __('Dealers Invoices') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('sub-contractors.index')" :active="request()->routeIs('sub-contractors.*')">
                 {{ __('Sub-Contractors') }}

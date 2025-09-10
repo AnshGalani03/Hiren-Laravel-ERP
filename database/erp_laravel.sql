@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 09, 2025 at 04:46 AM
+-- Generation Time: Sep 10, 2025 at 06:29 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -308,7 +308,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (22, '2025_09_02_130732_add_active_to_projects_table', 7),
 (23, '2025_09_03_061935_add_remark_to_invoices_table', 8),
 (24, '2025_09_03_062056_add_remark_to_invoices_table', 9),
-(25, '2025_09_08_114743_add_payment_status_to_upads_table', 10);
+(25, '2025_09_08_114743_add_payment_status_to_upads_table', 10),
+(26, '2025_09_09_060656_remove_month_and_pending_from_upads_table', 11),
+(27, '2025_09_10_051040_create_products_table', 12);
 
 -- --------------------------------------------------------
 
@@ -353,6 +355,29 @@ CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `product_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `product_name`, `date`, `created_at`, `updated_at`) VALUES
+(2, 'Cement', '2025-09-10', '2025-09-09 23:57:00', '2025-09-09 23:57:00');
 
 -- --------------------------------------------------------
 
@@ -600,29 +625,30 @@ DROP TABLE IF EXISTS `upads`;
 CREATE TABLE IF NOT EXISTS `upads` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `employee_id` bigint UNSIGNED NOT NULL,
-  `month` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` date NOT NULL,
   `salary` decimal(10,2) NOT NULL,
   `salary_paid` tinyint(1) NOT NULL DEFAULT '0',
   `upad` decimal(10,2) NOT NULL,
   `upad_paid` tinyint(1) NOT NULL DEFAULT '0',
-  `pending` decimal(10,2) NOT NULL DEFAULT '0.00',
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `upads_employee_id_foreign` (`employee_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `upads`
 --
 
-INSERT INTO `upads` (`id`, `employee_id`, `month`, `date`, `salary`, `salary_paid`, `upad`, `upad_paid`, `pending`, `remark`, `created_at`, `updated_at`) VALUES
-(13, 1, 'August', '2025-08-14', 50000.00, 0, 10000.00, 0, 5000.00, NULL, '2025-09-08 08:22:31', '2025-09-08 08:22:58'),
-(11, 1, 'September', '2025-09-05', 50000.00, 0, 10000.00, 0, 20000.00, NULL, '2025-09-08 08:21:40', '2025-09-08 08:24:06'),
-(14, 1, 'August', '2025-08-20', 50000.00, 0, 35000.00, 0, 5000.00, NULL, '2025-09-08 08:22:58', '2025-09-08 08:22:58'),
-(15, 1, 'September', '2025-09-06', 50000.00, 0, 20000.00, 0, 20000.00, NULL, '2025-09-08 08:23:53', '2025-09-08 08:24:06');
+INSERT INTO `upads` (`id`, `employee_id`, `date`, `salary`, `salary_paid`, `upad`, `upad_paid`, `remark`, `created_at`, `updated_at`) VALUES
+(13, 1, '2025-08-14', 50000.00, 0, 10000.00, 0, NULL, '2025-09-08 08:22:31', '2025-09-08 08:22:58'),
+(16, 1, '2025-09-07', 50000.00, 0, 2000.00, 0, NULL, '2025-09-08 23:20:51', '2025-09-09 00:00:49'),
+(11, 1, '2025-09-05', 50000.00, 0, 10000.00, 0, NULL, '2025-09-08 08:21:40', '2025-09-09 00:00:49'),
+(14, 1, '2025-08-20', 50000.00, 0, 35000.00, 0, NULL, '2025-09-08 08:22:58', '2025-09-08 08:22:58'),
+(15, 1, '2025-09-06', 50000.00, 0, 20000.00, 0, NULL, '2025-09-08 08:23:53', '2025-09-09 00:00:49'),
+(18, 1, '2025-09-05', 50000.00, 0, 2000.00, 0, 'Demo', '2025-09-09 00:39:34', '2025-09-09 00:47:39'),
+(19, 1, '2025-09-04', 50000.00, 0, 2000.00, 0, NULL, '2025-09-09 00:46:55', '2025-09-09 00:46:55');
 
 -- --------------------------------------------------------
 
