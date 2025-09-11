@@ -9,14 +9,7 @@
             </a>
         </div>
     </x-slot>
-
-    @if ($message = Session::get('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> {{ $message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-
+    
     <!-- Products Table -->
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="card-header">
