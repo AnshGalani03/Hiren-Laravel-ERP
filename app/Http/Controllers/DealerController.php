@@ -60,9 +60,9 @@ class DealerController extends Controller
         // Calculate totals
         $totalInvoices = $invoices->sum('amount');
         $totalTransactions = $transactions->sum('amount');
-        $grandTotal = $totalInvoices + $totalTransactions;
+        $pendingAmount = $totalInvoices - $totalTransactions;
 
-        return view('dealers.show', compact('dealer', 'invoices', 'transactions', 'totalInvoices', 'totalTransactions', 'grandTotal'));
+        return view('dealers.show', compact('dealer', 'invoices', 'transactions', 'totalInvoices', 'totalTransactions', 'pendingAmount'));
     }
 
 

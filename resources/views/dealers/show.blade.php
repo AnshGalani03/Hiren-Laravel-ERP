@@ -6,7 +6,7 @@
             </h2>
             <div>
                 <a href="{{ route('invoices.create', ['dealer_id' => $dealer->id]) }}" class="btn btn-success btn-sm">Add Invoice</a>
-                <a href="{{ route('transactions.create', ['type' => 'incoming', 'dealer_id' => $dealer->id]) }}" class="btn btn-info btn-sm">Add Transaction</a>
+                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'dealer_id' => $dealer->id]) }}" class="btn btn-danger btn-sm">Add Expense</a>
                 <a href="{{ route('dealers.edit', $dealer) }}" class="btn btn-warning btn-sm">Edit Dealer</a>
             </div>
         </div>
@@ -42,8 +42,8 @@
         <div class="col-md-4">
             <div class="card bg-success text-white">
                 <div class="card-body text-center">
-                    <h4>Grand Total</h4>
-                    <h2>₹{{ number_format($grandTotal, 2) }}</h2>
+                    <h4>Pending Amount</h4>
+                    <h2>₹{{ number_format($pendingAmount, 2) }}</h2>
                     <small>All activities</small>
                 </div>
             </div>
@@ -208,7 +208,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0"><i class="fas fa-exchange-alt text-info"></i> Transactions</h5>
             <div>
-                <a href="{{ route('transactions.create', ['type' => 'incoming', 'dealer_id' => $dealer->id]) }}" class="btn btn-success btn-sm">
+                <a href="{{ route('transactions.create', ['type' => 'incoming', 'dealer_id' => $dealer->id]) }}" class="btn btn-success btn-sm d-none">
                     <i class="fas fa-plus"></i> Add Income
                 </a>
                 <a href="{{ route('transactions.create', ['type' => 'outgoing', 'dealer_id' => $dealer->id]) }}" class="btn btn-danger btn-sm">
@@ -220,7 +220,7 @@
         <!-- Transaction Filters -->
         <div class="card-body border-bottom">
             <div class="row g-3">
-                <div class="col-md-3">
+                <div class="col-md-3 d-none">
                     <label for="dealer_tx_type_filter" class="form-label">Type</label>
                     <select class="form-control" id="dealer_tx_type_filter">
                         <option value="">All Types</option>
@@ -228,15 +228,15 @@
                         <option value="outgoing">Outgoing</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="dealer_tx_from_date" class="form-label">From Date</label>
                     <input type="date" class="form-control" id="dealer_tx_from_date">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="dealer_tx_to_date" class="form-label">To Date</label>
                     <input type="date" class="form-control" id="dealer_tx_to_date">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label">&nbsp;</label>
                     <div>
                         <button type="button" class="btn btn-secondary w-100" id="reset_tx_filters">
@@ -248,7 +248,7 @@
         </div>
 
         <!-- Transaction Summary Cards -->
-        <div class="card-body border-bottom bg-light">
+        <div class="card-body border-bottom bg-light d-none">
             <div class="row text-center">
                 <div class="col-md-3">
                     <div class="card bg-success text-white">
@@ -480,7 +480,9 @@
                     }
 
                     var net = incoming - outgoing;
-                    $('#tx_footer_total').html('₹' + numberFormat(Math.abs(net)) + ' (' + (net >= 0 ? 'Profit' : 'Loss') + ')');
+                    //Display Profit/Loss Text if incoming is available currently remove this line
+                    // $('#tx_footer_total').html('₹' + numberFormat(Math.abs(net)) + ' (' + (net >= 0 ? 'Profit' : 'Loss') + ')');
+                    $('#tx_footer_total').html('₹' + numberFormat(Math.abs(net)));
                 }
             });
 
