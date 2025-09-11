@@ -124,6 +124,27 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <!-- In your transaction create form -->
+                            @if(request('sub_contractor_id'))
+                            <input type="hidden" name="sub_contractor_id" value="{{ request('sub_contractor_id') }}">
+                            <div class="col-md-6">
+                                <label class="form-label">Sub-Contractor</label>
+                                <input type="text" class="form-control" value="{{ \App\Models\SubContractor::find(request('sub_contractor_id'))->contractor_name }}" readonly>
+                            </div>
+                            @else
+                            <div class="col-md-6">
+                                <label for="sub_contractor_id" class="form-label">Sub-Contractor (Optional)</label>
+                                <select class="form-control" id="sub_contractor_id" name="sub_contractor_id">
+                                    <option value="">Select Sub-Contractor</option>
+                                    @foreach($subContractors as $subContractor)
+                                    <option value="{{ $subContractor->id }}" {{ old('sub_contractor_id') == $subContractor->id ? 'selected' : '' }}>
+                                        {{ $subContractor->contractor_name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>

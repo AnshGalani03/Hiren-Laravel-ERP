@@ -100,6 +100,13 @@ Route::middleware('auth')->group(function () {
     Route::get('sub-contractor-bills/{subContractorBill}/edit', [SubContractorBillController::class, 'edit'])->name('sub-contractor-bills.edit');
     Route::patch('sub-contractor-bills/{subContractorBill}', [SubContractorBillController::class, 'update'])->name('sub-contractor-bills.update');
     Route::delete('sub-contractor-bills/{subContractorBill}', [SubContractorBillController::class, 'destroy'])->name('sub-contractor-bills.destroy');
+    // Bills DataTable routes
+    Route::get('sub-contractors/{subContractor}/bills-data', [SubContractorController::class, 'billsData'])
+        ->name('sub-contractors.bills-data');
+    Route::delete('bills/{id}', [SubContractorController::class, 'deleteBill'])
+        ->name('bills.delete');
+
+
 
     // Project Transactions Data in Data table
     Route::get('projects/{project}/transactions-data', [ProjectController::class, 'transactionsData'])->name('projects.transactions-data');
@@ -111,10 +118,9 @@ Route::middleware('auth')->group(function () {
     // Add inside middleware('auth')->group():
     Route::resource('upads', UpadController::class);
 
-
+    // Employee upad routes
     Route::get('employees/{employee}/monthly-upads', [UpadController::class, 'monthlyView'])->name('employees.monthly-upads');
     Route::get('upads/monthly-report', [UpadController::class, 'monthlyReport'])->name('upads.monthly-report');
-
 
     Route::patch('upads/{upad}/payment-status', [UpadController::class, 'updatePaymentStatus'])
         ->name('upads.updatePaymentStatus');
@@ -132,6 +138,13 @@ Route::middleware('auth')->group(function () {
         ->middleware('auth');
 
     Route::post('bills/{bill}/update-status', [BillController::class, 'updateStatus'])->name('bills.updateStatus');
+
+    // Sub-Contractor Bills Routes
+    Route::resource('sub-contractor-bills', SubContractorBillController::class)->except(['index', 'show']);
+    Route::get('sub-contractors/{subContractor}/bills-data', [SubContractorController::class, 'billsData'])
+        ->name('sub-contractors.bills-data');
+    Route::delete('bills/{id}', [SubContractorController::class, 'deleteBill'])
+        ->name('sub-contractors.delete-bill');
 });
 
 require __DIR__ . '/auth.php';

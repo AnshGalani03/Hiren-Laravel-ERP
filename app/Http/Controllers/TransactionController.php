@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Dealer;
 use App\Models\Incoming;
 use App\Models\Outgoing;
+use App\Models\SubContractor;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
@@ -17,7 +18,7 @@ class TransactionController extends Controller
     {
         if ($request->ajax()) {
             // Base query - start fresh
-            $query = Transaction::with(['project', 'dealer', 'incoming', 'outgoing']);
+            $query = Transaction::with(['project', 'dealer', 'subContractor', 'incoming', 'outgoing']);
 
             // Apply filters consistently
             $query = $this->applyFilters($query, $request);
@@ -42,12 +43,15 @@ class TransactionController extends Controller
                 ->addColumn('linked_to', function ($transaction) {
                     $linked = [];
                     if ($transaction->project) {
-                        $linked[] = '<span class="badge bg-info">Project: ' . $transaction->project->name . '</span>';
+                        $linked[] = '<span class="badge bg-primary">Project: ' . $transaction->project->name . '</span>';
                     }
                     if ($transaction->dealer) {
-                        $linked[] = '<span class="badge bg-secondary">Dealer: ' . $transaction->dealer->dealer_name . '</span>';
+                        $linked[] = '<span class="badge bg-info">Dealer: ' . $transaction->dealer->dealer_name . '</span>';
                     }
-                    return implode('<br>', $linked) ?: '<span class="text-muted">None</span>';
+                    if ($transaction->subContractor) {
+                        $linked[] = '<span class="badge bg-warning">Sub-Contractor: ' . $transaction->subContractor->contractor_name . '</span>';
+                    }
+                    return implode(' ', $linked) ?: 'None';
                 })
                 ->editColumn('type', function ($transaction) {
                     $class = $transaction->type == 'incoming' ? 'success' : 'danger';
@@ -56,12 +60,8 @@ class TransactionController extends Controller
                 })
                 ->addColumn('action', function ($transaction) {
                     return '
-                        <a href="' . route('transactions.edit', $transaction->id) . '" class="btn btn-warning btn-sm">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <button class="btn btn-danger btn-sm delete-transaction" data-id="' . $transaction->id . '">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
+                        <a href="' . route('transactions.edit', $transaction) . '" class="btn btn-warning btn-sm">Edit</a>
+                        <button class="btn btn-danger btn-sm delete-transaction" data-id="' . $transaction->id . '">Delete</button>
                     ';
                 })
                 ->rawColumns(['type', 'linked_to', 'action', 'amount'])
@@ -71,8 +71,9 @@ class TransactionController extends Controller
         // Load filter data
         $projects = Project::where('active', true)->orderBy('name')->get();
         $dealers = Dealer::orderBy('dealer_name')->get();
+        $subContractors = SubContractor::orderBy('contractor_name')->get(); // Add this
 
-        return view('transactions.index', compact('projects', 'dealers'));
+        return view('transactions.index', compact('projects', 'dealers', 'subContractors'));
     }
 
     // NEW: Separate method to apply filters consistently
@@ -88,12 +89,17 @@ class TransactionController extends Controller
             $query->where('dealer_id', $request->dealer_id);
         }
 
+        // Sub-Contractor filter - ADD THIS
+        if ($request->filled('sub_contractor_id') && $request->sub_contractor_id != '') {
+            $query->where('sub_contractor_id', $request->sub_contractor_id);
+        }
+
         // Type filter
         if ($request->filled('type') && $request->type != '') {
             $query->where('type', $request->type);
         }
 
-        // Date range filter - FIXED: Proper date parsing
+        // Date range filter
         if ($request->filled('from_date') && $request->filled('to_date')) {
             try {
                 $fromDate = Carbon::parse($request->from_date)->format('Y-m-d');
@@ -101,7 +107,6 @@ class TransactionController extends Controller
                 $query->whereBetween('date', [$fromDate, $toDate]);
             } catch (\Exception $e) {
                 // If date parsing fails, ignore the date filter
-                // \Log::error('Date parsing error in transactions filter: ' . $e->getMessage());
             }
         }
 
@@ -111,13 +116,13 @@ class TransactionController extends Controller
     public function create(Request $request)
     {
         $type = $request->get('type', 'incoming');
-        // Load ONLY active projects for dropdown
         $projects = Project::where('active', true)->orderBy('name')->get();
         $dealers = Dealer::orderBy('dealer_name')->get();
+        $subContractors = SubContractor::orderBy('contractor_name')->get(); // Add this
         $incomings = Incoming::all();
         $outgoings = Outgoing::all();
 
-        return view('transactions.create', compact('type', 'projects', 'dealers', 'incomings', 'outgoings'));
+        return view('transactions.create', compact('type', 'projects', 'dealers', 'subContractors', 'incomings', 'outgoings'));
     }
 
     public function store(Request $request)
@@ -130,6 +135,8 @@ class TransactionController extends Controller
             'incoming_id' => 'required_if:type,incoming|exists:incomings,id',
             'outgoing_id' => 'required_if:type,outgoing|exists:outgoings,id',
             'project_id' => 'nullable|exists:projects,id',
+            'dealer_id' => 'nullable|exists:dealers,id',
+            'sub_contractor_id' => 'nullable|exists:sub_contractors,id', // Add this
         ]);
 
         // Additional validation: if project is selected, ensure it's active
@@ -146,13 +153,13 @@ class TransactionController extends Controller
 
     public function edit(Transaction $transaction)
     {
-        // Load ONLY active projects for dropdown
         $projects = Project::where('active', true)->orderBy('name')->get();
         $dealers = Dealer::orderBy('dealer_name')->get();
+        $subContractors = SubContractor::orderBy('contractor_name')->get();
         $incomings = Incoming::all();
         $outgoings = Outgoing::all();
 
-        return view('transactions.edit', compact('transaction', 'projects', 'dealers', 'incomings', 'outgoings'));
+        return view('transactions.edit', compact('transaction', 'projects', 'dealers', 'subContractors', 'incomings', 'outgoings'));
     }
 
     public function update(Request $request, Transaction $transaction)
@@ -165,6 +172,8 @@ class TransactionController extends Controller
             'incoming_id' => 'required_if:type,incoming|exists:incomings,id',
             'outgoing_id' => 'required_if:type,outgoing|exists:outgoings,id',
             'project_id' => 'nullable|exists:projects,id',
+            'dealer_id' => 'nullable|exists:dealers,id',
+            'sub_contractor_id' => 'nullable|exists:sub_contractors,id',
         ]);
 
         // Additional validation: if project is selected, ensure it's active

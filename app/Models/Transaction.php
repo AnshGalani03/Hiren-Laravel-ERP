@@ -11,14 +11,14 @@ class Transaction extends Model
 
     protected $fillable = [
         'type',
-        'project_id',
-        'dealer_id',
-        'incoming_id',
-        'outgoing_id',
         'amount',
         'date',
         'description',
-        'remark'
+        'project_id',
+        'dealer_id',
+        'sub_contractor_id', // Add this
+        'incoming_id',
+        'outgoing_id'
     ];
 
     protected $casts = [
@@ -33,6 +33,11 @@ class Transaction extends Model
     public function dealer()
     {
         return $this->belongsTo(Dealer::class);
+    }
+
+    public function subContractor()
+    {
+        return $this->belongsTo(SubContractor::class);
     }
 
     public function incoming()
