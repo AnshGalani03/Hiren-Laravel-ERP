@@ -6,7 +6,7 @@
                 <i class="fas fa-arrow-left"></i> Back
             </a>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Edit Sub-Contractor: ') . $subContractor->contractor_name }}
+                {{ __('Edit Sub-Contractor') }}
             </h2>
         </div>
     </x-slot>
@@ -15,7 +15,7 @@
         <div class="p-6 text-gray-900">
             <form method="POST" action="{{ route('sub-contractors.update', $subContractor) }}">
                 @csrf
-                @method('PATCH')
+                @method('PUT')
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -30,7 +30,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
                         <input type="date" class="form-control @error('date') is-invalid @enderror"
-                            id="date" name="date" value="{{ old('date', $subContractor->date->format('Y-m-d')) }}" required>
+                            id="date" name="date" value="{{ old('date', $subContractor->date?->format('Y-m-d')) }}" required>
                         @error('date')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -79,20 +79,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="expenses" class="form-label">Initial Expenses</label>
-                        <input type="number" step="0.01" class="form-control @error('expenses') is-invalid @enderror"
-                            id="expenses" name="expenses" value="{{ old('expenses', $subContractor->expenses) }}">
-                        @error('expenses')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label for="work_order_date" class="form-label">Work Order Date</label>
                         <input type="date" class="form-control @error('work_order_date') is-invalid @enderror"
-                            id="work_order_date" name="work_order_date"
-                            value="{{ old('work_order_date', $subContractor->work_order_date ? $subContractor->work_order_date->format('Y-m-d') : '') }}">
+                            id="work_order_date" name="work_order_date" value="{{ old('work_order_date', $subContractor->work_order_date?->format('Y-m-d')) }}">
                         @error('work_order_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -118,7 +108,7 @@
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <a href="{{ route('sub-contractors.show', $subContractor) }}" class="btn btn-secondary">Cancel</a>
+                    <a href="{{ route('sub-contractors.index') }}" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">Update Sub-Contractor</button>
                 </div>
             </form>

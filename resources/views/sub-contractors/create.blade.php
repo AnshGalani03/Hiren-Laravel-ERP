@@ -77,17 +77,10 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="expenses" class="form-label">Initial Expenses</label>
-                        <input type="number" step="0.01" class="form-control @error('expenses') is-invalid @enderror"
-                            id="expenses" name="expenses" value="{{ old('expenses', 0) }}">
-                        @error('expenses')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+                <!-- REMOVED THE EXPENSES ROW SECTION -->
 
-                    <div class="col-md-6 mb-3">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
                         <label for="work_order_date" class="form-label">Work Order Date</label>
                         <input type="date" class="form-control @error('work_order_date') is-invalid @enderror"
                             id="work_order_date" name="work_order_date" value="{{ old('work_order_date') }}">

@@ -17,7 +17,6 @@ class SubContractor extends Model
         'amount_project',
         'time_limit',
         'emd_fdr_detail',
-        'expenses',
         'work_order_date',
         'remark'
     ];

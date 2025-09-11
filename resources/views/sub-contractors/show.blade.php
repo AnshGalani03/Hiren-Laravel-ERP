@@ -98,10 +98,6 @@
                         <p>{{ $subContractor->emd_fdr_detail ?: 'N/A' }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Initial Expenses:</strong>
-                        <p>₹{{ number_format($subContractor->expenses, 2) }}</p>
-                    </div>
-                    <div class="mb-3">
                         <strong>Remark:</strong>
                         <p>{{ $subContractor->remark ?: 'N/A' }}</p>
                     </div>
