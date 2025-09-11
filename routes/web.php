@@ -19,6 +19,7 @@ use App\Http\Controllers\SubContractorController;
 use App\Http\Controllers\SubContractorBillController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -145,6 +146,9 @@ Route::middleware('auth')->group(function () {
         ->name('sub-contractors.bills-data');
     Route::delete('bills/{id}', [SubContractorController::class, 'deleteBill'])
         ->name('sub-contractors.delete-bill');
+
+    // Customer route
+    Route::resource('customers', CustomerController::class);
 });
 
 require __DIR__ . '/auth.php';
