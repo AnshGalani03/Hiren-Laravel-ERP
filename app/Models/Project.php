@@ -16,7 +16,6 @@ class Project extends Model
         'amount_project',
         'time_limit',
         'emd_fdr_detail',
-        'expenses',
         'work_order_date',
         'remark',
         'active'  // Added active field

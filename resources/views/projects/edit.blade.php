@@ -83,16 +83,7 @@
 
                 <!-- Add this before the EMD/FDR Detail section -->
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="expenses" class="form-label">Initial Expenses</label>
-                        <input type="number" step="0.01" class="form-control @error('expenses') is-invalid @enderror"
-                            id="expenses" name="expenses" value="{{ old('expenses', $project->expenses) }}">
-                        @error('expenses')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label for="active" class="form-label">Project Status</label>
                         <select class="form-control @error('active') is-invalid @enderror" id="active" name="active">
                             <option value="1" {{ old('active', $project->active) == '1' ? 'selected' : '' }}>Active</option>
@@ -103,7 +94,6 @@
                         @enderror
                     </div>
                 </div>
-
 
                 <div class="mb-3">
                     <label for="emd_fdr_detail" class="form-label">EMD/FDR Detail</label>

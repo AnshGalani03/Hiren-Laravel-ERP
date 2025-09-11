@@ -15,7 +15,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $projects = Project::select(['id', 'name', 'date', 'department_name', 'amount_project', 'time_limit', 'emd_fdr_detail', 'expenses', 'work_order_date', 'remark', 'active']);
+            $projects = Project::select(['id', 'name', 'date', 'department_name', 'amount_project', 'time_limit', 'emd_fdr_detail', 'work_order_date', 'remark', 'active']);
 
             // Filter by active status if requested
             if ($request->filled('status') && $request->status != '') {
