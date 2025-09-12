@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css" media="screen">
         @page {
-            margin: 8mm 8mm 8mm 8mm;
+            margin: 50mm 8mm 8mm 8mm;
         }
 
         * {
@@ -56,16 +56,16 @@
 
         .invoice-title {
             display: table-cell;
-            width: 40%;
-            text-align: right;
+            /* width: 40%; */
+            text-align: center;
             vertical-align: top;
         }
 
         .invoice-title h1 {
-            font-size: 32px;
-            color: #1e3a8a;
+            font-size: 22px;
+            color: #42999b;
             font-weight: bold;
-            margin: 0;
+            margin-bottom: 20px;
         }
 
         .invoice-details-table {
@@ -118,7 +118,7 @@
         }
 
         .items-table th {
-            background: #1e3a8a;
+            background: #42999b;
             color: white;
             border: 1px solid #000;
             padding: 4px 3px;
@@ -168,15 +168,16 @@
         }
 
         .summary-table .subtotal-row {
-            background: #dde7ff;
+            background: #42999b;
+            color: #fff;
         }
 
         .summary-table .tax-row {
-            background: #c2d6ff;
+            background: #83c5be;
         }
 
         .summary-table .total-row {
-            background: #a6c8ff;
+            background: #98cfc9;
         }
 
         .terms-section {
@@ -218,7 +219,7 @@
     <div class="invoice-container">
         <!-- Header -->
         <div class="header">
-            <div class="company-info">
+            <div class="company-info" style="display: none;">
                 @if($invoice->logo)
                 <!-- <img src="{{ $invoice->getLogo() }}" alt="Logo" style="max-width: 80px; margin-bottom: 5px;"> -->
                 @endif
@@ -238,7 +239,7 @@
                 </div>
             </div>
             <div class="invoice-title">
-                <h1>INVOICE</h1>
+                <h1>TAX INVOICE</h1>
             </div>
         </div>
 
@@ -320,7 +321,7 @@
         </table>
 
         <!-- Thank You Message -->
-        <div class="thank-you">
+        <div class="thank-you" style="display:none">
             Thanks for shopping with us.
         </div>
 
@@ -346,19 +347,46 @@
                 </tr>
             </table>
         </div>
-
-
-
-
         <!-- Terms & Conditions -->
         <div class="terms-section">
-            <div class="terms-title">Terms & Conditions Apply</div>
             @if($invoice->notes)
             <p>{{ $invoice->notes }}</p>
             @else
             <!-- <p>Full payment is due upon receipt of this invoice.</p> -->
             @endif
         </div>
+
+        <div class="bank-gst-info">
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40%">Bank Detail</th>
+                        <th style="width: 30%">GST & PAN</th>
+                        <th style="width: 30%">For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p>ICICI BANK LTD</p>
+                            <p>A/C No: 724605500446</p>
+                            <p>IFSC: ICIC0001838</p>
+                            <p>Branch: Mini Bazaar, Varachha, Surat</p>
+                        </td>
+                        <td>
+                            <p>GSTIN NO: 24GYTPS4723P1ZC</p>
+                            <p>PAN NO: GYTPS4723P</p>
+                        </td>
+                        <td>
+                            <p style="text-align: center;">Authorised Signatory</p>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="terms-title">Terms & Conditions Apply</div>
     </div>
 </body>
 
