@@ -48,7 +48,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <button type="button" id="clearFilters" class="btn btn-secondary btn-sm">
+                    <button type="button" id="resetFilters" class="btn btn-secondary btn-sm">
                         <i class="fas fa-times"></i> Clear Filters
                     </button>
                 </div>
@@ -88,7 +88,17 @@
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                ajax: "{{ route('bills.index') }}",
+                ajax: {
+                    url: "{{ route('bills.index') }}",
+                    type: "GET",
+                    data: function(d) {
+                        // Add filter parameters to the AJAX request
+                        d.customer_name = $('#filterCustomer').val();
+                        d.status = $('#filterStatus').val();
+                        d.start_date = $('#filterStartDate').val();
+                        d.end_date = $('#filterEndDate').val();
+                    }
+                },
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -134,6 +144,17 @@
                 ]
             });
 
+            // Filter functionality
+            $('#filterCustomer, #filterStatus, #filterStartDate, #filterEndDate').on('change keyup', function() {
+                billsTable.draw();
+            });
+
+            // Reset filters
+            $('#resetFilters').click(function() {
+                $('#filterCustomer, #filterStatus, #filterStartDate, #filterEndDate').val('');
+                billsTable.draw();
+            });
+
             // Handle delete button click
             $(document).on('click', '.delete-bill', function(e) {
                 e.preventDefault();
@@ -168,11 +189,12 @@
                 }
             });
 
-            // Handle status update (if you have this functionality)
+            // Handle status update
             $(document).on('change', '.status-select', function() {
                 var billId = $(this).data('id');
                 var newStatus = $(this).val();
                 var statusSelect = $(this);
+                var originalValue = statusSelect.data('original-value') || statusSelect.val();
 
                 $.ajax({
                     url: '{{ route("bills.index") }}/' + billId + '/update-status',
@@ -189,15 +211,15 @@
                             var statusBadge = statusSelect.siblings('.status-badge');
                             var badgeClass = newStatus === 'paid' ? 'bg-success' : (newStatus === 'sent' ? 'bg-warning' : 'bg-secondary');
                             statusBadge.removeClass('bg-success bg-warning bg-secondary').addClass(badgeClass);
-                            statusBadge.text(response.status);
+                            statusBadge.text(newStatus.charAt(0).toUpperCase() + newStatus.slice(1));
 
-                            // Optionally reload the page to show flash message
-                            // window.location.reload();
+                            // Store new original value
+                            statusSelect.data('original-value', newStatus);
                         }
                     },
                     error: function() {
                         // Revert the select value on error
-                        statusSelect.val(statusSelect.data('original-value'));
+                        statusSelect.val(originalValue);
                     }
                 });
             });
