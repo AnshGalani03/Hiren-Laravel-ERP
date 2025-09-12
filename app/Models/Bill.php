@@ -46,14 +46,35 @@ class Bill extends Model
         parent::boot();
 
         static::creating(function ($bill) {
-            $bill->bill_number = static::generateBillNumber();
+            if (!$bill->bill_number) {
+                $bill->bill_number = self::generateBillNumber();
+            }
         });
     }
 
+    /**
+     * Generate next bill number - Simple method
+     */
     public static function generateBillNumber()
     {
-        $lastBill = static::orderBy('id', 'desc')->first();
-        $number = $lastBill ? intval(substr($lastBill->bill_number, 4)) + 1 : 1;
-        return 'BILL' . str_pad($number, 4, '0', STR_PAD_LEFT);
+        $currentYear = now()->format('y'); // 25 for 2025
+        $prefix = 'HSN' . $currentYear;
+
+        // Get the last bill number for current year
+        $lastBill = self::where('bill_number', 'like', $prefix . '%')
+            ->orderBy('bill_number', 'desc')
+            ->first();
+
+        if ($lastBill) {
+            // Extract the number part and increment
+            $lastNumber = (int) substr($lastBill->bill_number, -3);
+            $nextNumber = $lastNumber + 1;
+        } else {
+            // First bill of the year
+            $nextNumber = 1;
+        }
+
+        // Format: HSN25001, HSN25002, etc.
+        return $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
     }
 }

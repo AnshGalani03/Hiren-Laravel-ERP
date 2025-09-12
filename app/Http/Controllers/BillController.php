@@ -255,8 +255,6 @@ class BillController extends Controller
         // Load customer and billItems relationships
         $bill->load('customer', 'billItems.product');
 
-
-
         // Check if bill is GST or Non-GST based on database field
         $isGstBill = $bill->is_gst;
 
@@ -319,7 +317,11 @@ class BillController extends Controller
             ->currencyCode('INR')
             ->addItems($items)
             ->notes($bill->notes ?? '')
-            ->filename($bill->bill_number . '-' . ($isGstBill ? 'gst' : 'non-gst'))
+            /**
+             * FIle Name with gst and non gst title
+             */
+            // ->filename($bill->bill_number . '-' . ($isGstBill ? 'gst' : 'non-gst'))
+            ->filename($bill->bill_number)
             ->template('custom');
 
         // Add tax rate only for GST bills

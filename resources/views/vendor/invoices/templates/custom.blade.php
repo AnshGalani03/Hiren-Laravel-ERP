@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>{{ $invoice->getSerialNumber() }}</title>
+    <title>{{ $invoice->filename}}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css" media="screen">
         @page {
