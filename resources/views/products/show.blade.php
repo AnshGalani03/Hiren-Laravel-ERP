@@ -8,12 +8,18 @@
                 <a href="{{ route('products.edit', $product) }}" class="btn btn-warning">
                     <i class="fas fa-edit"></i> Edit
                 </a>
-                <a href="{{ route('products.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Back to List
-                </a>
             </div>
         </div>
     </x-slot>
+
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <a href="{{ route('products.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+
+    </div>
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="card-header">
