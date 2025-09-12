@@ -272,11 +272,12 @@
         <table class="items-table">
             <thead>
                 <tr>
-                    <th style="width: 5%;">#</th>
-                    <th style="width: 50%;">Item & Description</th>
-                    <th style="width: 15%;" class="text-center">Qty</th>
-                    <th style="width: 15%;" class="text-right">Rate</th>
-                    <th style="width: 15%;" class="text-right">Amount</th>
+                    <th style="width: 5%">#</th>
+                    <th style="width: 30%">Item & Description</th>
+                    <th style="width: 15%">HSN Code</th>
+                    <th style="width: 10%" class="text-right">Qty</th>
+                    <th style="width: 15%" class="text-right">Rate</th>
+                    <th style="width: 15%" class="text-right">Amount</th>
                 </tr>
             </thead>
             <tbody>
@@ -288,6 +289,14 @@
                         @if($item->description)
                         <div class="item-subtitle">{{ $item->description }}</div>
                         @endif
+                    </td>
+                    <td class="text-center">
+                        {{-- Get HSN code from product --}}
+                        @php
+                        $billItem = \App\Models\BillItem::where('product_id', $item->product_id ?? 0)->first();
+                        $hsnCode = $billItem->product->hsn_code ?? 'N/A';
+                        @endphp
+                        {{ $hsnCode }}
                     </td>
                     <td class="text-center">{{ number_format($item->quantity, 2) }}</td>
                     <td class="text-right">{{ $invoice->formatCurrency(floatval($item->price_per_unit ?? 0)) }}</td>

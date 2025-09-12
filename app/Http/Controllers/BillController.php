@@ -71,7 +71,7 @@ class BillController extends Controller
                             <a href="' . route('bills.show', $bill->id) . '" class="btn btn-info btn-sm">View</a>
                             <a href="' . route('bills.edit', $bill->id) . '" class="btn btn-warning btn-sm">Edit</a>
                             <a href="' . route('bills.pdf', ['bill' => $bill->id]) . '" class="btn btn-success btn-sm">PDF</a>
-                            <button class="btn btn-danger btn-sm delete-bill" data-id="' . $bill->id . '">Delete</button>
+                            <button class="btn btn-danger btn-sm delete-bill" data-id="' . $bill->id . '"  data-bill-number="' . $bill->bill_number . '">Delete</button>
                         </div>
                     ';
                 })
@@ -208,11 +208,22 @@ class BillController extends Controller
 
     public function destroy(Bill $bill)
     {
-        $bill->billItems()->delete();
-        $bill->delete();
+        try {
+            $billNumber = $bill->bill_number;
 
-        return redirect()->route('bills.index')
-            ->with('success', 'Bill deleted successfully.');
+            // Delete all bill items first
+            $bill->billItems()->delete();
+
+            // Then delete the bill
+            $bill->delete();
+
+            return redirect()->route('bills.index')
+                ->with('success', 'Bill #' . $billNumber . ' deleted successfully!');
+        } catch (\Exception $e) {
+
+            return redirect()->route('bills.index')
+                ->with('error', 'Error deleting bill: ' . $e->getMessage());
+        }
     }
 
     public function pdf(Bill $bill, Request $request)

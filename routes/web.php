@@ -11,33 +11,34 @@ use App\Http\Controllers\ProjectIncomeController;
 use App\Http\Controllers\TenderController;
 use App\Http\Controllers\OutgoingController;
 use App\Http\Controllers\IncomingController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\SubContractorController;
 use App\Http\Controllers\SubContractorBillController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CustomerController;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Dealer Routes
     Route::resource('dealers', DealerController::class);
+    Route::get('dealers/{dealer}/invoices-data', [DealerController::class, 'invoicesData'])->name('dealers.invoices-data');
+    Route::get('dealers/{dealer}/transactions-data', [DealerController::class, 'transactionsData'])->name('dealers.transactions-data');
 
     // Invoice Routes
     Route::get('invoices', [InvoiceController::class, 'index'])->name('invoices.index');
@@ -46,37 +47,31 @@ Route::middleware('auth')->group(function () {
     Route::get('invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
     Route::patch('invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
     Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
-
     Route::get('invoices/summary', [InvoiceController::class, 'summary'])->name('invoices.summary');
-
 
     // Employee Routes
     Route::resource('employees', EmployeeController::class);
+    Route::get('employees/{employee}/monthly-upads', [UpadController::class, 'monthlyView'])->name('employees.monthly-upads');
+    Route::get('employees/{employee}/monthly-overview', [EmployeeController::class, 'monthlyOverview'])->name('employees.monthly-overview');
 
     // Upad Routes
-    Route::get('upads/create', [UpadController::class, 'create'])->name('upads.create');
-    Route::post('upads', [UpadController::class, 'store'])->name('upads.store');
-    Route::get('upads/{upad}/edit', [UpadController::class, 'edit'])->name('upads.edit');
-    Route::patch('upads/{upad}', [UpadController::class, 'update'])->name('upads.update');
-    Route::delete('upads/{upad}', [UpadController::class, 'destroy'])->name('upads.destroy');
+    Route::resource('upads', UpadController::class);
+    Route::get('upads/monthly-report', [UpadController::class, 'monthlyReport'])->name('upads.monthly-report');
+    Route::patch('upads/{upad}/payment-status', [UpadController::class, 'updatePaymentStatus'])->name('upads.updatePaymentStatus');
 
     // Project Routes
     Route::resource('projects', ProjectController::class);
     Route::post('projects/{project}/assign-employee', [ProjectController::class, 'assignEmployee'])->name('projects.assign-employee');
     Route::post('projects/{project}/remove-employee', [ProjectController::class, 'removeEmployee'])->name('projects.remove-employee');
-    Route::get('projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+    Route::get('projects/{project}/toggle-status', [ProjectController::class, 'toggleStatus'])->name('projects.toggle-status');
+    Route::get('projects/{project}/transactions-data', [ProjectController::class, 'transactionsData'])->name('projects.transactions-data');
 
     // Project Expense & Income Routes
     Route::resource('project-expenses', ProjectExpenseController::class);
     Route::resource('project-incomes', ProjectIncomeController::class);
 
-    // Add this route for toggling project status
-    Route::get('projects/{project}/toggle-status', [ProjectController::class, 'toggleStatus'])->name('projects.toggle-status');
-
-
     // Tender Routes
     Route::resource('tenders', TenderController::class);
-    Route::get('tenders/{tender}', [TenderController::class, 'show'])->name('tenders.show');
 
     // Daily Kharcha Routes
     Route::resource('outgoings', OutgoingController::class);
@@ -89,65 +84,29 @@ Route::middleware('auth')->group(function () {
     Route::get('transactions/{transaction}/edit', [TransactionController::class, 'edit'])->name('transactions.edit');
     Route::patch('transactions/{transaction}', [TransactionController::class, 'update'])->name('transactions.update');
     Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
-
     Route::get('transactions/summary', [TransactionController::class, 'summary'])->name('transactions.summary');
 
     // Sub-contractor Routes
     Route::resource('sub-contractors', SubContractorController::class);
+    Route::get('sub-contractors/{subContractor}/bills-data', [SubContractorController::class, 'billsData'])->name('sub-contractors.bills-data');
 
-    // Sub-contractor Bill Routes
-    Route::get('sub-contractor-bills/create', [SubContractorBillController::class, 'create'])->name('sub-contractor-bills.create');
-    Route::post('sub-contractor-bills', [SubContractorBillController::class, 'store'])->name('sub-contractor-bills.store');
-    Route::get('sub-contractor-bills/{subContractorBill}/edit', [SubContractorBillController::class, 'edit'])->name('sub-contractor-bills.edit');
-    Route::patch('sub-contractor-bills/{subContractorBill}', [SubContractorBillController::class, 'update'])->name('sub-contractor-bills.update');
-    Route::delete('sub-contractor-bills/{subContractorBill}', [SubContractorBillController::class, 'destroy'])->name('sub-contractor-bills.destroy');
-    // Bills DataTable routes
-    Route::get('sub-contractors/{subContractor}/bills-data', [SubContractorController::class, 'billsData'])
-        ->name('sub-contractors.bills-data');
-    Route::delete('bills/{id}', [SubContractorController::class, 'deleteBill'])
-        ->name('bills.delete');
+    // Sub-contractor Bill Routes (Fixed: Use proper resource naming)
+    Route::resource('sub-contractor-bills', SubContractorBillController::class)->except(['index', 'show']);
 
+    // Product Routes
+    Route::resource('products', ProductController::class);
 
+    // Customer Routes
+    Route::resource('customers', CustomerController::class);
 
-    // Project Transactions Data in Data table
-    Route::get('projects/{project}/transactions-data', [ProjectController::class, 'transactionsData'])->name('projects.transactions-data');
-
-    // Dealer Invoices and Transactions Data in Data table
-    Route::get('dealers/{dealer}/invoices-data', [DealerController::class, 'invoicesData'])->name('dealers.invoices-data');
-    Route::get('dealers/{dealer}/transactions-data', [DealerController::class, 'transactionsData'])->name('dealers.transactions-data');
-
-    // Add inside middleware('auth')->group():
-    Route::resource('upads', UpadController::class);
-
-    // Employee upad routes
-    Route::get('employees/{employee}/monthly-upads', [UpadController::class, 'monthlyView'])->name('employees.monthly-upads');
-    Route::get('upads/monthly-report', [UpadController::class, 'monthlyReport'])->name('upads.monthly-report');
-
-    Route::patch('upads/{upad}/payment-status', [UpadController::class, 'updatePaymentStatus'])
-        ->name('upads.updatePaymentStatus');
-
-    Route::get('employees/{employee}/monthly-overview', [EmployeeController::class, 'monthlyOverview'])
-        ->name('employees.monthly-overview');
-
-    //Product Route
-    Route::resource('products', ProductController::class)->middleware('auth');
-
-    //Bills Route
-    Route::resource('bills', BillController::class)->middleware('auth');
+    // Bills Routes (Fixed: Moved to end to avoid conflicts)
+    Route::resource('bills', BillController::class);
     Route::get('bills/{bill}/pdf', [BillController::class, 'generatePDF'])->name('bills.pdf');
-
-
     Route::post('bills/{bill}/update-status', [BillController::class, 'updateStatus'])->name('bills.updateStatus');
 
-    // Sub-Contractor Bills Routes
-    Route::resource('sub-contractor-bills', SubContractorBillController::class)->except(['index', 'show']);
-    Route::get('sub-contractors/{subContractor}/bills-data', [SubContractorController::class, 'billsData'])
-        ->name('sub-contractors.bills-data');
-    Route::delete('bills/{id}', [SubContractorController::class, 'deleteBill'])
-        ->name('sub-contractors.delete-bill');
-
-    // Customer route
-    Route::resource('customers', CustomerController::class);
+    // Sub-contractor specific bill deletion (Fixed: Use proper URL structure)
+    Route::delete('sub-contractors/{subContractor}/bills/{bill}', [SubContractorController::class, 'deleteBill'])
+        ->name('sub-contractors.bills.destroy');
 });
 
 require __DIR__ . '/auth.php';

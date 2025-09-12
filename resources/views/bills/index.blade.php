@@ -83,56 +83,50 @@
     @push('scripts')
     <script>
         $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            var table = $('#bills-table').DataTable({
+            // Initialize DataTable
+            var billsTable = $('#bills-table').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                ajax: {
-                    url: "{{ route('bills.index') }}",
-                    data: function(d) {
-                        d.customer_name = $('#filterCustomer').val(); // Changed from dealer_name
-                        d.status = $('#filterStatus').val();
-                        d.start_date = $('#filterStartDate').val();
-                        d.end_date = $('#filterEndDate').val();
-                    }
-                },
+                ajax: "{{ route('bills.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1
                     },
                     {
                         data: 'bill_number',
-                        name: 'bill_number'
+                        name: 'bill_number',
+                        responsivePriority: 2
                     },
                     {
                         data: 'customer_name',
-                        name: 'customer.name'
-                    }, // Changed from dealer_name
+                        name: 'customer.name',
+                        responsivePriority: 3
+                    },
                     {
                         data: 'bill_date',
-                        name: 'bill_date'
+                        name: 'bill_date',
+                        responsivePriority: 5
                     },
                     {
                         data: 'total_amount',
-                        name: 'total_amount'
+                        name: 'total_amount',
+                        responsivePriority: 4
                     },
                     {
                         data: 'status',
-                        name: 'status'
+                        name: 'status',
+                        responsivePriority: 6
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 7
                     }
                 ],
                 order: [
@@ -140,74 +134,77 @@
                 ]
             });
 
-            // Filter change events
-            $('#filterDealer, #filterStatus, #filterStartDate, #filterEndDate').change(function() {
-                table.draw();
-            });
+            // Handle delete button click
+            $(document).on('click', '.delete-bill', function(e) {
+                e.preventDefault();
 
-            // Clear filters
-            $('#clearFilters').click(function() {
-                $('#filterDealer').val('');
-                $('#filterStatus').val('');
-                $('#filterStartDate').val('');
-                $('#filterEndDate').val('');
-                table.draw();
-            });
-
-            // Handle delete button
-            $(document).on('click', '.delete-bill', function() {
                 var billId = $(this).data('id');
-                if (confirm('Are you sure you want to delete this bill?')) {
-                    $.ajax({
-                        url: "{{ route('bills.index') }}/" + billId,
-                        type: 'DELETE',
-                        success: function(response) {
-                            if (response.success) {
-                                table.ajax.reload();
-                                alert('Bill deleted successfully!');
-                            }
-                        },
-                        error: function() {
-                            alert('Error deleting bill');
-                        }
+                var billNumber = $(this).data('bill-number') || billId;
+
+                if (confirm('Are you sure you want to delete Bill #' + billNumber + '?')) {
+                    // Create a form and submit it to trigger Laravel flash messages
+                    var form = $('<form>', {
+                        'method': 'POST',
+                        'action': '{{ route("bills.index") }}/' + billId
                     });
+
+                    // Add CSRF token
+                    form.append($('<input>', {
+                        'type': 'hidden',
+                        'name': '_token',
+                        'value': $('meta[name="csrf-token"]').attr('content')
+                    }));
+
+                    // Add DELETE method
+                    form.append($('<input>', {
+                        'type': 'hidden',
+                        'name': '_method',
+                        'value': 'DELETE'
+                    }));
+
+                    // Append form to body and submit
+                    $('body').append(form);
+                    form.submit();
                 }
             });
 
-            // Handle status change
+            // Handle status update (if you have this functionality)
             $(document).on('change', '.status-select', function() {
                 var billId = $(this).data('id');
                 var newStatus = $(this).val();
-                var selectElement = $(this);
+                var statusSelect = $(this);
 
                 $.ajax({
-                    url: '/bills/' + billId + '/update-status',
+                    url: '{{ route("bills.index") }}/' + billId + '/update-status',
                     type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     data: {
-                        status: newStatus,
-                        _token: $('meta[name="csrf-token"]').attr('content')
+                        status: newStatus
                     },
                     success: function(response) {
                         if (response.success) {
-                            var badge = selectElement.closest('tr').find('.status-badge');
-                            badge.removeClass('bg-secondary bg-warning bg-success');
+                            // Update badge color and text
+                            var statusBadge = statusSelect.siblings('.status-badge');
+                            var badgeClass = newStatus === 'paid' ? 'bg-success' : (newStatus === 'sent' ? 'bg-warning' : 'bg-secondary');
+                            statusBadge.removeClass('bg-success bg-warning bg-secondary').addClass(badgeClass);
+                            statusBadge.text(response.status);
 
-                            if (newStatus === 'paid') {
-                                badge.addClass('bg-success');
-                            } else if (newStatus === 'sent') {
-                                badge.addClass('bg-warning');
-                            } else {
-                                badge.addClass('bg-secondary');
-                            }
-                            badge.text(response.status);
-
-                            alert(response.message);
+                            // Optionally reload the page to show flash message
+                            // window.location.reload();
                         }
                     },
                     error: function() {
-                        alert('Error updating status');
+                        // Revert the select value on error
+                        statusSelect.val(statusSelect.data('original-value'));
                     }
                 });
+            });
+
+            // Store original values for status selects
+            $('.status-select').each(function() {
+                $(this).data('original-value', $(this).val());
             });
         });
     </script>
