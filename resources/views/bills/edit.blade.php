@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Edit Bill: ') . $bill->bill_number }}
-            </h2>
             <a class="btn btn-secondary" href="{{ route('bills.index') }}">
                 <i class="fas fa-arrow-left"></i> Back to List
             </a>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Edit Bill: ') . $bill->bill_number }}
+            </h2>
         </div>
     </x-slot>
 
