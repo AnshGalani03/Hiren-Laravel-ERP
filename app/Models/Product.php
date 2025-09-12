@@ -12,6 +12,7 @@ class Product extends Model
 
     protected $fillable = [
         'product_name',
+        'hsn_code', // Add this
         'date'
     ];
 
@@ -23,7 +24,7 @@ class Product extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($product) {
             if (!$product->date) {
                 $product->date = Carbon::now()->toDateString();

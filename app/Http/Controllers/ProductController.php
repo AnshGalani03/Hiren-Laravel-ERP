@@ -19,6 +19,9 @@ class ProductController extends Controller
                 ->editColumn('date', function ($product) {
                     return $product->date->format('d/m/Y');
                 })
+                ->editColumn('hsn_code', function ($product) {
+                    return $product->hsn_code ?? 'N/A';
+                })
                 ->addColumn('action', function ($product) {
                     return '
                         <a href="' . route('products.show', $product->id) . '" class="btn btn-info btn-sm">View</a>
@@ -45,10 +48,12 @@ class ProductController extends Controller
     {
         $request->validate([
             'product_name' => 'required|string|max:255|unique:products,product_name',
+            'hsn_code' => 'nullable|string|max:20',
         ]);
 
         Product::create([
             'product_name' => $request->product_name,
+            'hsn_code' => $request->hsn_code,
             'date' => Carbon::now()->toDateString()
         ]);
 
@@ -70,10 +75,12 @@ class ProductController extends Controller
     {
         $request->validate([
             'product_name' => 'required|string|max:255|unique:products,product_name,' . $product->id,
+            'hsn_code' => 'nullable|string|max:20',
         ]);
 
         $product->update([
             'product_name' => $request->product_name,
+            'hsn_code' => $request->hsn_code,
         ]);
 
         return redirect()->route('products.index')

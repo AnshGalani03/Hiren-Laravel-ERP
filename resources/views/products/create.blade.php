@@ -5,7 +5,7 @@
                 {{ __('Add New Product') }}
             </h2>
             <a class="btn btn-secondary" href="{{ route('products.index') }}">
-                <i class="fas fa-arrow-left"></i> Back to Products
+                <i class="fas fa-arrow-left"></i> Back to List
             </a>
         </div>
     </x-slot>
@@ -23,35 +23,31 @@
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="card-header">
-            <h5 class="mb-0">Product Information</h5>
+            <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Product Information</h5>
         </div>
         <div class="p-6 text-gray-900">
             <form action="{{ route('products.store') }}" method="POST">
                 @csrf
 
-                <div class="mb-3">
-                    <label for="product_name" class="form-label">
-                        Product Name <span class="text-danger">*</span>
-                    </label>
-                    <input type="text"
-                        class="form-control @error('product_name') is-invalid @enderror"
-                        id="product_name"
-                        name="product_name"
-                        value="{{ old('product_name') }}"
-                        placeholder="Enter product name"
-                        required>
-                    @error('product_name')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Date Added</label>
-                    <input type="text"
-                        class="form-control"
-                        value="{{ date('d/m/Y') }}"
-                        readonly>
-                    <small class="text-muted">Date will be automatically set to today's date.</small>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="product_name" class="form-label">Product Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('product_name') is-invalid @enderror"
+                            id="product_name" name="product_name" value="{{ old('product_name') }}" required>
+                        @error('product_name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label for="hsn_code" class="form-label">HSN Code</label>
+                        <input type="text" class="form-control @error('hsn_code') is-invalid @enderror"
+                            id="hsn_code" name="hsn_code" value="{{ old('hsn_code') }}"
+                            placeholder="e.g., 1234567890">
+                        <small class="text-muted">HSN (Harmonized System of Nomenclature) code for tax classification</small>
+                        @error('hsn_code')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="d-flex justify-content-between">

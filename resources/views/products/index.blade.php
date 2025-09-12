@@ -4,16 +4,16 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Products Management') }}
             </h2>
-            <a class="btn btn-primary" href="{{ route('products.create') }}">
-                Add New Product
+            <a class="btn btn-success" href="{{ route('products.create') }}">
+                <i class="fas fa-plus"></i> Add New Product
             </a>
         </div>
     </x-slot>
-    
-    <!-- Products Table -->
+
+
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-table"></i> Products List</h5>
+            <h5 class="mb-0"><i class="fas fa-boxes"></i> Products List</h5>
         </div>
         <div class="p-6 text-gray-900">
             <div class="table-responsive">
@@ -22,6 +22,7 @@
                         <tr>
                             <th>Sr. No</th>
                             <th>Product Name</th>
+                            <th>HSN Code</th>
                             <th>Date Added</th>
                             <th>Actions</th>
                         </tr>
@@ -32,59 +33,41 @@
     </div>
 
     @push('scripts')
+
     <script>
         $(document).ready(function() {
-            // CSRF Token setup
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            // Initialize DataTable
             $('#products-table').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                ajax: {
-                    url: "{{ route('products.index') }}",
-                    error: function(xhr, error, thrown) {
-                        console.log('DataTable AJAX Error:', xhr.responseText);
-                        alert('Error loading data. Please check console for details.');
-                    }
-                },
+                ajax: "{{ route('products.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
-                        searchable: false,
-                        responsivePriority: 1
+                        searchable: false
                     },
                     {
                         data: 'product_name',
-                        name: 'product_name',
-                        responsivePriority: 1
+                        name: 'product_name'
+                    },
+                    {
+                        data: 'hsn_code',
+                        name: 'hsn_code'
                     },
                     {
                         data: 'date',
-                        name: 'date',
-                        responsivePriority: 2
+                        name: 'date'
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false,
-                        responsivePriority: 1
+                        searchable: false
                     }
                 ],
                 order: [
-                    [2, 'desc']
-                ], // Order by date descending
-                pageLength: 25,
-                lengthMenu: [
-                    [10, 25, 50, 100],
-                    [10, 25, 50, 100]
+                    [3, 'desc']
                 ]
             });
         });
