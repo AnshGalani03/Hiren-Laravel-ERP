@@ -325,38 +325,21 @@
 
         <div class="summary-section">
             <table class="summary-table">
-                @php
-                // Get the original bill data for reliable calculation
-                $originalBill = $originalBill ?? null;
-                if ($originalBill) {
-                $subtotal = $originalBill->subtotal;
-                $taxRate = $originalBill->tax_rate ?? 0;
-                $isGst = $originalBill->is_gst;
-                } else {
-                $subtotal = floatval($invoice->taxable_amount ?? 0);
-                $taxRate = floatval($invoice->tax_rate ?? 0);
-                $isGst = $taxRate > 0;
-                }
-
-                $taxAmount = $isGst ? ($subtotal * $taxRate) / 100 : 0;
-                $totalAmount = $subtotal + $taxAmount;
-                @endphp
-
                 <tr class="subtotal-row">
                     <td>Subtotal</td>
-                    <td class="text-right">₹{{ number_format($subtotal, 2) }}</td>
+                    <td class="text-right">₹{{ number_format($originalBill->subtotal, 2) }}</td>
                 </tr>
 
-                @if($isGst && $taxRate > 0)
+                @if($isGstBill)
                 <tr class="tax-amount-row">
-                    <td>GST @ {{ number_format($taxRate, 2) }}%</td>
-                    <td class="text-right">₹{{ number_format($taxAmount, 2) }}</td>
+                    <td>GST @ {{ number_format($originalBill->tax_rate, 2) }}%</td>
+                    <td class="text-right">₹{{number_format($originalBill->tax_amount) }}</td>
                 </tr>
                 @endif
 
                 <tr class="total-row" style="border-top: 2px solid #333; font-weight: bold;">
                     <td><strong>Grand Total</strong></td>
-                    <td class="text-right"><strong>₹{{ number_format($totalAmount, 2) }}</strong></td>
+                    <td class="text-right"><strong>₹{{number_format($originalBill->total_amount) }}</strong></td>
                 </tr>
             </table>
         </div>

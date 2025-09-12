@@ -160,6 +160,7 @@ class BillController extends Controller
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'bill_date' => 'required|date',
+            'is_gst' => 'boolean',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
@@ -169,15 +170,15 @@ class BillController extends Controller
             'notes' => 'nullable|string|max:1000'
         ]);
 
-        // Delete old bill items
-        $bill->billItems()->delete();
+
 
         $subtotal = 0;
         foreach ($request->items as $item) {
             $subtotal += $item['quantity'] * $item['unit_price'];
         }
 
-        $taxRate = $request->tax_rate ?? 0;
+        $isGst = $request->has('is_gst');
+        $taxRate = $isGst ? ($request->tax_rate ?? 0) : 0;
         $taxAmount = ($subtotal * $taxRate) / 100;
         $totalAmount = $subtotal + $taxAmount;
 
@@ -193,6 +194,9 @@ class BillController extends Controller
             'notes' => $request->notes
         ]);
 
+        // Delete existing items and create new ones
+        $bill->billItems()->delete();
+        
         foreach ($request->items as $item) {
             $bill->billItems()->create([
                 'product_id' => $item['product_id'],
