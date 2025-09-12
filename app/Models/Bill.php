@@ -11,15 +11,15 @@ class Bill extends Model
 
     protected $fillable = [
         'bill_number',
-        'dealer_id',
+        'customer_id', // Make sure this is customer_id, not dealer_id
         'bill_date',
         'subtotal',
         'tax_rate',
         'tax_amount',
         'total_amount',
-        'notes',
+        'is_gst',
         'status',
-        'is_gst'
+        'notes'
     ];
 
     protected $casts = [
@@ -31,9 +31,9 @@ class Bill extends Model
         'is_gst' => 'boolean'
     ];
 
-    public function dealer()
+    public function customer()
     {
-        return $this->belongsTo(Dealer::class);
+        return $this->belongsTo(Customer::class);
     }
 
     public function billItems()

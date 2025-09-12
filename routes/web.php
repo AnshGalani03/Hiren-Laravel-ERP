@@ -134,9 +134,8 @@ Route::middleware('auth')->group(function () {
 
     //Bills Route
     Route::resource('bills', BillController::class)->middleware('auth');
-    Route::get('bills/{bill}/pdf/{type}', [BillController::class, 'generatePDF'])
-        ->name('bills.pdf')
-        ->middleware('auth');
+    Route::get('bills/{bill}/pdf', [BillController::class, 'generatePDF'])->name('bills.pdf');
+
 
     Route::post('bills/{bill}/update-status', [BillController::class, 'updateStatus'])->name('bills.updateStatus');
 

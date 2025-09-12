@@ -5,12 +5,10 @@
                 {{ __('Bill Details: ') . $bill->bill_number }}
             </h2>
             <div>
-                <a class="btn btn-success btn-sm me-2" href="{{ route('bills.pdf', ['bill' => $bill->id, 'type' => 'gst']) }}">
-                    <i class="fas fa-file-pdf"></i> GST PDF
+                <a href="{{ route('bills.pdf', $bill->id) }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-file-pdf"></i> Generate PDF
                 </a>
-                <a class="btn btn-primary btn-sm me-2" href="{{ route('bills.pdf', ['bill' => $bill->id, 'type' => 'non-gst']) }}">
-                    <i class="fas fa-file-pdf"></i> Non-GST PDF
-                </a>
+
                 <a class="btn btn-warning btn-sm me-2" href="{{ route('bills.edit', $bill->id) }}">
                     <i class="fas fa-edit"></i> Edit
                 </a>
@@ -41,8 +39,8 @@
                             <td>{{ $bill->bill_number }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Dealer:</strong></td>
-                            <td>{{ $bill->dealer->dealer_name }}</td>
+                            <td><strong>Customer:</strong></td>
+                            <td>{{ $bill->customer->name }}</td>
                         </tr>
                         <tr>
                             <td><strong>Bill Date:</strong></td>

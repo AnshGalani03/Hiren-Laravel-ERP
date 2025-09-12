@@ -32,16 +32,17 @@
 
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <label for="dealer_id" class="form-label">Dealer <span class="text-danger">*</span></label>
-                        <select class="form-control" id="dealer_id" name="dealer_id" required>
-                            <option value="">Select Dealer</option>
-                            @foreach($dealers as $dealer)
-                            <option value="{{ $dealer->id }}" {{ $bill->dealer_id == $dealer->id ? 'selected' : '' }}>
-                                {{ $dealer->dealer_name }}
+                        <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
+                        <select class="form-control" id="customer_id" name="customer_id" required>
+                            <option value="">Select Customer</option>
+                            @foreach($customers as $customer)
+                            <option value="{{ $customer->id }}" @selected(old('customer_id', $bill->customer_id) == $customer->id)>
+                                {{ $customer->name }}
                             </option>
                             @endforeach
                         </select>
                     </div>
+
                     <div class="col-md-6">
                         <label for="bill_date" class="form-label">Bill Date <span class="text-danger">*</span></label>
                         <input type="date" class="form-control" id="bill_date" name="bill_date"
@@ -160,14 +161,8 @@
 
     @push('scripts')
     <script>
-        let itemIndex = {
-            {
-                count($bill - > billItems)
-            }
-        };
-        const products = {
-            !!json_encode($products) !!
-        };
+        let itemIndex = {{count($bill->billItems)}};
+        const products = {!! json_encode($products) !!};
 
         $('#addItem').click(function() {
             addItemRow();

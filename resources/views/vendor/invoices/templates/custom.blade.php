@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>{{ $invoice->name ?? 'Invoice' }}</title>
+    <title>{{ $invoice->getSerialNumber() }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css" media="screen">
         @page {
@@ -200,6 +200,10 @@
 </head>
 
 <body>
+    {{-- Determine if it's GST bill based on tax rate --}}
+    @php
+    $isGstBill = ($invoice->tax_rate ?? 0) > 0;
+    @endphp
     <div class="invoice-container">
         <!-- Header -->
         <div class="header">
@@ -213,11 +217,13 @@
                     @if($invoice->seller->phone)
                     {{ $invoice->seller->phone }}<br>
                     @endif
+                    @if($isGstBill)
                     @foreach($invoice->seller->custom_fields as $key => $value)
                     @if($value)
                     {{ ucfirst($key) }}: {{ $value }}<br>
                     @endif
                     @endforeach
+                    @endif
                 </div>
             </div>
             <div class="invoice-title">
@@ -250,11 +256,13 @@
                         @if($invoice->buyer->phone)
                         {{ $invoice->buyer->phone }}<br>
                         @endif
+                        @if($isGstBill)
                         @foreach($invoice->buyer->custom_fields as $key => $value)
                         @if($value)
                         {{ ucfirst($key) }}: {{ $value }}<br>
                         @endif
                         @endforeach
+                        @endif
                     </td>
                 </tr>
             </tbody>
@@ -303,7 +311,7 @@
                     <td class="text-right">{{ $invoice->formatCurrency(floatval($invoice->taxable_amount ?? 0)) }}</td>
                 </tr>
                 @endif
-                @if($invoice->hasItemOrInvoiceTax() && $invoice->tax_rate > 0)
+                @if($isGstBill)
                 <tr class="tax-row">
                     <td>Tax Rate</td>
                     <td class="text-right">{{ number_format($invoice->tax_rate ?? 0, 2) }}%</td>

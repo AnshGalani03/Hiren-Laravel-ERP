@@ -17,19 +17,21 @@
         </div>
         <div class="p-3">
             <div class="row">
+                <!-- Filter section -->
                 <div class="col-md-3">
-                    <label for="filterDealer" class="form-label">Dealer</label>
-                    <select id="filterDealer" class="form-select">
-                        <option value="">All Dealers</option>
-                        @foreach($dealers as $dealer)
-                        <option value="{{ $dealer->dealer_name }}">{{ $dealer->dealer_name }}</option>
+                    <label for="filterCustomer" class="form-label">Customer</label>
+                    <select id="filterCustomer" class="form-select">
+                        <option value="">All Customers</option>
+                        @foreach($customers as $customer)
+                        <option value="{{ $customer->name }}">{{ $customer->name }}</option>
                         @endforeach
                     </select>
                 </div>
+
                 <div class="col-md-3">
                     <label for="filterStatus" class="form-label">Status</label>
                     <select id="filterStatus" class="form-select">
-                        <option value="">All Statuses</option>
+                        <option value="">All Status</option>
                         <option value="draft">Draft</option>
                         <option value="sent">Sent</option>
                         <option value="paid">Paid</option>
@@ -66,7 +68,7 @@
                         <tr>
                             <th>Sr. No</th>
                             <th>Bill Number</th>
-                            <th>Dealer</th>
+                            <th>Customer</th>
                             <th>Date</th>
                             <th>Total Amount</th>
                             <th>Status</th>
@@ -94,7 +96,7 @@
                 ajax: {
                     url: "{{ route('bills.index') }}",
                     data: function(d) {
-                        d.dealer_name = $('#filterDealer').val();
+                        d.customer_name = $('#filterCustomer').val(); // Changed from dealer_name
                         d.status = $('#filterStatus').val();
                         d.start_date = $('#filterStartDate').val();
                         d.end_date = $('#filterEndDate').val();
@@ -111,9 +113,9 @@
                         name: 'bill_number'
                     },
                     {
-                        data: 'dealer_name',
-                        name: 'dealer.dealer_name'
-                    },
+                        data: 'customer_name',
+                        name: 'customer.name'
+                    }, // Changed from dealer_name
                     {
                         data: 'bill_date',
                         name: 'bill_date'

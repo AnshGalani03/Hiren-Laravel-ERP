@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bill;
-use App\Models\BillItem;
+use App\Models\Customer;
 use App\Models\Product;
-use App\Models\Dealer;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Facades\DataTables;
 use LaravelDaily\Invoices\Invoice;
 use LaravelDaily\Invoices\Classes\Party;
@@ -17,12 +17,12 @@ class BillController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $bills = Bill::query()->with('dealer');
+            $bills = Bill::query()->with('customer');
 
-            // Filter by dealer name
-            if ($request->has('dealer_name') && !empty($request->dealer_name)) {
-                $bills->whereHas('dealer', function ($q) use ($request) {
-                    $q->where('dealer_name', 'like', '%' . $request->dealer_name . '%');
+            // Filter by customer name
+            if ($request->has('customer_name') && !empty($request->customer_name)) {
+                $bills->whereHas('customer', function ($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->customer_name . '%');
                 });
             }
 
@@ -40,13 +40,14 @@ class BillController extends Controller
                 $bills->whereDate('bill_date', '<=', $request->end_date);
             }
 
-            return DataTables::eloquent($bills)
+            // ✅ Use DataTables facade with ::of() method instead of ::eloquent()
+            return DataTables::of($bills)
                 ->addIndexColumn()
                 ->editColumn('bill_date', function ($bill) {
                     return $bill->bill_date->format('d/m/Y');
                 })
-                ->addColumn('dealer_name', function ($bill) {
-                    return $bill->dealer->dealer_name ?? 'N/A';
+                ->addColumn('customer_name', function ($bill) {
+                    return $bill->customer->name ?? 'N/A';
                 })
                 ->editColumn('total_amount', function ($bill) {
                     return '₹' . number_format($bill->total_amount, 2);
@@ -66,11 +67,10 @@ class BillController extends Controller
                 })
                 ->addColumn('action', function ($bill) {
                     return '
-                        <div class="action-btn">
+                        <div class="btn-group" role="group">
                             <a href="' . route('bills.show', $bill->id) . '" class="btn btn-info btn-sm">View</a>
                             <a href="' . route('bills.edit', $bill->id) . '" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="' . route('bills.pdf', ['bill' => $bill->id, 'type' => 'gst']) . '" class="btn btn-success btn-sm">GST PDF</a>
-                            <a href="' . route('bills.pdf', ['bill' => $bill->id, 'type' => 'non-gst']) . '" class="btn btn-primary btn-sm">Non-GST PDF</a>
+                            <a href="' . route('bills.pdf', ['bill' => $bill->id]) . '" class="btn btn-success btn-sm">PDF</a>
                             <button class="btn btn-danger btn-sm delete-bill" data-id="' . $bill->id . '">Delete</button>
                         </div>
                     ';
@@ -79,26 +79,86 @@ class BillController extends Controller
                 ->make(true);
         }
 
-        // Get dealers for filter dropdown
-        $dealers = Dealer::orderBy('dealer_name')->get();
-
-        return view('bills.index', compact('dealers'));
+        // Load customers for filter dropdown
+        $customers = Customer::orderBy('name')->get();
+        return view('bills.index', compact('customers'));
     }
-
-
 
     public function create()
     {
-        $dealers = Dealer::orderBy('dealer_name')->get();
-        $products = Product::orderBy('product_name')->get();
-
-        return view('bills.create', compact('dealers', 'products'));
+        $customers = Customer::orderBy('name')->get();
+        $products = Product::all();
+        return view('bills.create', compact('customers', 'products'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'dealer_id' => 'required|exists:dealers,id',
+            'customer_id' => 'required|exists:customers,id',
+            'bill_date' => 'required|date',
+            'is_gst' => 'boolean',
+            'tax_rate' => 'required_if:is_gst,1|nullable|numeric|min:0|max:100',
+            'items' => 'required|array|min:1',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.unit_price' => 'required|numeric|min:0',
+            'status' => 'required|in:draft,sent,paid',
+            'notes' => 'nullable|string|max:1000'
+        ]);
+
+        $subtotal = 0;
+        foreach ($request->items as $item) {
+            $subtotal += $item['quantity'] * $item['unit_price'];
+        }
+
+        $isGst = $request->has('is_gst');
+        $taxRate = $isGst ? ($request->tax_rate ?? 0) : 0;
+        $taxAmount = ($subtotal * $taxRate) / 100;
+        $totalAmount = $subtotal + $taxAmount;
+
+        $bill = Bill::create([
+            'customer_id' => $request->customer_id,
+            'bill_date' => $request->bill_date,
+            'subtotal' => $subtotal,
+            'tax_rate' => $taxRate,
+            'tax_amount' => $taxAmount,
+            'total_amount' => $totalAmount,
+            'is_gst' => $isGst,
+            'status' => $request->status,
+            'notes' => $request->notes
+        ]);
+
+        foreach ($request->items as $item) {
+            $bill->billItems()->create([
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'unit_price' => $item['unit_price'],
+                'total_price' => $item['quantity'] * $item['unit_price']
+            ]);
+        }
+
+        return redirect()->route('bills.index')
+            ->with('success', 'Bill created successfully.');
+    }
+
+    public function show(Bill $bill)
+    {
+        $bill->load('customer', 'billItems.product');
+        return view('bills.show', compact('bill'));
+    }
+
+    public function edit(Bill $bill)
+    {
+        $bill->load('billItems.product');
+        $customers = Customer::orderBy('name')->get();
+        $products = Product::all();
+        return view('bills.edit', compact('bill', 'customers', 'products'));
+    }
+
+    public function update(Request $request, Bill $bill)
+    {
+        $request->validate([
+            'customer_id' => 'required|exists:customers,id',
             'bill_date' => 'required|date',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
@@ -109,105 +169,38 @@ class BillController extends Controller
             'notes' => 'nullable|string|max:1000'
         ]);
 
-        $bill = Bill::create([
-            'dealer_id' => $request->dealer_id,
-            'bill_date' => $request->bill_date,
-            'tax_rate' => $request->tax_rate ?? 0,
-            'notes' => $request->notes,
-            'is_gst' => ($request->tax_rate ?? 0) > 0,
-            'status' => $request->status
-        ]);
-
-        $subtotal = 0;
-
-        foreach ($request->items as $item) {
-            $totalPrice = $item['quantity'] * $item['unit_price'];
-
-            BillItem::create([
-                'bill_id' => $bill->id,
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'unit_price' => $item['unit_price'],
-                'total_price' => $totalPrice
-            ]);
-
-            $subtotal += $totalPrice;
-        }
-
-        $taxAmount = ($subtotal * ($request->tax_rate ?? 0)) / 100;
-        $totalAmount = $subtotal + $taxAmount;
-
-        $bill->update([
-            'subtotal' => $subtotal,
-            'tax_rate' => $request->tax_rate ?? 0,
-            'tax_amount' => $taxAmount,
-            'total_amount' => $totalAmount,
-            'status' => $request->status
-        ]);
-
-        return redirect()->route('bills.index')
-            ->with('success', 'Bill created successfully.');
-    }
-
-    public function show(Bill $bill)
-    {
-        $bill->load('dealer', 'billItems.product');
-        return view('bills.show', compact('bill'));
-    }
-
-    public function edit(Bill $bill)
-    {
-        $bill->load('billItems.product');
-        $dealers = Dealer::orderBy('dealer_name')->get();
-        $products = Product::orderBy('product_name')->get();
-
-        return view('bills.edit', compact('bill', 'dealers', 'products'));
-    }
-
-    public function update(Request $request, Bill $bill)
-    {
-        $request->validate([
-            'dealer_id' => 'required|exists:dealers,id',
-            'bill_date' => 'required|date',
-            'items' => 'required|array|min:1',
-            'items.*.product_id' => 'required|exists:products,id',
-            'items.*.quantity' => 'required|integer|min:1',
-            'items.*.unit_price' => 'required|numeric|min:0',
-            'tax_rate' => 'nullable|numeric|min:0|max:100',
-            'notes' => 'nullable|string|max:1000'
-        ]);
-
+        // Delete old bill items
         $bill->billItems()->delete();
 
         $subtotal = 0;
-
         foreach ($request->items as $item) {
-            $totalPrice = $item['quantity'] * $item['unit_price'];
-
-            BillItem::create([
-                'bill_id' => $bill->id,
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'unit_price' => $item['unit_price'],
-                'total_price' => $totalPrice
-            ]);
-
-            $subtotal += $totalPrice;
+            $subtotal += $item['quantity'] * $item['unit_price'];
         }
 
-        $taxAmount = ($subtotal * ($request->tax_rate ?? 0)) / 100;
+        $taxRate = $request->tax_rate ?? 0;
+        $taxAmount = ($subtotal * $taxRate) / 100;
         $totalAmount = $subtotal + $taxAmount;
 
         $bill->update([
-            'dealer_id' => $request->dealer_id,
+            'customer_id' => $request->customer_id,
             'bill_date' => $request->bill_date,
             'subtotal' => $subtotal,
-            'tax_rate' => $request->tax_rate ?? 0,
+            'tax_rate' => $taxRate,
             'tax_amount' => $taxAmount,
             'total_amount' => $totalAmount,
-            'notes' => $request->notes,
-            'is_gst' => ($request->tax_rate ?? 0) > 0
+            'is_gst' => $taxRate > 0,
+            'status' => $request->status,
+            'notes' => $request->notes
         ]);
+
+        foreach ($request->items as $item) {
+            $bill->billItems()->create([
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'unit_price' => $item['unit_price'],
+                'total_price' => $item['quantity'] * $item['unit_price']
+            ]);
+        }
 
         return redirect()->route('bills.index')
             ->with('success', 'Bill updated successfully.');
@@ -215,21 +208,48 @@ class BillController extends Controller
 
     public function destroy(Bill $bill)
     {
-        try {
-            $bill->delete();
-            return response()->json(['success' => true, 'message' => 'Bill deleted successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Error deleting bill'], 500);
-        }
+        $bill->billItems()->delete();
+        $bill->delete();
+
+        return redirect()->route('bills.index')
+            ->with('success', 'Bill deleted successfully.');
     }
 
-    public function generatePDF(Bill $bill, $type = 'gst')
+    public function pdf(Bill $bill, Request $request)
     {
-        $bill->load('dealer', 'billItems.product');
+        $bill->load('customer', 'billItems.product');
+        $type = $request->type ?? 'gst';
 
-        // Seller custom fields
+        $pdf = PDF::loadView('bills.pdf', compact('bill', 'type'));
+        return $pdf->download('bill-' . $bill->bill_number . '.pdf');
+    }
+
+    public function updateStatus(Request $request, Bill $bill)
+    {
+        $request->validate([
+            'status' => 'required|in:draft,sent,paid'
+        ]);
+
+        $bill->update(['status' => $request->status]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully!',
+            'status' => ucfirst($request->status)
+        ]);
+    }
+
+    public function generatePDF(Bill $bill, Request $request)
+    {
+        // Load customer and billItems relationships
+        $bill->load('customer', 'billItems.product');
+
+        // Check if bill is GST or Non-GST based on database field
+        $isGstBill = $bill->is_gst;
+
+        // Seller custom fields - only for GST bills
         $sellerCustomFields = [];
-        if ($type === 'gst') {
+        if ($isGstBill) {
             $sellerCustomFields['GSTIN'] = config('app.company.gstin', '27ABCDE1234F1Z5');
             $sellerCustomFields['PAN'] = config('app.company.pan', 'ABCDE1234F');
         }
@@ -241,27 +261,23 @@ class BillController extends Controller
             'custom_fields' => $sellerCustomFields,
         ]);
 
-        // Buyer custom fields
+        // Buyer custom fields - only for GST bills
         $buyerCustomFields = [];
-        if ($type === 'gst') {
-            if (filled($bill->dealer->gst)) {
-                $buyerCustomFields['GSTIN'] = $bill->dealer->gst;
-            }
-            if (filled($bill->dealer->pan)) {
-                $buyerCustomFields['PAN'] = $bill->dealer->pan;
+        if ($isGstBill) {
+            if (!empty($bill->customer->gst)) {
+                $buyerCustomFields['GSTIN'] = $bill->customer->gst;
             }
         }
 
         $customer = new Party([
-            'name' => $bill->dealer->dealer_name,
-            'address' => $bill->dealer->address ?? '',
-            'phone' => $bill->dealer->mobile_no ?? '',
+            'name' => $bill->customer->name,
+            'address' => $bill->customer->address ?? '',
+            'phone' => $bill->customer->phone_no ?? '',
             'custom_fields' => $buyerCustomFields,
         ]);
 
         $items = [];
         foreach ($bill->billItems as $item) {
-            // Create invoice item WITHOUT tax
             $invoiceItem = InvoiceItem::make($item->product->product_name)
                 ->pricePerUnit($item->unit_price)
                 ->quantity($item->quantity);
@@ -281,37 +297,15 @@ class BillController extends Controller
             ->currencyCode('INR')
             ->addItems($items)
             ->notes($bill->notes ?? '')
-            ->filename($bill->bill_number . '-' . $type)
+            ->filename($bill->bill_number . '-' . ($isGstBill ? 'gst' : 'non-gst'))
             ->template('custom');
+        // ->with('is_gst_bill', $isGstBill); // Pass to template
 
-        // Use the package's built-in methods for tax calculations
-        if ($type === 'gst' && $bill->tax_rate > 0) {
+        // Add tax rate only for GST bills
+        if ($isGstBill && $bill->tax_rate > 0) {
             $invoice->taxRate($bill->tax_rate);
         }
 
-        // Add logo for GST invoices
-        if ($type === 'gst') {
-            $logoPath = public_path('images/h-logo.png');
-            if (file_exists($logoPath)) {
-                $invoice->logo($logoPath);
-            }
-        }
-
         return $invoice->stream();
-    }
-
-    public function updateStatus(Request $request, Bill $bill)
-    {
-        $request->validate([
-            'status' => 'required|in:draft,sent,paid'
-        ]);
-
-        $bill->update(['status' => $request->status]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Status updated successfully!',
-            'status' => ucfirst($request->status)
-        ]);
     }
 }
