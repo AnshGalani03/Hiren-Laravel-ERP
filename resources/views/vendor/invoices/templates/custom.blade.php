@@ -308,9 +308,7 @@
                         }
                         }
                         @endphp
-                        <strong>{{ $hsnCode }}</strong>
-
-
+                        {{ $hsnCode }}
                     </td>
                     <td class="text-center">{{ number_format($item->quantity, 2) }}</td>
                     <td class="text-right">{{ $invoice->formatCurrency(floatval($item->price_per_unit ?? 0)) }}</td>
@@ -325,27 +323,46 @@
             Thanks for shopping with us.
         </div>
 
-        <!-- Summary Section -->
         <div class="summary-section">
             <table class="summary-table">
-                @if($invoice->hasItemOrInvoiceTax() && $invoice->tax_rate > 0)
+                @php
+                // Get the original bill data for reliable calculation
+                $originalBill = $originalBill ?? null;
+                if ($originalBill) {
+                $subtotal = $originalBill->subtotal;
+                $taxRate = $originalBill->tax_rate ?? 0;
+                $isGst = $originalBill->is_gst;
+                } else {
+                $subtotal = floatval($invoice->taxable_amount ?? 0);
+                $taxRate = floatval($invoice->tax_rate ?? 0);
+                $isGst = $taxRate > 0;
+                }
+
+                $taxAmount = $isGst ? ($subtotal * $taxRate) / 100 : 0;
+                $totalAmount = $subtotal + $taxAmount;
+                @endphp
+
                 <tr class="subtotal-row">
-                    <td>Sub Total</td>
-                    <td class="text-right">{{ $invoice->formatCurrency(floatval($invoice->taxable_amount ?? 0)) }}</td>
+                    <td>Subtotal</td>
+                    <td class="text-right">₹{{ number_format($subtotal, 2) }}</td>
+                </tr>
+
+                @if($isGst && $taxRate > 0)
+                <tr class="tax-amount-row">
+                    <td>GST @ {{ number_format($taxRate, 2) }}%</td>
+                    <td class="text-right">₹{{ number_format($taxAmount, 2) }}</td>
                 </tr>
                 @endif
-                @if($isGstBill)
-                <tr class="tax-row">
-                    <td>Tax Rate</td>
-                    <td class="text-right">{{ number_format($invoice->tax_rate ?? 0, 2) }}%</td>
-                </tr>
-                @endif
-                <tr class="total-row">
-                    <td>Total</td>
-                    <td class="text-right">{{ $invoice->formatCurrency(floatval($invoice->total_amount ?? 0)) }}</td>
+
+                <tr class="total-row" style="border-top: 2px solid #333; font-weight: bold;">
+                    <td><strong>Grand Total</strong></td>
+                    <td class="text-right"><strong>₹{{ number_format($totalAmount, 2) }}</strong></td>
                 </tr>
             </table>
         </div>
+
+
+
 
         <!-- Terms & Conditions -->
         <div class="terms-section">
