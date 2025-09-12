@@ -203,6 +203,16 @@
     {{-- Determine if it's GST bill based on tax rate --}}
     @php
     $isGstBill = ($invoice->tax_rate ?? 0) > 0;
+    // Get the original bill data that we shared from controller
+    $originalBill = $originalBill ?? null;
+
+    // If originalBill is not available, try to get it from the sequence
+    if (!$originalBill) {
+    $billId = $invoice->getCustomData()['sequence'] ?? 0;
+    if ($billId) {
+    $originalBill = \App\Models\Bill::with('billItems.product')->find($billId);
+    }
+    }
     @endphp
     <div class="invoice-container">
         <!-- Header -->
@@ -286,17 +296,21 @@
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td>
                         <div class="item-description">{{ $item->title }}</div>
-                        @if($item->description)
-                        <div class="item-subtitle">{{ $item->description }}</div>
-                        @endif
                     </td>
                     <td class="text-center">
-                        {{-- Get HSN code from product --}}
+                        {{-- Get HSN code from original bill items --}}
                         @php
-                        $billItem = \App\Models\BillItem::where('product_id', $item->product_id ?? 0)->first();
-                        $hsnCode = $billItem->product->hsn_code ?? 'N/A';
+                        $hsnCode = 'N/A';
+                        if ($originalBill && $originalBill->billItems && isset($originalBill->billItems[$index])) {
+                        $billItem = $originalBill->billItems[$index];
+                        if ($billItem->product && $billItem->product->hsn_code) {
+                        $hsnCode = $billItem->product->hsn_code;
+                        }
+                        }
                         @endphp
-                        {{ $hsnCode }}
+                        <strong>{{ $hsnCode }}</strong>
+
+
                     </td>
                     <td class="text-center">{{ number_format($item->quantity, 2) }}</td>
                     <td class="text-right">{{ $invoice->formatCurrency(floatval($item->price_per_unit ?? 0)) }}</td>

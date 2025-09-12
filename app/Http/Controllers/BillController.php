@@ -255,6 +255,8 @@ class BillController extends Controller
         // Load customer and billItems relationships
         $bill->load('customer', 'billItems.product');
 
+
+
         // Check if bill is GST or Non-GST based on database field
         $isGstBill = $bill->is_gst;
 
@@ -289,9 +291,18 @@ class BillController extends Controller
 
         $items = [];
         foreach ($bill->billItems as $item) {
-            $invoiceItem = InvoiceItem::make($item->product->product_name)
+            // Include HSN code in the product title or description
+            $productTitle = $item->product->product_name;
+            $productDescription = '';
+
+            if ($item->product->hsn_code) {
+                $productDescription = 'HSN: ' . $item->product->hsn_code;
+            }
+
+            $invoiceItem = InvoiceItem::make($productTitle)
                 ->pricePerUnit($item->unit_price)
-                ->quantity($item->quantity);
+                ->quantity($item->quantity)
+                ->description($productDescription); // Add HSN in description
 
             $items[] = $invoiceItem;
         }
@@ -310,13 +321,14 @@ class BillController extends Controller
             ->notes($bill->notes ?? '')
             ->filename($bill->bill_number . '-' . ($isGstBill ? 'gst' : 'non-gst'))
             ->template('custom');
-        // ->with('is_gst_bill', $isGstBill); // Pass to template
 
         // Add tax rate only for GST bills
         if ($isGstBill && $bill->tax_rate > 0) {
             $invoice->taxRate($bill->tax_rate);
         }
 
+        // Pass the original bill data to the view
+        view()->share('originalBill', $bill);
         return $invoice->stream();
     }
 }
