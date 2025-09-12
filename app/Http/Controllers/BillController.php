@@ -171,7 +171,6 @@ class BillController extends Controller
         ]);
 
 
-
         $subtotal = 0;
         foreach ($request->items as $item) {
             $subtotal += $item['quantity'] * $item['unit_price'];
@@ -189,14 +188,14 @@ class BillController extends Controller
             'tax_rate' => $taxRate,
             'tax_amount' => $taxAmount,
             'total_amount' => $totalAmount,
-            'is_gst' => $taxRate > 0,
+            'is_gst' => $isGst,
             'status' => $request->status,
             'notes' => $request->notes
         ]);
 
         // Delete existing items and create new ones
         $bill->billItems()->delete();
-        
+
         foreach ($request->items as $item) {
             $bill->billItems()->create([
                 'product_id' => $item['product_id'],
@@ -207,7 +206,7 @@ class BillController extends Controller
         }
 
         return redirect()->route('bills.index')
-            ->with('success', 'Bill updated successfully.');
+            ->with('success', 'Bill updated successfully: ' . $bill->bill_number);
     }
 
     public function destroy(Bill $bill)

@@ -219,7 +219,7 @@
         <div class="header">
             <div class="company-info">
                 @if($invoice->logo)
-                <img src="{{ $invoice->getLogo() }}" alt="Logo" style="max-width: 80px; margin-bottom: 5px;">
+                <!-- <img src="{{ $invoice->getLogo() }}" alt="Logo" style="max-width: 80px; margin-bottom: 5px;"> -->
                 @endif
                 <div class="company-name">{{ $invoice->seller->name }}</div>
                 <div class="company-address">
@@ -325,6 +325,8 @@
 
         <div class="summary-section">
             <table class="summary-table">
+
+
                 <tr class="subtotal-row">
                     <td>Subtotal</td>
                     <td class="text-right">₹{{ number_format($originalBill->subtotal, 2) }}</td>
@@ -332,14 +334,14 @@
 
                 @if($isGstBill)
                 <tr class="tax-amount-row">
-                    <td>GST @ {{ number_format($originalBill->tax_rate, 2) }}%</td>
-                    <td class="text-right">₹{{number_format($originalBill->tax_amount) }}</td>
+                    <td>GST @ {{ number_format($originalBill->tax_rate, 2) }} %</td>
+                    <td class="text-right">₹{{ number_format($originalBill->tax_amount, 2) }}</td>
                 </tr>
                 @endif
 
                 <tr class="total-row" style="border-top: 2px solid #333; font-weight: bold;">
                     <td><strong>Grand Total</strong></td>
-                    <td class="text-right"><strong>₹{{number_format($originalBill->total_amount) }}</strong></td>
+                    <td class="text-right"><strong>₹{{ number_format($originalBill->total_amount, 2) }}</strong></td>
                 </tr>
             </table>
         </div>

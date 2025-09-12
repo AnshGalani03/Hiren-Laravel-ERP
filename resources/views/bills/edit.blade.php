@@ -60,6 +60,7 @@
                             @endforeach
                         </select>
                     </div>
+                    <!-- Status and Notes Row -->
                     <div class="col-md-6">
                         <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                         <select class="form-control" id="status" name="status" required>
@@ -68,7 +69,6 @@
                             <option value="paid" {{ old('status', $bill->status) == 'paid' ? 'selected' : '' }}>Paid</option>
                         </select>
                     </div>
-
                 </div>
 
                 <!-- GST Checkbox and Rate Row -->
@@ -92,10 +92,7 @@
                     </div>
                 </div>
 
-                <!-- Status and Notes Row -->
-                <div class="row mb-4">
 
-                </div>
 
                 <!-- Bill Items Section -->
                 <div class="card mb-4">
