@@ -58,7 +58,7 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-uppercase mb-1">
                                         Active Projects</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ \App\Models\Project::count() }}</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ \App\Models\Project::where('active', true)->count() }}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-project-diagram fa-2x text-gray-300"></i>
