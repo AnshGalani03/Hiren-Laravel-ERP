@@ -8,6 +8,11 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="text-lg font-semibold mb-4">Overview</h3>
+                </div>
+            </div>
+            <div class="row">
                 <!-- Dealers Card -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card dashboard-card h-100 py-2">
@@ -45,6 +50,27 @@
                             </div>
                             <div class="mt-2">
                                 <a href="{{ route('employees.index') }}" class="btn dashboard-card-btn">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Customers Card -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card dashboard-card h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                        Total Customers</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ \App\Models\Customer::count() }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <a href="{{ route('customers.index') }}" class="btn dashboard-card-btn">View All</a>
                             </div>
                         </div>
                     </div>
@@ -114,7 +140,7 @@
                 </div>
 
                 <!-- Products Card -->
-                <div class="col-xl-3 col-md-6 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4 d-none">
                     <div class="card dashboard-card h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -202,6 +228,18 @@
                                             <path fill="#000" d="M4.5 8.552c0 1.995 1.505 3.5 3.5 3.5s3.5-1.505 3.5-3.5s-1.505-3.5-3.5-3.5s-3.5 1.505-3.5 3.5M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM4 19h10v-1c0-2.757-2.243-5-5-5H7c-2.757 0-5 2.243-5 5v1z" stroke-width="0.5" stroke="#000" />
                                         </svg>
                                         Add Employee
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card mb-0 w-100 dashboard-quick-card">
+                                <div class="card-body">
+                                    <a href="{{ route('customers.create') }}" class="btn w-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path fill="#000" d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" stroke-width="0.5" stroke="#000" />
+                                        </svg>
+                                        Add Customer
                                     </a>
                                 </div>
                             </div>
