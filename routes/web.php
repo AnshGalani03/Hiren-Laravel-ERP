@@ -21,6 +21,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ExportController;
 
 //Add Login Route in main page
 Route::get('/', function () {
@@ -111,6 +112,11 @@ Route::middleware('auth')->group(function () {
     // Sub-contractor specific bill deletion (Fixed: Use proper URL structure)
     Route::delete('sub-contractors/{subContractor}/bills/{bill}', [SubContractorController::class, 'deleteBill'])
         ->name('sub-contractors.bills.destroy');
+
+    // Exports report route
+    Route::get('exports', [ExportController::class, 'index'])->name('exports.index');
+    Route::post('exports/upad-report', [ExportController::class, 'exportUpadReport'])->name('exports.upad-report');
+    Route::post('exports/transactions-report', [ExportController::class, 'exportTransactionsReport'])->name('exports.transactions-report');
 });
 
 require __DIR__ . '/auth.php';

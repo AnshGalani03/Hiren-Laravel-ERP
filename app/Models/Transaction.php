@@ -49,4 +49,15 @@ class Transaction extends Model
     {
         return $this->belongsTo(Outgoing::class);
     }
+
+    // Helper method to get category name
+    public function getCategoryAttribute()
+    {
+        if ($this->type === 'incoming' && $this->incoming) {
+            return $this->incoming->name;
+        } elseif ($this->type === 'outgoing' && $this->outgoing) {
+            return $this->outgoing->name;
+        }
+        return 'General';
+    }
 }

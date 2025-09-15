@@ -15,4 +15,9 @@ class Outgoing extends Model
     {
         return $this->hasMany(ProjectExpense::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'outgoing_id');
+    }
 }

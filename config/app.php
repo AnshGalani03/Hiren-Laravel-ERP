@@ -128,10 +128,10 @@ return [
 
     'company' => [
         'name' => env('COMPANY_NAME', 'Shingala Hiren Nareshbhai'),
-        'gstin' => env('COMPANY_GSTIN', '27ABCDE1234F1Z5'),
-        'pan' => env('COMPANY_PAN', 'ABCDE1234F'),
-        'phone' => env('COMPANY_PHONE', '+91 9876543210'),
-        'address' => env('COMPANY_ADDRESS', '123 Business Street, City, State - 123456'),
+        'gstin' => env('COMPANY_GSTIN', '24GYTPS4723P1ZC'),
+        'pan' => env('COMPANY_PAN', 'GYTPS4723P'),
+        'phone' => env('COMPANY_PHONE', '+91 76007 07476'),
+        'address' => env('COMPANY_ADDRESS', 'G-501, Kaveri Habitat, Nr. Harekrishan Campush, Sarthana Jakatnaka, Surat - 395006'),
     ],
 
 

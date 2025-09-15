@@ -15,4 +15,9 @@ class Incoming extends Model
     {
         return $this->hasMany(ProjectIncome::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'incoming_id');
+    }
 }
