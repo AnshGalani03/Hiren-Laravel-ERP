@@ -9,15 +9,6 @@
             </h2>
         </div>
     </x-slot>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="back-btn pb-3">
-                <a href="{{ route('employees.index') }}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left"></i> Back
-                </a>
-            </div>
-        </div>
-    </div>
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="card-header">
             <h5 class="mb-0"><i class="fas fa-calendar-alt"></i> Monthly Summary</h5>

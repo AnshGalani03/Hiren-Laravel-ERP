@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="module-detail-page d-flex justify-content-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('All Transactions') }}
             </h2>
@@ -85,7 +85,7 @@
     </div>
 
     <!-- Summary Cards -->
-    <div class="row mb-4">
+    <div class="row mb-4 transactions-summery-card">
         <div class="col-md-3">
             <div class="card bg-success text-white">
                 <div class="card-body text-center">

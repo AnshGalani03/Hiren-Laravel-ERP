@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="module-detail-page d-flex justify-content-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Project Details: ') . $project->name }}
                 @if(!$project->active)
@@ -27,7 +27,7 @@
         </div>
     </div>
     <!-- Financial Summary Cards -->
-    <div class="row mb-4">
+    <div class="financial-summary-card row mb-4">
         <div class="col-md-3">
             <div class="card bg-success text-white">
                 <div class="card-body text-center">
@@ -146,7 +146,7 @@
                             <i class="fas fa-user-plus"></i> Manage Team
                         </button>
                     </div>
-                    <div class="card-body">
+                    <div class="team-members card-body">
                         @if($assignedEmployees->count() > 0)
                         <div class="row g-3">
                             @foreach($assignedEmployees as $employee)
@@ -154,7 +154,7 @@
                                 <div class="card border-start border-primary border-1 shadow-sm">
                                     <div class="card-body p-3">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex align-items-center">
+                                            <div class="team-members-icon-name d-flex align-items-center">
                                                 <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
                                                     <i class="fas fa-user"></i>
                                                 </div>
@@ -261,7 +261,7 @@
 
     <!-- All Transactions Section -->
     <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="transaction-header card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0"><i class="fas fa-exchange-alt text-info"></i> All Transactions</h5>
             <div>
                 @if($project->active)
@@ -306,7 +306,7 @@
         </div>
 
         <!-- Summary Cards -->
-        <div class="card-body border-bottom bg-light">
+        <div class="financial-summary-card card-body border-bottom bg-light">
             <div class="row text-center">
                 <div class="col-md-3">
                     <div class="card bg-success text-white h-100">

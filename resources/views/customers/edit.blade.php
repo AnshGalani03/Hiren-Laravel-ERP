@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="module-edit-page d-flex justify-content-between align-items-center">
             <a class="btn btn-secondary" href="{{ route('customers.index') }}">
                 <i class="fas fa-arrow-left"></i> Back to List
             </a>

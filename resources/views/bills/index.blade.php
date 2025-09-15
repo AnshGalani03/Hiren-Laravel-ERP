@@ -16,7 +16,7 @@
             <h5 class="mb-0"><i class="fas fa-filter"></i> Filters</h5>
         </div>
         <div class="p-3">
-            <div class="row">
+            <div class="bills-filters row">
                 <!-- Filter section -->
                 <div class="col-md-3">
                     <label for="filterCustomer" class="form-label">Customer</label>

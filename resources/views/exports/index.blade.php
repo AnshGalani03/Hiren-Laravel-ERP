@@ -5,200 +5,192 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
-            <div class="row" style="row-gap: 30px;">
-                <div class="col-lg-6">
-                    <!-- Employee Upad Report -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 text-gray-900">
-                            <div class="mb-4">
-                                <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                                    <i class="fas fa-users text-blue-600 mr-2 pe-1"></i>Employee Upad Report
-                                </h3>
-                                <p class="text-sm text-gray-600">Export employee upad records for a specific date range</p>
+    <div class="row" style="row-gap: 30px;">
+        <div class="col-lg-6">
+            <!-- Employee Upad Report -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                            <i class="fas fa-users text-blue-600 mr-2 pe-1"></i>Employee Upad Report
+                        </h3>
+                        <p class="text-sm text-gray-600">Export employee upad records for a specific date range</p>
+                    </div>
+
+                    <form id="upadReportForm" action="{{ route('exports.upad-report') }}" method="POST" class="space-y-4">
+                        @csrf
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="mb-2">
+                                <label for="upad_employee_id" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Employee (Optional)
+                                </label>
+                                <select name="employee_id" id="upad_employee_id"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="">All Employees</option>
+                                    @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
-                            <form id="upadReportForm" action="{{ route('exports.upad-report') }}" method="POST" class="space-y-4">
-                                @csrf
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                    <div class="mb-2">
-                                        <label for="upad_employee_id" class="block text-sm font-medium text-gray-700 mb-2">
-                                            Employee (Optional)
-                                        </label>
-                                        <select name="employee_id" id="upad_employee_id"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                            <option value="">All Employees</option>
-                                            @foreach($employees as $employee)
-                                            <option value="{{ $employee->id }}">{{ $employee->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label for="upad_start_date" class="block text-sm font-medium text-gray-700 mb-2">
-                                            Start Date <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="date" name="start_date" id="upad_start_date" required
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label for="upad_end_date" class="block text-sm font-medium text-gray-700 mb-2">
-                                            End Date <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="date" name="end_date" id="upad_end_date" required
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    </div>
-
-                                    <div class="flex items-end">
-                                        <button type="submit" id="upadExportBtn"
-                                            class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 relative btn-primary">
-                                            <span class="btn-text">
-                                                <i class="fas fa-download mr-2 px-1"></i>Export PDF
-                                            </span>
-                                            <span class="btn-loading hidden">
-                                                <i class="fas fa-spinner fa-spin mr-2"></i>Generating...
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Progress Bar -->
-                                <div id="upadProgress" class="hidden mt-4">
-                                    <div class="bg-gray-200 rounded-full h-3 mb-2">
-                                        <div id="upadProgressBar" class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
-                                    </div>
-                                    <div class="flex justify-between text-sm text-gray-600">
-                                        <span id="upadProgressText">Preparing report...</span>
-                                        <span id="upadProgressPercent">0%</span>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <!-- Transactions Report -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 text-gray-900">
-                            <div class="mb-4">
-                                <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                                    <i class="fas fa-exchange-alt text-green-600 mr-2 pe-1"></i>Transactions Report
-                                </h3>
-                                <p class="text-sm text-gray-600">Export transaction records with multiple filter options</p>
+                            <div class="mb-2">
+                                <label for="upad_start_date" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Start Date <span class="text-red-500">*</span>
+                                </label>
+                                <input type="date" name="start_date" id="upad_start_date" required
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
 
-                            <form id="transactionsReportForm" action="{{ route('exports.transactions-report') }}" method="POST" class="space-y-4">
-                                @csrf
+                            <div class="mb-2">
+                                <label for="upad_end_date" class="block text-sm font-medium text-gray-700 mb-2">
+                                    End Date <span class="text-red-500">*</span>
+                                </label>
+                                <input type="date" name="end_date" id="upad_end_date" required
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
 
-                                <!-- First Row: Type, Project, Dealer, Sub-Contractor -->
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                    <div class="mb-2">
-                                        <label for="trans_type" class="block text-sm font-medium text-gray-700 mb-2">
-                                            Transaction Type
-                                        </label>
-                                        <select name="type" id="trans_type"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                            <option value="">All Transactions</option>
-                                            <option value="incoming">Incoming Only</option>
-                                            <option value="outgoing">Outgoing Only</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label for="trans_project" class="block text-sm font-medium text-gray-700 mb-2">
-                                            Project
-                                        </label>
-                                        <select name="project_id" id="trans_project"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                            <option value="">All Projects</option>
-                                            @foreach(\App\Models\Project::orderBy('name')->get() as $project)
-                                            <option value="{{ $project->id }}">{{ $project->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label for="trans_dealer" class="block text-sm font-medium text-gray-700 mb-2">
-                                            Dealer
-                                        </label>
-                                        <select name="dealer_id" id="trans_dealer"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                            <option value="">All Dealers</option>
-                                            @foreach(\App\Models\Dealer::orderBy('dealer_name')->get() as $dealer)
-                                            <option value="{{ $dealer->id }}">{{ $dealer->dealer_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label for="trans_sub_contractor" class="block text-sm font-medium text-gray-700 mb-2">
-                                            Sub-Contractor
-                                        </label>
-                                        <select name="sub_contractor_id" id="trans_sub_contractor"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                            <option value="">All Sub-Contractors</option>
-                                            @foreach(\App\Models\SubContractor::orderBy('contractor_name')->get() as $subContractor)
-                                            <option value="{{ $subContractor->id }}">{{ $subContractor->contractor_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Second Row: Date Range and Export Button -->
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div class="mb-2">
-                                        <label for="trans_start_date" class="block text-sm font-medium text-gray-700 mb-2">
-                                            Start Date <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="date" name="start_date" id="trans_start_date" required
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label for="trans_end_date" class="block text-sm font-medium text-gray-700 mb-2">
-                                            End Date <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="date" name="end_date" id="trans_end_date" required
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    </div>
-
-                                    <div class="flex items-end">
-                                        <button type="submit" id="transExportBtn"
-                                            class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200 relative btn-primary">
-                                            <span class="btn-text">
-                                                <i class="fas fa-download mr-2 px-1"></i>Export PDF
-                                            </span>
-                                            <span class="btn-loading hidden">
-                                                <i class="fas fa-spinner fa-spin mr-2"></i>Generating...
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Progress Bar -->
-                                <div id="transProgress" class="hidden mt-4">
-                                    <div class="bg-gray-200 rounded-full h-3 mb-2">
-                                        <div id="transProgressBar" class="bg-green-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
-                                    </div>
-                                    <div class="flex justify-between text-sm text-gray-600">
-                                        <span id="transProgressText">Preparing report...</span>
-                                        <span id="transProgressPercent">0%</span>
-                                    </div>
-                                </div>
-                            </form>
+                            <div class="flex items-end">
+                                <button type="submit" id="upadExportBtn"
+                                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 relative btn-primary">
+                                    <span class="btn-text">
+                                        <i class="fas fa-download mr-2 px-1"></i>Export PDF
+                                    </span>
+                                    <span class="btn-loading hidden">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i>Generating...
+                                    </span>
+                                </button>
+                            </div>
                         </div>
-                    </div>
+
+                        <!-- Progress Bar -->
+                        <div id="upadProgress" class="hidden mt-4">
+                            <div class="bg-gray-200 rounded-full h-3 mb-2">
+                                <div id="upadProgressBar" class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span id="upadProgressText">Preparing report...</span>
+                                <span id="upadProgressPercent">0%</span>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
+        <div class="col-lg-6">
+            <!-- Transactions Report -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                            <i class="fas fa-exchange-alt text-green-600 mr-2 pe-1"></i>Transactions Report
+                        </h3>
+                        <p class="text-sm text-gray-600">Export transaction records with multiple filter options</p>
+                    </div>
 
+                    <form id="transactionsReportForm" action="{{ route('exports.transactions-report') }}" method="POST" class="space-y-4">
+                        @csrf
 
+                        <!-- First Row: Type, Project, Dealer, Sub-Contractor -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="mb-2">
+                                <label for="trans_type" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Transaction Type
+                                </label>
+                                <select name="type" id="trans_type"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                    <option value="">All Transactions</option>
+                                    <option value="incoming">Incoming Only</option>
+                                    <option value="outgoing">Outgoing Only</option>
+                                </select>
+                            </div>
 
+                            <div class="mb-2">
+                                <label for="trans_project" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Project
+                                </label>
+                                <select name="project_id" id="trans_project"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                    <option value="">All Projects</option>
+                                    @foreach(\App\Models\Project::orderBy('name')->get() as $project)
+                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
+                            <div class="mb-2">
+                                <label for="trans_dealer" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Dealer
+                                </label>
+                                <select name="dealer_id" id="trans_dealer"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                    <option value="">All Dealers</option>
+                                    @foreach(\App\Models\Dealer::orderBy('dealer_name')->get() as $dealer)
+                                    <option value="{{ $dealer->id }}">{{ $dealer->dealer_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
+                            <div class="mb-2">
+                                <label for="trans_sub_contractor" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Sub-Contractor
+                                </label>
+                                <select name="sub_contractor_id" id="trans_sub_contractor"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                    <option value="">All Sub-Contractors</option>
+                                    @foreach(\App\Models\SubContractor::orderBy('contractor_name')->get() as $subContractor)
+                                    <option value="{{ $subContractor->id }}">{{ $subContractor->contractor_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Second Row: Date Range and Export Button -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="mb-2">
+                                <label for="trans_start_date" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Start Date <span class="text-red-500">*</span>
+                                </label>
+                                <input type="date" name="start_date" id="trans_start_date" required
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="trans_end_date" class="block text-sm font-medium text-gray-700 mb-2">
+                                    End Date <span class="text-red-500">*</span>
+                                </label>
+                                <input type="date" name="end_date" id="trans_end_date" required
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+
+                            <div class="flex items-end">
+                                <button type="submit" id="transExportBtn"
+                                    class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200 relative btn-primary">
+                                    <span class="btn-text">
+                                        <i class="fas fa-download mr-2 px-1"></i>Export PDF
+                                    </span>
+                                    <span class="btn-loading hidden">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i>Generating...
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div id="transProgress" class="hidden mt-4">
+                            <div class="bg-gray-200 rounded-full h-3 mb-2">
+                                <div id="transProgressBar" class="bg-green-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span id="transProgressText">Preparing report...</span>
+                                <span id="transProgressPercent">0%</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+
 
     <!-- Success/Error Messages -->
     <div id="successMessage" class="hidden fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg shadow-lg z-50">

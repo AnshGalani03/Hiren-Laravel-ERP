@@ -112,7 +112,8 @@
     background: #42999b;
     border-color: #42999b;
 }
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:focus {
     background: #006d77;
     border-color: #006d77;
 }
@@ -121,7 +122,8 @@
     color: #fff;
     border-color: #006d77;
 }
-.btn-info:hover {
+.btn-info:hover,
+.btn-info:focus {
     background: #83c5be;
     border-color: #83c5be;
     color: #000;
@@ -131,10 +133,14 @@
     color: #fff;
     border-color: #60be8f;
 }
-.btn-warning:hover {
+.btn-warning:hover,
+.btn-warning:focus {
     background: #63afad;
     border-color: #63afad;
     color: #fff;
+}
+.btn:focus {
+    box-shadow: none;
 }
 @media only screen and (max-width: 767px) {
     .quick-actions .col-md-3 {
@@ -149,10 +155,96 @@
     .overview-title {
         padding: 0 10px;
     }
-    .overview-cards i{
+    .overview-cards i {
         font-size: 16px;
     }
-    .quick-actions svg{
+    .quick-actions svg {
         width: 20px;
+    }
+    .module-detail-page {
+        display: block !important;
+    }
+    .module-detail-page h2 {
+        margin-bottom: 10px;
+    }
+    .summery-card .card {
+        margin-bottom: 10px;
+    }
+    .salary-upad-management {
+        display: block !important;
+    }
+    .salary-upad-management h5,
+    .transaction-header h5 {
+        margin-bottom: 10px !important;
+    }
+    .salary-upad-management-btn {
+        display: block !important;
+    }
+    .salary-upad-management-btn form {
+        margin-bottom: 10px;
+    }
+    .salary-summery-card .col-md-3 {
+        margin-bottom: 10px;
+    }
+    .module-edit-page {
+        flex-direction: column-reverse;
+        gap: 10px;
+        align-items: start !important;
+    }
+    .financial-summary-card .col-md-3 {
+        margin-bottom: 10px;
+    }
+    .transaction-header {
+        display: block !important;
+    }
+    .team-members .col-lg-3 {
+        width: 50%;
+    }
+    .team-members-icon-name {
+        display: block !important;
+    }
+    .team-members-icon-name h6 {
+        margin-top: 5px;
+    }
+    .transactions-overview .col-md-3 {
+        margin-bottom: 10px;
+    }
+    .transaction-table-header {
+        display: block !important;
+    }
+    .transaction-table-header h6 {
+        margin-bottom: 10px;
+    }
+    .invoices-summary .col-md-3 {
+        width: 50%;
+        margin-bottom: 10px;
+    }
+    .bills-filters .col-md-3 {
+        margin-bottom: 10px;
+    }
+    .bill-detail-header {
+        display: block !important;
+    }
+    .bill-detail-header h2 {
+        margin-bottom: 10px;
+    }
+    .row.bill-item{
+        row-gap: 10px;
+    }
+    #customer_id{
+        margin-bottom: 10px;
+    }
+    .transactions-summery-card .col-md-3 {
+       width: 50%;
+       margin-bottom: 10px;
+    }
+    .transaction-module-form .row{
+        margin-bottom: 0 !important; 
+    }
+    .transaction-module-form .col-md-6, .transaction-module-form .col-md-4{
+        margin-bottom: 10px;
+    }
+    .product-edit-form .col-md-6{
+        margin-bottom: 10px;
     }
 }

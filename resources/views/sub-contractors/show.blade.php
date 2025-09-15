@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="module-detail-page d-flex justify-content-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Sub-Contractor Details: ') . $subContractor->contractor_name }}
             </h2>
@@ -123,7 +123,7 @@
         </div>
 
         <!-- Filter Controls -->
-        <div class="p-3 border-bottom">
+        <div class="transactions-overview p-3 border-bottom">
             <div class="row">
                 <div class="col-md-3">
                     <label for="transaction-type" class="form-label">Transaction Type</label>
@@ -142,10 +142,10 @@
                     <input type="date" class="form-control" id="end-date">
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
-                    <button type="button" class="btn btn-primary me-2" id="apply-filter">
+                    <button type="button" class="btn btn-primary me-2 btn-sm" id="apply-filter">
                         <i class="fas fa-filter"></i> Apply Filter
                     </button>
-                    <button type="button" class="btn btn-secondary" id="clear-filter">
+                    <button type="button" class="btn btn-secondary btn-sm" id="clear-filter">
                         <i class="fas fa-times"></i> Clear
                     </button>
                 </div>
@@ -199,7 +199,7 @@
 
         <!-- DataTable -->
         <div class="p-6 text-gray-900">
-            <div class="d-flex justify-content-between mb-3">
+            <div class="transaction-table-header d-flex justify-content-between mb-3">
                 <h6>Transaction Details</h6>
                 <div>
                     <a href="{{ route('transactions.create', ['type' => 'incoming', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-sm btn-success">Add Income</a>

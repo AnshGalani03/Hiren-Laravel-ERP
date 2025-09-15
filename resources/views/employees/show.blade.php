@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="module-detail-page d-flex justify-content-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Employee Details: ') . $employee->name }}
             </h2>
@@ -103,11 +103,11 @@
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <!-- Header with Filter and Buttons on Same Line -->
         <div class="card-header">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="salary-upad-management d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-money-bill"></i> Salary & Upad Management</h5>
 
                 <!-- Right side: Month Filter + Buttons -->
-                <div class="d-flex align-items-center">
+                <div class="salary-upad-management-btn d-flex align-items-center">
                     <!-- Month Filter Form -->
                     <form method="GET" action="{{ route('employees.show', $employee) }}" class="d-flex align-items-center me-3">
                         <label for="month" class="form-label me-2 mb-0">Filter:</label>
@@ -217,7 +217,7 @@
             </div>
 
             <!-- Month Summary -->
-            <div class="mt-4 p-3 bg-light rounded">
+            <div class="salary-summery-card mt-4 p-3 bg-light rounded">
                 @php
                 $monthSalary = $upads->first()->salary ?? 0;
                 $monthUpads = $upads->sum('upad');

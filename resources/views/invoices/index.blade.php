@@ -36,7 +36,7 @@
     </div>
 
     <!-- Summary Cards -->
-    <div class="row mb-4">
+    <div class="invoices-summary row mb-4">
         <div class="col-md-3">
             <div class="card bg-primary text-white">
                 <div class="card-body text-center">

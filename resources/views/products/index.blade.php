@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="module-detail-page d-flex justify-content-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Products Management') }}
             </h2>
@@ -45,30 +45,32 @@
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1,
                     },
                     {
                         data: 'product_name',
-                        name: 'product_name'
+                        name: 'product_name',
+                        responsivePriority: 2,
                     },
                     {
                         data: 'hsn_code',
-                        name: 'hsn_code'
+                        name: 'hsn_code',
+                        responsivePriority: 3,
                     },
                     {
                         data: 'date',
-                        name: 'date'
+                        name: 'date',
+                        responsivePriority: 4,
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 2,
                     }
                 ],
-                order: [
-                    [3, 'desc']
-                ]
             });
         });
     </script>

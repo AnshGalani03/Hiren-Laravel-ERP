@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="module-detail-page d-flex justify-content-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Dealer Details: ') . $dealer->dealer_name }}
             </h2>
@@ -13,42 +13,45 @@
     </x-slot>
 
     <!-- Financial Summary -->
-    <div class="row mb-4">
-        <div class="col-lg-12">
-            <div class="back-btn pb-3">
-                <a href="{{ route('dealers.index') }}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left"></i> Back
-                </a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-primary text-white">
-                <div class="card-body text-center">
-                    <h4>Total Invoices</h4>
-                    <h2>₹{{ number_format($totalInvoices, 2) }}</h2>
-                    <small>{{ $invoices->count() }} invoices</small>
+    <div class="summery-card">
+        <div class="row mb-4">
+            <div class="col-lg-12">
+                <div class="back-btn pb-3">
+                    <a href="{{ route('dealers.index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-info text-white">
-                <div class="card-body text-center">
-                    <h4>Total Transactions</h4>
-                    <h2>₹{{ number_format($totalTransactions, 2) }}</h2>
-                    <small>{{ $transactions->count() }} transactions</small>
+            <div class="col-md-4">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h4>Total Invoices</h4>
+                        <h2>₹{{ number_format($totalInvoices, 2) }}</h2>
+                        <small>{{ $invoices->count() }} invoices</small>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-success text-white">
-                <div class="card-body text-center">
-                    <h4>Pending Amount</h4>
-                    <h2>₹{{ number_format($pendingAmount, 2) }}</h2>
-                    <small>All activities</small>
+            <div class="col-md-4">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <h4>Total Transactions</h4>
+                        <h2>₹{{ number_format($totalTransactions, 2) }}</h2>
+                        <small>{{ $transactions->count() }} transactions</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <h4>Pending Amount</h4>
+                        <h2>₹{{ number_format($pendingAmount, 2) }}</h2>
+                        <small>All activities</small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Dealer Details Cards -->
     <div class="row mb-4">
@@ -143,7 +146,7 @@
         </div>
 
         <!-- Summary Cards for Invoices -->
-        <div class="card-body border-bottom bg-light">
+        <div class="summery-card card-body border-bottom bg-light">
             <div class="row text-center">
                 <div class="col-md-4">
                     <div class="card bg-success text-white">
@@ -351,30 +354,36 @@
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1,
                     },
                     {
                         data: 'bill_no',
-                        name: 'bill_no'
+                        name: 'bill_no',
+                        responsivePriority: 2,
                     },
                     {
                         data: 'amount',
-                        name: 'amount'
+                        name: 'amount',
+                        responsivePriority: 3,
                     },
                     {
                         data: 'date',
-                        name: 'date'
+                        name: 'date',
+                        responsivePriority: 4,
                     },
                     {
                         data: 'remark',
                         name: 'remark',
-                        className: 'd-none d-md-table-cell'
+                        className: 'd-none d-md-table-cell',
+                        responsivePriority: 5,
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1,
                     }
                 ],
                 order: [
@@ -424,38 +433,46 @@
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1
                     },
                     {
                         data: 'type',
-                        name: 'type'
+                        name: 'type',
+                        responsivePriority: 2
                     },
                     {
                         data: 'category',
-                        name: 'category'
+                        name: 'category',
+                        responsivePriority: 3
                     },
                     {
                         data: 'project_name',
                         name: 'project_name',
-                        className: 'd-none d-md-table-cell'
+                        className: 'd-none d-md-table-cell',
+                        responsivePriority: 4
                     },
                     {
                         data: 'description',
-                        name: 'description'
+                        name: 'description',
+                        responsivePriority: 5
                     },
                     {
                         data: 'amount',
-                        name: 'amount'
+                        name: 'amount',
+                        responsivePriority: 6
                     },
                     {
                         data: 'date',
-                        name: 'date'
+                        name: 'date',
+                        responsivePriority: 7
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        responsivePriority: 1
                     }
                 ],
                 order: [
