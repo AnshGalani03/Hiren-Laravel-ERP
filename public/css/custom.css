@@ -136,3 +136,23 @@
     border-color: #63afad;
     color: #fff;
 }
+@media only screen and (max-width: 767px) {
+    .quick-actions .col-md-3 {
+        width: 50%;
+        display: inherit;
+    }
+    .overview-cards .col-xl-3 {
+        width: 50%;
+        /* display: inherit; */
+    }
+    .overview-cards,
+    .overview-title {
+        padding: 0 10px;
+    }
+    .overview-cards i{
+        font-size: 16px;
+    }
+    .quick-actions svg{
+        width: 20px;
+    }
+}

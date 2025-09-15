@@ -7,12 +7,12 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="row">
+            <div class="row overview-title">
                 <div class="col-lg-12">
                     <h3 class="text-lg font-semibold mb-4">Overview</h3>
                 </div>
             </div>
-            <div class="row">
+            <div class="row overview-cards">
                 <!-- Dealers Card -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card dashboard-card h-100 py-2">
@@ -204,7 +204,7 @@
             </div>
 
             <!-- Quick Actions -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg quick-actions">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
                     <div class="row">
