@@ -25,7 +25,7 @@
         <div class="card-header">
             <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Product Information</h5>
         </div>
-        <div class="p-6 text-gray-900">
+        <div class="product-create-form p-6 text-gray-900">
             <form action="{{ route('products.store') }}" method="POST">
                 @csrf
 

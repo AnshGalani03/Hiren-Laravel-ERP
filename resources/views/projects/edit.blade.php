@@ -79,8 +79,6 @@
                     </div>
                 </div>
 
-
-
                 <!-- Add this before the EMD/FDR Detail section -->
                 <div class="row">
                     <div class="col-md-12 mb-3">

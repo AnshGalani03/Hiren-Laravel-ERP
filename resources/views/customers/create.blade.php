@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="module-edit-page d-flex justify-content-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Add New Customer') }}
             </h2>
@@ -25,7 +25,7 @@
         <div class="card-header">
             <h5 class="mb-0"><i class="fas fa-user-plus"></i> Customer Information</h5>
         </div>
-        <div class="p-6 text-gray-900">
+        <div class="customer-add-form p-6 text-gray-900">
             <form action="{{ route('customers.store') }}" method="POST">
                 @csrf
                 

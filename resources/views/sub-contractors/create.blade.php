@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="sub-contractors-header d-flex justify-content-between align-items-center">
             <!-- Back Button -->
             <a href="{{ route('sub-contractors.index') }}" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left"></i> Back

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="monthly-overview-header d-flex justify-content-between align-items-center">
             <a href="{{ route('employees.show', $employee) }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to Details
             </a>

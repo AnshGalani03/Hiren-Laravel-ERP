@@ -228,23 +228,49 @@
     .bill-detail-header h2 {
         margin-bottom: 10px;
     }
-    .row.bill-item{
+    .row.bill-item {
         row-gap: 10px;
     }
-    #customer_id{
+    #customer_id {
         margin-bottom: 10px;
     }
     .transactions-summery-card .col-md-3 {
-       width: 50%;
-       margin-bottom: 10px;
-    }
-    .transaction-module-form .row{
-        margin-bottom: 0 !important; 
-    }
-    .transaction-module-form .col-md-6, .transaction-module-form .col-md-4{
+        width: 50%;
         margin-bottom: 10px;
     }
-    .product-edit-form .col-md-6{
+    .transaction-module-form .row {
+        margin-bottom: 0 !important;
+    }
+    .transaction-module-form .col-md-6,
+    .transaction-module-form .col-md-4 {
+        margin-bottom: 10px;
+    }
+    .product-edit-form .col-md-6 {
+        margin-bottom: 10px;
+    }
+    .monthly-overview-header {
+        display: block !important;
+    }
+    .monthly-overview-header a {
+        margin-bottom: 10px;
+    }
+    .customer-add-form .row {
+        margin-bottom: 0 !important;
+    }
+    .customer-add-form .col-md-6,
+    .customer-add-form .col-md-12 {
+        margin-bottom: 10px;
+    }
+    .team-member-modal .col-md-3 {
+        width: 50%;
+    }
+    .sub-contractors-header{
+        display: block !important;
+    }
+    .sub-contractors-header a{
+        margin-bottom: 10px;
+    }
+    .product-create-form .col-md-6{
         margin-bottom: 10px;
     }
 }

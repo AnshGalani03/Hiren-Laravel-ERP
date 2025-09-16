@@ -155,9 +155,6 @@
                                     <div class="card-body p-3">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="team-members-icon-name d-flex align-items-center">
-                                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                                    <i class="fas fa-user"></i>
-                                                </div>
                                                 <div>
                                                     <h6 class="mb-1 fw-bold text-dark">{{ $employee->name }}</h6>
                                                     <small class="text-muted">
@@ -210,7 +207,7 @@
                 </div>
                 <form action="{{ route('projects.assign-employee', $project) }}" method="POST">
                     @csrf
-                    <div class="modal-body">
+                    <div class="modal-body team-member-modal">
                         <div class="mb-3">
                             <label class="form-label fw-bold">
                                 <i class="fas fa-user-check text-primary me-1"></i>Select Team Members
@@ -229,9 +226,6 @@
                                                     {{ $assignedEmployees->contains($employee) ? 'checked' : '' }}>
                                                 <label class="form-check-label w-100" for="employee{{ $employee->id }}">
                                                     <div class="d-flex align-items-center">
-                                                        <div class="bg-{{ $assignedEmployees->contains($employee) ? 'primary' : 'secondary' }} text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px;">
-                                                            <i class="fas fa-user fa-sm"></i>
-                                                        </div>
                                                         <div>
                                                             <div class="fw-bold">{{ $employee->name }}</div>
                                                             <small class="text-muted">{{ $employee->designation ?: 'Team Member' }}</small>

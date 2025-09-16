@@ -43,7 +43,7 @@
                         </select>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-2 mb-3">
                         <label for="sub_contractor_id" class="form-label">Sub-Contractor</label>
                         <select class="form-select" id="sub_contractor_id" name="sub_contractor_id">
                             <option value="">All Sub-Contractors</option>

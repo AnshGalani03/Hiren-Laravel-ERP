@@ -25,7 +25,7 @@
         <div class="card-header">
             <h5 class="mb-0"><i class="fas fa-user-edit"></i> Edit Customer Information</h5>
         </div>
-        <div class="p-6 text-gray-900">
+        <div class="customer-add-form p-6 text-gray-900">
             <form action="{{ route('customers.update', $customer) }}" method="POST">
                 @csrf
                 @method('PUT')
