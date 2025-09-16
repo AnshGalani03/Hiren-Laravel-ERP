@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 15, 2025 at 04:44 AM
+-- Generation Time: Sep 16, 2025 at 06:02 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -756,7 +756,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Ansh', 'anshgalani@yahoo.com', NULL, '$2y$12$88RbyG0Cy.0.yLS/jj6.U.yCTw5CJ/1/gvL31S8ZRJEybOVv1wVcq', NULL, '2025-09-13 05:46:52', '2025-09-13 05:46:52');
+(1, 'Ansh', 'anshgalani@yahoo.com', NULL, '$2y$12$e63VF4Z10IFUeGjHc9E1tOm/5.qp3Tb2vaGt6OFjCmNyJiOTuFv9C', NULL, '2025-09-13 05:46:52', '2025-09-15 05:57:56');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
