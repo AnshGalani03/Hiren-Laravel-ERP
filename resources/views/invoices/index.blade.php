@@ -7,38 +7,46 @@
         </div>
     </x-slot>
 
-    <!-- Filter Section -->
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4">
-        <div class="p-4">
+    <!-- Filters -->
+    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="p-6">
             <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="dealer_filter" class="form-label">Filter by Dealer</label>
-                    <select class="form-control" id="dealer_filter">
+                <div class="col-lg-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dealer</label>
+                    <select id="dealerFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">All Dealers</option>
                         @foreach($dealers as $dealer)
                         <option value="{{ $dealer->id }}">{{ $dealer->dealer_name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">&nbsp;</label>
-                    <div>
-                        <button type="button" class="btn btn-secondary w-100" id="reset_filter">
-                            <i class="fas fa-sync"></i> Reset
-                        </button>
-                    </div>
+                <div class="col-lg-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">From Date</label>
+                    <input type="date" id="startDateFilter"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="col-lg-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">To Date</label>
+                    <input type="date" id="endDateFilter"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="col-lg-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Action</label>
+                    <button id="clearFilterBtn" class="btn btn-secondary w-100">
+                        <i class="fas fa-times mr-1"></i> Clear
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Summary Cards -->
-    <div class="invoices-summary row mb-4">
+    <div class="invoices-summary row mb-4 mt-4">
         <div class="col-md-3">
             <div class="card bg-primary text-white">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-file-invoice"></i> Total Invoices</h4>
-                    <h2 id="total_invoices">0</h2>
+                    <h2 id="totalInvoices">0</h2>
                 </div>
             </div>
         </div>
@@ -46,7 +54,7 @@
             <div class="card bg-success text-white">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-money-bill"></i> Total Amount</h4>
-                    <h2 id="total_amount">₹0.00</h2>
+                    <h2 id="totalAmount">₹0.00</h2>
                 </div>
             </div>
         </div>
@@ -54,15 +62,15 @@
             <div class="card bg-info text-white">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-users"></i> Unique Dealers</h4>
-                    <h2 id="unique_dealers">0</h2>
+                    <h2 id="uniqueDealers">0</h2>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card bg-warning text-white">
                 <div class="card-body text-center">
-                    <h4><i class="fas fa-chart-line"></i> Average Amount</h4>
-                    <h2 id="avg_amount">₹0.00</h2>
+                    <h4><i class="fas fa-chart-line"></i> GST Amount</h4>
+                    <h2 id="totalGst">₹0.00</h2>
                 </div>
             </div>
         </div>
@@ -112,7 +120,9 @@
                 ajax: {
                     url: "{{ route('invoices.index') }}",
                     data: function(d) {
-                        d.dealer_id = $('#dealer_filter').val();
+                        d.dealer_id = $('#dealerFilter').val();
+                        d.start_date = $('#startDateFilter').val();
+                        d.end_date = $('#endDateFilter').val();
                     },
                     error: function(xhr, error, thrown) {
                         console.log('DataTable AJAX Error:', xhr.responseText);
@@ -160,8 +170,10 @@
                     }
                 ],
                 order: [
-                    [4, 'desc']
-                ], // Order by date descending
+                    [3, 'desc']
+                ], // Order by date desc
+                pageLength: 25,
+                responsive: true,
 
                 // Enable search box - remove the restrictive dom option
                 dom: 'Blfrtip', // This includes the search box ('f')
@@ -172,15 +184,29 @@
             });
 
 
-            // Filter event handler
-            $('#dealer_filter').change(function() {
-                table.draw();
+            // Filter functionality
+            $('#filterBtn').on('click', function() {
+                table.ajax.reload();
+                updateSummary();
             });
 
-            // Reset filter
-            $('#reset_filter').click(function() {
-                $('#dealer_filter').val('');
-                table.draw();
+            $('#clearFilterBtn').on('click', function() {
+                $('#dealerFilter').val('');
+                $('#startDateFilter').val('');
+                $('#endDateFilter').val('');
+                table.ajax.reload();
+                updateSummary();
+            });
+
+            $('#refreshBtn').on('click', function() {
+                table.ajax.reload();
+                updateSummary();
+            });
+
+            // Enter key support for date inputs
+            $('#startDateFilter, #endDateFilter, #dealerFilter').on('change', function() {
+                table.ajax.reload();
+                updateSummary();
             });
 
             // Delete invoice
@@ -216,21 +242,23 @@
                     method: 'GET',
                     dataType: 'json',
                     data: {
-                        dealer_id: $('#dealer_filter').val()
+                        dealer_id: $('#dealerFilter').val(),
+                        start_date: $('#startDateFilter').val(),
+                        end_date: $('#endDateFilter').val()
                     },
                     success: function(response) {
-                        $('#total_invoices').text(response.total_invoices || 0);
-                        $('#total_amount').text('₹' + numberFormat(response.total_amount || 0));
-                        $('#unique_dealers').text(response.unique_dealers || 0);
-                        $('#avg_amount').text('₹' + numberFormat(response.avg_amount || 0));
+                        $('#totalInvoices').text(response.total_invoices || 0);
+                        $('#totalAmount').text('₹' + numberFormat(response.total_original_amount || 0));
+                        $('#uniqueDealers').text(response.unique_dealers || 0);
+                        $('#totalGst').text('₹' + numberFormat(response.total_gst_amount || 0));
                     },
                     error: function(xhr) {
                         console.log('Summary Error:', xhr.responseText);
                         // Set to zero if error
-                        $('#total_invoices').text('0');
-                        $('#total_amount').text('₹0.00');
-                        $('#unique_dealers').text('0');
-                        $('#avg_amount').text('₹0.00');
+                        $('#totalInvoices').text('0');
+                        $('#totalAmount').text('₹0.00');
+                        $('#uniqueDealers').text('0');
+                        $('#totalGst').text('₹0.00');
                     }
                 });
             }

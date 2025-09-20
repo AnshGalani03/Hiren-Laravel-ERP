@@ -167,8 +167,8 @@
                 <div class="col-md-4">
                     <div class="card bg-info text-white">
                         <div class="card-body p-3">
-                            <h6><i class="fas fa-calendar"></i> Average Per Month</h6>
-                            <h4 id="dealer_avg_monthly">₹0.00</h4>
+                            <h6><i class="fas fa-calendar"></i> GST Amount</h6>
+                            <h4 id="dealer_gst_amount">₹0.00</h4>
                         </div>
                     </div>
                 </div>
@@ -190,16 +190,6 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr class="table-dark">
-                                <th>Total</th>
-                                <th></th>
-                                <th id="invoice_footer_total">₹0.00</th>
-                                <th></th>
-                                <th class="d-none d-md-table-cell"></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -528,8 +518,8 @@
             function updateInvoiceSummary(summary) {
                 if (summary) {
                     $('#dealer_total_invoices').text(summary.total_invoices || 0);
-                    $('#dealer_invoice_amount').text('₹' + numberFormat(summary.total_amount || 0));
-                    $('#dealer_avg_monthly').text('₹' + numberFormat(summary.avg_per_month || 0));
+                    $('#dealer_invoice_amount').text('₹' + numberFormat(summary.total_original_amount || 0));
+                    $('#dealer_gst_amount').text('₹' + numberFormat(summary.total_gst_amount || 0));
                 }
             }
 

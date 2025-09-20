@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 20, 2025 at 07:14 AM
+-- Generation Time: Sep 20, 2025 at 11:21 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -361,7 +361,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -403,7 +403,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (33, '2025_09_11_064505_add_sub_contractor_to_transactions_table', 11),
 (34, '2025_09_11_110558_create_customers_table', 12),
 (35, '2025_09_11_115949_replace_dealer_with_customer_in_bills_table', 13),
-(36, '2025_09_12_063258_add_hsn_code_to_products_table', 14);
+(36, '2025_09_12_063258_add_hsn_code_to_products_table', 14),
+(37, '2025_09_20_073627_add_contractor_type_to_sub_contractors_table', 15);
 
 -- --------------------------------------------------------
 
@@ -593,6 +594,8 @@ DROP TABLE IF EXISTS `sub_contractors`;
 CREATE TABLE IF NOT EXISTS `sub_contractors` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `contractor_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contractor_type` enum('self','third_party') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'self',
+  `third_party_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` date NOT NULL,
   `project_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `department_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -603,15 +606,17 @@ CREATE TABLE IF NOT EXISTS `sub_contractors` (
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  PRIMARY KEY (`id`),
+  KEY `sub_contractors_contractor_type_contractor_name_index` (`contractor_type`,`contractor_name`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `sub_contractors`
 --
 
-INSERT INTO `sub_contractors` (`id`, `contractor_name`, `date`, `project_name`, `department_name`, `amount_project`, `time_limit`, `emd_fdr_detail`, `work_order_date`, `remark`, `created_at`, `updated_at`) VALUES
-(1, 'Milan', '2025-09-07', 'Surat', 'Road', 5000.00, '6 Month', '2000', '2025-09-04', NULL, '2025-09-13 05:57:44', '2025-09-13 05:57:44');
+INSERT INTO `sub_contractors` (`id`, `contractor_name`, `contractor_type`, `third_party_name`, `date`, `project_name`, `department_name`, `amount_project`, `time_limit`, `emd_fdr_detail`, `work_order_date`, `remark`, `created_at`, `updated_at`) VALUES
+(1, 'Milan', 'self', NULL, '2025-09-07', 'Surat', 'Road', 5000.00, '6 Month', '2000', '2025-09-04', NULL, '2025-09-13 05:57:44', '2025-09-13 05:57:44'),
+(2, 'Ansh', 'third_party', 'Demo', '2025-09-18', 'Demo', 'Road', 500000.00, '6 Month', 'Demo', '2025-09-10', 'Demo Remark', '2025-09-20 04:17:52', '2025-09-20 04:17:52');
 
 -- --------------------------------------------------------
 

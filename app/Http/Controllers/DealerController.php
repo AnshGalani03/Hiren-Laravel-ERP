@@ -92,8 +92,8 @@ class DealerController extends Controller
     public function invoicesData(Request $request, Dealer $dealer)
     {
         if ($request->ajax()) {
-            $baseQuery = $dealer->invoices()->select(['id', 'bill_no', 'amount', 'date', 'remark']);
-
+            $baseQuery = $dealer->invoices()->select(['id', 'bill_no', 'amount', 'original_amount', 'gst_rate', 'date', 'remark']);
+    
             // Apply filters
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $baseQuery->whereBetween('date', [
@@ -101,7 +101,7 @@ class DealerController extends Controller
                     Carbon::parse($request->to_date)->endOfDay(),
                 ]);
             }
-
+    
             // Calculate summary with correct queries
             $summaryQuery = $dealer->invoices();
             if ($request->filled('from_date') && $request->filled('to_date')) {
@@ -110,30 +110,17 @@ class DealerController extends Controller
                     Carbon::parse($request->to_date)->endOfDay(),
                 ]);
             }
-
+    
             $totalInvoices = $summaryQuery->count() ?: 0;
-            $totalAmount = $summaryQuery->sum('amount') ?: 0;
-
-            // Fix: Calculate unique months properly using raw query
-            $uniqueMonths = DB::table('invoices')
-                ->select(DB::raw('YEAR(date) as year, MONTH(date) as month'))
-                ->where('dealer_id', $dealer->id)
-                ->when($request->filled('from_date') && $request->filled('to_date'), function ($query) use ($request) {
-                    return $query->whereBetween('date', [
-                        Carbon::parse($request->from_date)->startOfDay(),
-                        Carbon::parse($request->to_date)->endOfDay(),
-                    ]);
-                })
-                ->groupBy('year', 'month')
-                ->get()
-                ->count();
-
-            $avgPerMonth = $uniqueMonths > 0 ? ($totalAmount / $uniqueMonths) : 0;
-
+            $totalOriginalAmount = $summaryQuery->sum('original_amount') ?: 0;
+            $totalGstAmount = $summaryQuery->sum('amount') ?: 0; // Sum of GST amounts
+            
+            // REMOVED: Average calculation
+    
             return DataTables::of($baseQuery)
                 ->addIndexColumn()
                 ->editColumn('amount', function ($invoice) {
-                    return '<span data-amount="' . $invoice->amount . '">₹' . number_format($invoice->amount, 2) . '</span>';
+                    return '₹ ' . number_format($invoice->original_amount, 2);
                 })
                 ->editColumn('date', function ($invoice) {
                     return $invoice->date ? $invoice->date->format('d/m/Y') : '';
@@ -141,6 +128,7 @@ class DealerController extends Controller
                 ->editColumn('remark', function ($invoice) {
                     return $invoice->remark ?: 'N/A';
                 })
+                
                 ->addColumn('action', function ($invoice) {
                     return '
                         <a href="' . route('invoices.edit', $invoice->id) . '" class="btn btn-warning btn-sm">
@@ -151,19 +139,21 @@ class DealerController extends Controller
                         </button>
                     ';
                 })
-                ->rawColumns(['amount', 'action'])
+                ->rawColumns(['amount', 'original_amount', 'action'])
                 ->with([
                     'summary' => [
                         'total_invoices' => $totalInvoices,
-                        'total_amount' => $totalAmount,
-                        'avg_per_month' => $avgPerMonth
+                        'total_original_amount' => $totalOriginalAmount,
+                        'total_gst_amount' => $totalGstAmount,
+                        // REMOVED: avg_per_month
                     ]
                 ])
                 ->make(true);
         }
-
+    
         return response()->json(['error' => 'Invalid request'], 400);
     }
+    
 
     public function transactionsData(Request $request, Dealer $dealer)
     {
