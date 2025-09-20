@@ -142,6 +142,14 @@
 .btn:focus {
     box-shadow: none;
 }
+.self-label {
+    background-color: #42999b;
+    color: #fff;
+}
+.third-party-label {
+    background-color: #60be8f;
+    color: #fff;
+}
 @media only screen and (max-width: 767px) {
     .quick-actions .col-md-3 {
         width: 50%;

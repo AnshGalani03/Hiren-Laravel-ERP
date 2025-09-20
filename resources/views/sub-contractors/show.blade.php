@@ -6,7 +6,7 @@
             </h2>
             <div>
                 <a href="{{ route('transactions.create', ['type' => 'incoming', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-success">Add Income</a>
-                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-danger">Add Bill</a>
+                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-danger">Add Expense</a>
                 <a href="{{ route('sub-contractors.edit', $subContractor) }}" class="btn btn-warning">Edit</a>
             </div>
         </div>
@@ -103,6 +103,17 @@
                     <h5 class="mb-0">Additional Details</h5>
                 </div>
                 <div class="card-body">
+                    @if($subContractor->contractor_type === 'third_party' && $subContractor->third_party_name)
+                    <div class="mb-3">
+                        <strong>Contractor Type:</strong>
+                        <p>Third Party: {{ $subContractor->third_party_name }}</p>
+                    </div>
+                    @else
+                    <div class="mb-3">
+                        <strong>Contractor Type:</strong>
+                        <p>Self</p>
+                    </div>
+                    @endif
                     <div class="mb-3">
                         <strong>EMD/FDR Detail:</strong>
                         <p>{{ $subContractor->emd_fdr_detail ?: 'N/A' }}</p>
@@ -118,7 +129,7 @@
 
     <!-- Transactions Section -->
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="card-header">
+        <div class="card-header p-3">
             <h5 class="mb-0">Transactions Overview & Filters</h5>
         </div>
 
@@ -135,17 +146,18 @@
                 </div>
                 <div class="col-md-3">
                     <label for="start-date" class="form-label">Start Date</label>
-                    <input type="date" class="form-control" id="start-date">
+                    <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md" id="start-date">
                 </div>
                 <div class="col-md-3">
                     <label for="end-date" class="form-label">End Date</label>
-                    <input type="date" class="form-control" id="end-date">
+                    <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md" id="end-date">
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="button" class="btn btn-primary me-2 btn-sm" id="apply-filter">
+                <div class="col-md-3 ">
+                    <label for="action" class="block mb-1">Action</label>
+                    <button type="button" class="btn btn-primary me-2" id="apply-filter">
                         <i class="fas fa-filter"></i> Apply Filter
                     </button>
-                    <button type="button" class="btn btn-secondary btn-sm" id="clear-filter">
+                    <button type="button" class="btn btn-secondary" id="clear-filter">
                         <i class="fas fa-times"></i> Clear
                     </button>
                 </div>
@@ -153,7 +165,7 @@
         </div>
 
         <!-- Enhanced Summary Cards -->
-        <div class="card-body border-bottom bg-light">
+        <div class="card-body border-bottom bg-light p-3">
             <div class="row text-center g-3">
                 <!-- Total Incoming Card -->
                 <div class="col-md-4">

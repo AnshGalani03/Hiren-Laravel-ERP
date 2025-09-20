@@ -27,9 +27,6 @@
         </div>
     </div>
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4">
-        <div class="card-header">
-            <h5 class="mb-0">Bill Information</h5>
-        </div>
         <div class="p-6 text-gray-900">
             <div class="row">
                 <div class="col-md-6">
@@ -89,7 +86,7 @@
 
     <!-- Bill Items -->
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="card-header">
+        <div class="card-header pt-4 px-6">
             <h5 class="mb-0">Bill Items</h5>
         </div>
         <div class="p-6 text-gray-900">

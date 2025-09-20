@@ -17,9 +17,6 @@
 
     <!-- Filter Section -->
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-filter"></i> Filters</h5>
-        </div>
         <div class="p-4">
             <form id="filter-form">
                 <div class="row">
@@ -122,9 +119,6 @@
 
     <!-- Transactions Table -->
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-table"></i> Transactions List</h5>
-        </div>
         <div class="p-6 text-gray-900">
             <div class="table-responsive-wrapper">
                 <div class="table-responsive">

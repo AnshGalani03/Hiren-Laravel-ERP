@@ -10,9 +10,6 @@
 
     <!-- Filter Section -->
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-filter"></i> Filter Projects</h5>
-        </div>
         <div class="p-4">
             <div class="row">
                 <div class="col-md-3 mb-3">

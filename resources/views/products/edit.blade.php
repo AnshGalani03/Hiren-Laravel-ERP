@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="module-edit-page d-flex justify-content-between align-items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Edit Product: ') . $product->product_name }}
-            </h2>
             <a class="btn btn-secondary" href="{{ route('products.index') }}">
                 <i class="fas fa-arrow-left"></i> Back to List
             </a>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Edit Product: ') . $product->product_name }}
+            </h2>
         </div>
     </x-slot>
 
@@ -22,9 +22,6 @@
     @endif
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-edit"></i> Edit Product Information</h5>
-        </div>
         <div class="p-6 text-gray-900">
             <form action="{{ route('products.update', $product) }}" method="POST">
                 @csrf

@@ -20,9 +20,6 @@
         </div>
     </div>
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-user"></i> Customer Information</h5>
-        </div>
         <div class="p-6 text-gray-900">
             <div class="row">
                 <div class="col-md-8">

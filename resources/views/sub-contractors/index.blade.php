@@ -10,6 +10,44 @@
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900">
+
+            <!-- Filter Options -->
+            <div class="mb-4 ">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Contractor Type</label>
+                        <select id="contractorTypeFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                            <option value="">All Types</option>
+                            <option value="self">Self</option>
+                            <option value="third_party">Third Party</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+                        <input type="date" id="dateFromFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+                        <input type="date" id="dateToFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Action</label>
+                            <button id="filterBtn" class="btn btn-primary me-2 btn-sm">
+                                <i class="fas fa-filter"></i> Apply Filter
+                            </button>
+                            <button id="clearFilterBtn" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-times"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
             <div class="table-responsive-wrapper">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="sub-contractors-table" style="width:100%">
@@ -34,13 +72,21 @@
     @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#sub-contractors-table').DataTable({
+            let table = $('#sub-contractors-table').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
                 scrollX: true,
                 autoWidth: false,
-                ajax: "{{ route('sub-contractors.index') }}",
+                ajax: {
+                    url: "{{ route('sub-contractors.index') }}",
+                    data: function(d) {
+                        d.contractor_type = $('#contractorTypeFilter').val();
+                        d.department = $('#departmentFilter').val();
+                        d.date_from = $('#dateFromFilter').val();
+                        d.date_to = $('#dateToFilter').val();
+                    }
+                },
                 columns: [
                     // {
                     //     data: 'DT_RowIndex',
@@ -85,7 +131,28 @@
                         searchable: false,
                         responsivePriority: 1
                     },
-                ]
+                ],
+                pageLength: 25,
+            });
+
+            // Filter functionality
+            $('#filterBtn').on('click', function() {
+                table.ajax.reload();
+            });
+
+            $('#clearFilterBtn').on('click', function() {
+                $('#contractorTypeFilter').val('');
+                $('#departmentFilter').val('');
+                $('#dateFromFilter').val('');
+                $('#dateToFilter').val('');
+                table.ajax.reload();
+            });
+
+            // Enter key support
+            $('#departmentFilter').on('keypress', function(e) {
+                if (e.which == 13) {
+                    table.ajax.reload();
+                }
             });
         });
     </script>

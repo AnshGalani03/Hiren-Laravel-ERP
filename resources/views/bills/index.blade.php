@@ -12,9 +12,6 @@
 
     <!-- Filters -->
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-3">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-filter"></i> Filters</h5>
-        </div>
         <div class="p-3">
             <div class="bills-filters row">
                 <!-- Filter section -->
@@ -58,9 +55,6 @@
 
     <!-- Bills Table -->
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-file-invoice"></i> Bills List</h5>
-        </div>
         <div class="p-6 text-gray-900">
             <div class="table-responsive">
                 <table class="table table-bordered" id="bills-table" style="width:100%">

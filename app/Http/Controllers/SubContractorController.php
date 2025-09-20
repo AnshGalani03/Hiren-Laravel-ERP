@@ -8,16 +8,54 @@ use Yajra\DataTables\DataTables;
 use App\Models\SubContractorBill;
 use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class SubContractorController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $subContractors = SubContractor::select(['id', 'contractor_name', 'department_name', 'amount_project', 'date', 'time_limit', 'work_order_date']);
+            $subContractors = SubContractor::select([
+                'id',
+                'contractor_name',
+                'contractor_type',
+                'third_party_name',
+                'department_name',
+                'amount_project',
+                'date',
+                'time_limit',
+                'work_order_date'
+            ]);
+
+            // Apply filters
+            if ($request->filled('contractor_type')) {
+                $subContractors->where('contractor_type', $request->contractor_type);
+            }
+
+            if ($request->filled('department')) {
+                $subContractors->where('department_name', 'like', '%' . $request->department . '%');
+            }
+
+            if ($request->filled('date_from')) {
+                $subContractors->where('date', '>=', $request->date_from);
+            }
+
+            if ($request->filled('date_to')) {
+                $subContractors->where('date', '<=', $request->date_to);
+            }
 
             return DataTables::of($subContractors)
                 ->addIndexColumn()
+                ->editColumn('contractor_name', function ($subContractor) {
+                    $displayName = $subContractor->display_name;
+                    $badge = $subContractor->contractor_type === 'self'
+                        ? '<span class="badge badge-pill self-label">Self</span>'
+                        : '<span class="badge badge-pill third-party-label">Third Party</span>';
+
+                    return $displayName . ' <span class="ml-2">' . $badge . '</span>';
+                })
                 ->editColumn('date', function ($subContractor) {
                     return $subContractor->date ? $subContractor->date->format('d/m/Y') : '';
                 })
@@ -37,7 +75,7 @@ class SubContractorController extends Controller
                         </form>
                     ';
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['contractor_name', 'action'])
                 ->make(true);
         }
 
@@ -49,25 +87,48 @@ class SubContractorController extends Controller
         return view('sub-contractors.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'contractor_name' => 'required|string|max:255',
+            'contractor_type' => 'required|in:self,third_party',
+            'third_party_name' => 'required_if:contractor_type,third_party|nullable|string|max:255',
             'date' => 'required|date',
             'project_name' => 'required|string|max:255',
             'department_name' => 'required|string|max:255',
-            'amount_project' => 'required|numeric|min:0',
+            'amount_project' => 'required|numeric|min:0|max:999999999.99',
             'time_limit' => 'required|string|max:255',
+            'work_order_date' => 'nullable|date',
+            'emd_fdr_detail' => 'nullable|string|max:1000',
+            'remark' => 'nullable|string|max:1000',
         ]);
 
-        SubContractor::create($request->all());
-        return redirect()->route('sub-contractors.index')->with('success', 'Sub-contractor created successfully.');
+        DB::beginTransaction();
+
+        try {
+            $subContractor = SubContractor::create($validated);
+
+            DB::commit();
+
+            return redirect()
+                ->route('sub-contractors.index')
+                ->with('success', 'Sub-contractor created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return back()
+                ->withErrors(['error' => 'Failed to create sub-contractor. Please try again.'])
+                ->withInput();
+        }
     }
 
-    public function show(SubContractor $subContractor)
+    public function show(SubContractor $subContractor): View
     {
-        // Get all transactions for this sub-contractor (these are the "bills")
-        $transactions = $subContractor->transactions()->with(['incoming', 'outgoing', 'project', 'dealer'])->get();
+        // Get all transactions for this sub-contractor
+        $transactions = $subContractor->transactions()
+            ->with(['incoming', 'outgoing', 'project', 'dealer'])
+            ->latest()
+            ->get();
 
         return view('sub-contractors.show', compact('subContractor', 'transactions'));
     }
@@ -150,67 +211,101 @@ class SubContractorController extends Controller
 
 
 
-    public function edit(SubContractor $subContractor)
+    public function edit(SubContractor $subContractor): View
     {
         return view('sub-contractors.edit', compact('subContractor'));
     }
 
-    public function update(Request $request, SubContractor $subContractor)
+    public function update(Request $request, SubContractor $subContractor): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'contractor_name' => 'required|string|max:255',
+            'contractor_type' => 'required|in:self,third_party',
+            'third_party_name' => 'required_if:contractor_type,third_party|nullable|string|max:255',
             'date' => 'required|date',
             'project_name' => 'required|string|max:255',
             'department_name' => 'required|string|max:255',
-            'amount_project' => 'required|numeric|min:0',
+            'amount_project' => 'required|numeric|min:0|max:999999999.99',
             'time_limit' => 'required|string|max:255',
+            'work_order_date' => 'nullable|date',
+            'emd_fdr_detail' => 'nullable|string|max:1000',
+            'remark' => 'nullable|string|max:1000',
         ]);
 
-        $subContractor->update($request->all());
-        return redirect()->route('sub-contractors.index')->with('success', 'Sub-contractor updated successfully.');
+        DB::beginTransaction();
+
+        try {
+            $subContractor->update($validated);
+
+            DB::commit();
+
+            return redirect()
+                ->route('sub-contractors.index')
+                ->with('success', 'Sub-contractor updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return back()
+                ->withErrors(['error' => 'Failed to update sub-contractor. Please try again.'])
+                ->withInput();
+        }
     }
 
-    public function destroy(SubContractor $subContractor)
+    public function destroy(SubContractor $subContractor): RedirectResponse
     {
-        DB::transaction(function () use ($subContractor) {
+        DB::beginTransaction();
+
+        try {
             // Delete all associated transactions
             Transaction::where('sub_contractor_id', $subContractor->id)->delete();
 
-            // Delete all bills (which will also trigger any related deletions)
+            // Delete all bills
             $subContractor->bills()->delete();
 
             // Delete the sub-contractor
             $subContractor->delete();
-        });
 
-        return redirect()->route('sub-contractors.index')->with('success', 'Sub-contractor and all related data deleted successfully.');
+            DB::commit();
+
+            return redirect()
+                ->route('sub-contractors.index')
+                ->with('success', 'Sub-contractor and all related data deleted successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return back()->withErrors(['error' => 'Failed to delete sub-contractor. Please try again.']);
+        }
     }
 
     // AJAX delete method for bills
-    public function deleteBill($id)
+    public function deleteBill($id): JsonResponse
     {
+        DB::beginTransaction();
+
         try {
             $bill = SubContractorBill::findOrFail($id);
 
-            DB::transaction(function () use ($bill) {
-                // Delete the associated transaction
-                $transaction = Transaction::where('sub_contractor_id', $bill->sub_contractor_id)
-                    ->where('description', 'like', '%' . $bill->bill_no . '%')
-                    ->first();
+            // Find and delete the associated transaction
+            $transaction = Transaction::where('sub_contractor_id', $bill->sub_contractor_id)
+                ->where('description', 'like', '%' . ($bill->bill_no ?? '') . '%')
+                ->first();
 
-                if ($transaction) {
-                    $transaction->delete();
-                }
+            if ($transaction) {
+                $transaction->delete();
+            }
 
-                // Delete the bill
-                $bill->delete();
-            });
+            // Delete the bill
+            $bill->delete();
+
+            DB::commit();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Bill and transaction deleted successfully!'
             ]);
         } catch (\Exception $e) {
+            DB::rollBack();
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting bill: ' . $e->getMessage()

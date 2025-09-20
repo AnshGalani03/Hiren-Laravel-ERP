@@ -12,9 +12,6 @@
 
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-boxes"></i> Products List</h5>
-        </div>
         <div class="p-6 text-gray-900">
             <div class="table-responsive">
                 <table class="table table-bordered" id="products-table" style="width:100%">
