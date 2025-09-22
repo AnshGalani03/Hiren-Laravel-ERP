@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control @error('date') is-invalid @enderror"
+                        <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('date') is-invalid @enderror"
                             id="date" name="date" value="{{ old('date', $upad->date->format('Y-m-d')) }}" required>
                         @error('date')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -29,7 +29,7 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="salary" class="form-label">Salary <span class="text-danger">*</span></label>
-                        <input type="number" step="0.01" class="form-control @error('salary') is-invalid @enderror"
+                        <input type="number" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('salary') is-invalid @enderror"
                             id="salary" name="salary" value="{{ old('salary', $upad->salary) }}" required>
                         @error('salary')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -40,7 +40,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="upad" class="form-label">Upad Amount <span class="text-danger">*</span></label>
-                        <input type="number" step="0.01" class="form-control @error('upad') is-invalid @enderror"
+                        <input type="number" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('upad') is-invalid @enderror"
                             id="upad" name="upad" value="{{ old('upad', $upad->upad) }}" required>
                         @error('upad')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -49,7 +49,7 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="remark" class="form-label">Remark</label>
-                        <textarea class="form-control @error('remark') is-invalid @enderror"
+                        <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('remark') is-invalid @enderror"
                             id="remark" name="remark" rows="3">{{ old('remark', $upad->remark) }}</textarea>
                         @error('remark')
                         <div class="invalid-feedback">{{ $message }}</div>

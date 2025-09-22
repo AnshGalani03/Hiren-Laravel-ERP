@@ -31,14 +31,14 @@
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <label for="bill_number" class="form-label">Bill Number</label>
-                        <input type="text" class="form-control" id="bill_number" name="bill_number"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="bill_number" name="bill_number"
                             value="{{ old('bill_number', $bill->bill_number) }}" readonly
                             style="background-color: #f8f9fa; cursor: not-allowed;">
                         <small class="text-muted">Bill number cannot be changed</small>
                     </div>
                     <div class="col-md-6">
                         <label for="bill_date" class="form-label">Bill Date <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="bill_date" name="bill_date"
+                        <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="bill_date" name="bill_date"
                             value="{{ old('bill_date', $bill->bill_date->format('Y-m-d')) }}" required>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
-                        <select class="form-control" id="customer_id" name="customer_id" required>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="customer_id" name="customer_id" required>
                             <option value="">Select Customer</option>
                             @foreach($customers as $customer)
                             <option value="{{ $customer->id }}"
@@ -60,7 +60,7 @@
                     <!-- Status and Notes Row -->
                     <div class="col-md-6">
                         <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                        <select class="form-control" id="status" name="status" required>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="status" name="status" required>
                             <option value="draft" {{ old('status', $bill->status) == 'draft' ? 'selected' : '' }}>Draft</option>
                             <option value="sent" {{ old('status', $bill->status) == 'sent' ? 'selected' : '' }}>Sent</option>
                             <option value="paid" {{ old('status', $bill->status) == 'paid' ? 'selected' : '' }}>Paid</option>
@@ -81,7 +81,7 @@
                     </div>
                     <div class="col-md-6" id="gst_rate_section" style="{{ old('is_gst', $bill->is_gst) ? 'display: block;' : 'display: none;' }}">
                         <label for="tax_rate" class="form-label">GST Rate (%) <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" id="tax_rate" name="tax_rate"
+                        <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="tax_rate" name="tax_rate"
                             min="0" max="100" step="0.01"
                             value="{{ old('tax_rate', $bill->tax_rate) }}"
                             placeholder="e.g., 18">
@@ -105,7 +105,7 @@
                             @foreach($bill->billItems as $index => $item)
                             <div class="row bill-item mb-3" data-index="{{ $index }}">
                                 <div class="col-md-4">
-                                    <select class="form-control product-select" name="items[{{ $index }}][product_id]" required>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control product-select" name="items[{{ $index }}][product_id]" required>
                                         <option value="">Select Product</option>
                                         @foreach($products as $product)
                                         <option value="{{ $product->id }}" {{ $item->product_id == $product->id ? 'selected' : '' }}>
@@ -115,15 +115,15 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="number" class="form-control quantity" name="items[{{ $index }}][quantity]"
+                                    <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control quantity" name="items[{{ $index }}][quantity]"
                                         value="{{ $item->quantity }}" placeholder="Qty" min="1" step="1" required>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="number" class="form-control unit-price" name="items[{{ $index }}][unit_price]"
+                                    <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control unit-price" name="items[{{ $index }}][unit_price]"
                                         value="{{ $item->unit_price }}" placeholder="Price" min="0" step="0.01" required>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="text" class="form-control item-total" readonly
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control item-total" readonly
                                         value="{{ number_format($item->total_price, 2) }}" placeholder="Total">
                                 </div>
                                 <div class="col-md-2">
@@ -221,7 +221,7 @@
                 const itemHtml = `
                     <div class="row bill-item mb-3" data-index="${itemIndex}">
                         <div class="col-md-4">
-                            <select class="form-control product-select" name="items[${itemIndex}][product_id]" required>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control product-select" name="items[${itemIndex}][product_id]" required>
                                 <option value="">Select Product</option>
                                 @foreach($products as $product)
                                 <option value="{{ $product->id }}">{{ $product->product_name }}</option>
@@ -229,15 +229,15 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <input type="number" class="form-control quantity" name="items[${itemIndex}][quantity]" 
+                            <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control quantity" name="items[${itemIndex}][quantity]" 
                                    placeholder="Qty" min="1" step="1" required>
                         </div>
                         <div class="col-md-2">
-                            <input type="number" class="form-control unit-price" name="items[${itemIndex}][unit_price]" 
+                            <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control unit-price" name="items[${itemIndex}][unit_price]" 
                                    placeholder="Price" min="0" step="0.01" required>
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control item-total" readonly placeholder="Total">
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control item-total" readonly placeholder="Total">
                         </div>
                         <div class="col-md-2">
                             <button type="button" class="btn btn-danger btn-sm remove-item">

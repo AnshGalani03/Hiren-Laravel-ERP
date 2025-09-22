@@ -21,7 +21,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="bill_no" class="form-label">Bill No <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('bill_no') is-invalid @enderror"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('bill_no') is-invalid @enderror"
                             id="bill_no" name="bill_no"
                             value="{{ old('bill_no') }}" required>
                         @error('bill_no')
@@ -31,7 +31,7 @@
 
                     <div class="col-md-6">
                         <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control @error('date') is-invalid @enderror"
+                        <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('date') is-invalid @enderror"
                             id="date" name="date"
                             value="{{ old('date', date('Y-m-d')) }}" required>
                         @error('date')
@@ -43,7 +43,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="original_amount" class="form-label">Total Amount <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control @error('original_amount') is-invalid @enderror"
+                        <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('original_amount') is-invalid @enderror"
                             id="original_amount" name="original_amount"
                             value="{{ old('original_amount') }}"
                             step="0.01" min="0" max="999999999.99" required>
@@ -55,7 +55,7 @@
 
                     <div class="col-md-6">
                         <label for="gst_rate" class="form-label">GST Rate (%)</label>
-                        <input type="number" class="form-control @error('gst_rate') is-invalid @enderror"
+                        <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('gst_rate') is-invalid @enderror"
                             id="gst_rate" name="gst_rate"
                             value="{{ old('gst_rate', '18.00') }}"
                             step="0.01" min="0" max="100">
@@ -70,7 +70,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">GST Amount (Calculated)</label>
-                        <div class="form-control bg-light" id="gst_display">₹0.00</div>
+                        <div class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control bg-light" id="gst_display">₹0.00</div>
                         <small class="text-success">This amount will be saved to database</small>
                     </div>
                     <div class="col-md-6">
@@ -81,7 +81,7 @@
                 <div class="row mb-3">
                     <div class="col-md-12">
                         <label for="remark" class="form-label">Remark</label>
-                        <textarea class="form-control @error('remark') is-invalid @enderror"
+                        <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('remark') is-invalid @enderror"
                             id="remark" name="remark"
                             rows="3" placeholder="Enter any remarks...">{{ old('remark') }}</textarea>
                         @error('remark')

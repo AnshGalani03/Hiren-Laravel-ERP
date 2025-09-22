@@ -22,9 +22,6 @@
     @endif
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-user-edit"></i> Edit Customer Information</h5>
-        </div>
         <div class="customer-add-form p-6 text-gray-900">
             <form action="{{ route('customers.update', $customer) }}" method="POST">
                 @csrf
@@ -33,12 +30,12 @@
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <label for="name" class="form-label">Customer Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="name" name="name"
                             value="{{ old('name', $customer->name) }}" required>
                     </div>
                     <div class="col-md-6">
                         <label for="phone_no" class="form-label">Phone Number <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="phone_no" name="phone_no"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="phone_no" name="phone_no"
                             value="{{ old('phone_no', $customer->phone_no) }}" required>
                     </div>
                 </div>
@@ -46,7 +43,7 @@
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <label for="gst" class="form-label">GST Number</label>
-                        <input type="text" class="form-control" id="gst" name="gst"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="gst" name="gst"
                             value="{{ old('gst', $customer->gst) }}" placeholder="Optional">
                     </div>
                 </div>
@@ -54,7 +51,7 @@
                 <div class="row mb-4">
                     <div class="col-md-12">
                         <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="address" name="address" rows="4"
+                        <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="address" name="address" rows="4"
                             required>{{ old('address', $customer->address) }}</textarea>
                     </div>
                 </div>

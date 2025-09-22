@@ -24,7 +24,7 @@ class ProductController extends Controller
                 })
                 ->addColumn('action', function ($product) {
                     return '
-                        <a href="' . route('products.show', $product->id) . '" class="btn btn-info btn-sm">View</a>
+                        <a href="' . route('products.show', $product->id) . '" class="btn btn-info btn-sm d-none">View</a>
                         <a href="' . route('products.edit', $product->id) . '" class="btn btn-warning btn-sm">Edit</a>
                         <form action="' . route('products.destroy', $product->id) . '" method="POST" style="display:inline;">
                             ' . csrf_field() . method_field('DELETE') . '

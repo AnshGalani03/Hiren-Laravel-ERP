@@ -19,7 +19,7 @@
 
                 <div class="mb-3">
                     <label for="name" class="form-label">Outgoing Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('name') is-invalid @enderror"
                         id="name" name="name" value="{{ old('name', $outgoing->name) }}" required
                         placeholder="e.g., Transport, Materials, Labor">
                     @error('name')

@@ -32,7 +32,7 @@
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <label for="product_name" class="form-label">Product Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('product_name') is-invalid @enderror"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('product_name') is-invalid @enderror"
                             id="product_name" name="product_name" value="{{ old('product_name') }}" required>
                         @error('product_name')
                         <div class="invalid-feedback">{{ $message }}</div>
