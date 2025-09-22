@@ -358,18 +358,6 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr class="table-dark">
-                                <th>Total</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th id="footer_amount_total">₹0.00</th>
-                                <th></th>
-                                <th class="d-none d-md-table-cell"></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
             </div>
