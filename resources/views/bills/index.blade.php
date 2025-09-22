@@ -17,7 +17,7 @@
                 <!-- Filter section -->
                 <div class="col-md-3">
                     <label for="filterCustomer" class="form-label">Customer</label>
-                    <select id="filterCustomer" class="form-select">
+                    <select id="filterCustomer" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control">
                         <option value="">All Customers</option>
                         @foreach($customers as $customer)
                         <option value="{{ $customer->name }}">{{ $customer->name }}</option>
@@ -27,7 +27,7 @@
 
                 <div class="col-md-3">
                     <label for="filterStatus" class="form-label">Status</label>
-                    <select id="filterStatus" class="form-select">
+                    <select id="filterStatus" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control">
                         <option value="">All Status</option>
                         <option value="draft">Draft</option>
                         <option value="sent">Sent</option>
@@ -36,11 +36,11 @@
                 </div>
                 <div class="col-md-3">
                     <label for="filterStartDate" class="form-label">Start Date</label>
-                    <input type="date" id="filterStartDate" class="form-control">
+                    <input type="date" id="filterStartDate" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control">
                 </div>
                 <div class="col-md-3">
                     <label for="filterEndDate" class="form-label">End Date</label>
-                    <input type="date" id="filterEndDate" class="form-control">
+                    <input type="date" id="filterEndDate" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control">
                 </div>
             </div>
             <div class="row mt-3">
