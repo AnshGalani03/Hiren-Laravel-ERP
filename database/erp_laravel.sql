@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 20, 2025 at 11:21 AM
+-- Generation Time: Sep 20, 2025 at 12:32 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -294,20 +294,22 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `dealer_id` bigint UNSIGNED NOT NULL,
   `bill_no` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
+  `original_amount` decimal(12,2) NOT NULL,
+  `gst_rate` decimal(5,2) NOT NULL DEFAULT '18.00',
   `date` date NOT NULL,
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `invoices_dealer_id_foreign` (`dealer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `invoices`
 --
 
-INSERT INTO `invoices` (`id`, `dealer_id`, `bill_no`, `amount`, `date`, `remark`, `created_at`, `updated_at`) VALUES
-(1, 1, '01', 5000.00, '2025-09-03', 'Demo', '2025-09-13 05:47:56', '2025-09-13 05:47:56');
+INSERT INTO `invoices` (`id`, `dealer_id`, `bill_no`, `amount`, `original_amount`, `gst_rate`, `date`, `remark`, `created_at`, `updated_at`) VALUES
+(3, 1, '50', 900.00, 5000.00, 18.00, '2025-09-20', 'Demo', '2025-09-20 06:59:01', '2025-09-20 06:59:01');
 
 -- --------------------------------------------------------
 
@@ -361,7 +363,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -404,7 +406,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (34, '2025_09_11_110558_create_customers_table', 12),
 (35, '2025_09_11_115949_replace_dealer_with_customer_in_bills_table', 13),
 (36, '2025_09_12_063258_add_hsn_code_to_products_table', 14),
-(37, '2025_09_20_073627_add_contractor_type_to_sub_contractors_table', 15);
+(37, '2025_09_20_073627_add_contractor_type_to_sub_contractors_table', 15),
+(38, '2025_09_20_112555_add_gst_fields_to_invoices_table', 16);
 
 -- --------------------------------------------------------
 
