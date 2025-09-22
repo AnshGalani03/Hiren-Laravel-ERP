@@ -10,9 +10,6 @@
         </div>
     </x-slot>
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-calendar-alt"></i> Monthly Summary</h5>
-        </div>
         <div class="p-4">
             @if($monthlySummary->count() > 0)
             <div class="row">

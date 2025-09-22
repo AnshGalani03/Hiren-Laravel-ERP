@@ -58,7 +58,7 @@ class DealerController extends Controller
         $transactions = $dealer->transactions()->with(['incoming', 'outgoing', 'project'])->latest()->get();
 
         // Calculate totals
-        $totalInvoices = $invoices->sum('amount');
+        $totalInvoices = $invoices->sum('original_amount');
         $totalTransactions = $transactions->sum('amount');
         $pendingAmount = $totalInvoices - $totalTransactions;
 

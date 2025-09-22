@@ -17,10 +17,7 @@ use App\Http\Controllers\SubContractorBillController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CustomerController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ExportController;
 
 //Add Login Route in main page
