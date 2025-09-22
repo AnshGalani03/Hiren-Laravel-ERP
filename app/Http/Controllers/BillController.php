@@ -67,12 +67,10 @@ class BillController extends Controller
                 })
                 ->addColumn('action', function ($bill) {
                     return '
-                        <div class="btn-group" role="group">
                             <a href="' . route('bills.show', $bill->id) . '" class="btn btn-info btn-sm">View</a>
                             <a href="' . route('bills.edit', $bill->id) . '" class="btn btn-warning btn-sm">Edit</a>
                             <a href="' . route('bills.pdf', ['bill' => $bill->id]) . '" class="btn btn-success btn-sm" target="_blank">PDF</a>
                             <button class="btn btn-danger btn-sm delete-bill" data-id="' . $bill->id . '"  data-bill-number="' . $bill->bill_number . '">Delete</button>
-                        </div>
                     ';
                 })
                 ->rawColumns(['action', 'status'])

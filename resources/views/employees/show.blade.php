@@ -111,7 +111,7 @@
                     <!-- Month Filter Form -->
                     <form method="GET" action="{{ route('employees.show', $employee) }}" class="d-flex align-items-center me-3">
                         <label for="month" class="form-label me-2 mb-0">Filter:</label>
-                        <select name="month" id="month" class="form-control me-2" style="padding-right: 35px;">
+                        <select name="month" id="month" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control me-2" style="padding-right: 35px !important;">
                             @foreach($availableMonths as $month)
                             <option value="{{ $month->month_key }}" {{ $selectedMonth == $month->month_key ? 'selected' : '' }}>
                                 {{ $month->month_name }}

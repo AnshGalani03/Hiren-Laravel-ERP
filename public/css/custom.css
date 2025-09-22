@@ -150,6 +150,16 @@
     background-color: #60be8f;
     color: #fff;
 }
+.dataTables_filter input[type="search"]{
+    padding: 0 10px;
+    line-height: 1.25rem;
+    border-radius: .375rem;
+    border-color: #d1d5db;
+}
+.dataTables_filter input[type="search"]:focus{
+    border-color: #d1d5db;
+    box-shadow: none;
+}
 @media only screen and (max-width: 767px) {
     .quick-actions .col-md-3 {
         width: 50%;

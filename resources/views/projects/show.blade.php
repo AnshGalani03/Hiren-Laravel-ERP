@@ -274,7 +274,7 @@
             <div class="row g-3">
                 <div class="col-md-3">
                     <label for="transaction_type_filter" class="form-label">Type</label>
-                    <select class="form-control" id="transaction_type_filter">
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="transaction_type_filter">
                         <option value="">All Types</option>
                         <option value="incoming">Incoming</option>
                         <option value="outgoing">Outgoing</option>
@@ -282,11 +282,11 @@
                 </div>
                 <div class="col-md-3">
                     <label for="transaction_from_date" class="form-label">From Date</label>
-                    <input type="date" class="form-control" id="transaction_from_date">
+                    <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="transaction_from_date">
                 </div>
                 <div class="col-md-3">
                     <label for="transaction_to_date" class="form-label">To Date</label>
-                    <input type="date" class="form-control" id="transaction_to_date">
+                    <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="transaction_to_date">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">&nbsp;</label>

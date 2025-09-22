@@ -128,11 +128,11 @@
             <div class="row g-3">
                 <div class="col-md-4">
                     <label for="invoice_from_date" class="form-label">From Date</label>
-                    <input type="date" class="form-control" id="invoice_from_date">
+                    <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="invoice_from_date">
                 </div>
                 <div class="col-md-4">
                     <label for="invoice_to_date" class="form-label">To Date</label>
-                    <input type="date" class="form-control" id="invoice_to_date">
+                    <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="invoice_to_date">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">&nbsp;</label>
@@ -215,7 +215,7 @@
             <div class="row g-3">
                 <div class="col-md-3 d-none">
                     <label for="dealer_tx_type_filter" class="form-label">Type</label>
-                    <select class="form-control" id="dealer_tx_type_filter">
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="dealer_tx_type_filter">
                         <option value="">All Types</option>
                         <option value="incoming">Incoming</option>
                         <option value="outgoing">Outgoing</option>
@@ -223,11 +223,11 @@
                 </div>
                 <div class="col-md-4">
                     <label for="dealer_tx_from_date" class="form-label">From Date</label>
-                    <input type="date" class="form-control" id="dealer_tx_from_date">
+                    <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="dealer_tx_from_date">
                 </div>
                 <div class="col-md-4">
                     <label for="dealer_tx_to_date" class="form-label">To Date</label>
-                    <input type="date" class="form-control" id="dealer_tx_to_date">
+                    <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="dealer_tx_to_date">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">&nbsp;</label>
