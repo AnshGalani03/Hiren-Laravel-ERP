@@ -102,7 +102,7 @@
     <!-- Salary & Upad Management Section -->
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <!-- Header with Filter and Buttons on Same Line -->
-        <div class="card-header">
+        <div class="card-header p-4">
             <div class="salary-upad-management d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-money-bill"></i> Salary & Upad Management</h5>
 

@@ -33,7 +33,7 @@
                 <div class="card-body text-center">
                     <h4>Total Income</h4>
                     <h2>₹{{ number_format($totalIncomes, 2) }}</h2>
-                    <small>Project: ₹{{ number_format($totalProjectIncomes, 2) }} | Transactions: ₹{{ number_format($totalTransactionIncomes, 2) }}</small>
+                    <!-- <small>Project: ₹{{ number_format($totalProjectIncomes, 2) }} | Transactions: ₹{{ number_format($totalTransactionIncomes, 2) }}</small> -->
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
                 <div class="card-body text-center">
                     <h4>Total Expenses</h4>
                     <h2>₹{{ number_format($totalExpenses, 2) }}</h2>
-                    <small>Project: ₹{{ number_format($totalProjectExpenses, 2) }} | Transactions: ₹{{ number_format($totalTransactionExpenses, 2) }}</small>
+                    <!-- <small>Project: ₹{{ number_format($totalProjectExpenses, 2) }} | Transactions: ₹{{ number_format($totalTransactionExpenses, 2) }}</small> -->
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
                 <div class="card-body text-center">
                     <h4>Net {{ $netProfit >= 0 ? 'Profit' : 'Loss' }}</h4>
                     <h2>₹{{ number_format(abs($netProfit), 2) }}</h2>
-                    <small>{{ $netProfit >= 0 ? 'Profit' : 'Loss' }}</small>
+                    <!-- <small>{{ $netProfit >= 0 ? 'Profit' : 'Loss' }}</small> -->
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
                 <div class="card-body text-center">
                     <h4>Project Budget</h4>
                     <h2>₹{{ number_format($project->amount_project, 2) }}</h2>
-                    <small>Budget vs Expense: {{ $totalExpenses > 0 ? number_format(($totalExpenses / $project->amount_project) * 100, 1) : 0 }}%</small>
+                    <!-- <small>Budget vs Expense: {{ $totalExpenses > 0 ? number_format(($totalExpenses / $project->amount_project) * 100, 1) : 0 }}%</small> -->
                 </div>
             </div>
         </div>
@@ -96,11 +96,11 @@
                         </tr>
                         <tr>
                             <td><strong>Project Date:</strong></td>
-                            <td>@formatDate($project->date)</td>
+                            <td>{{ $project->date ? $project->date->format('d/m/Y') : 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td><strong>Work Order Date:</strong></td>
-                            <td>@formatDate($project->work_order_date)</td>
+                            <td>{{ $project->work_order_date ? $project->work_order_date->format('d/m/Y') : 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td><strong>Time Limit:</strong></td>
