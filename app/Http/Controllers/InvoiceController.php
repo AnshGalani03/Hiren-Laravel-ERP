@@ -121,7 +121,7 @@ class InvoiceController extends Controller
 
             return redirect()
                 ->route('dealers.show', $validated['dealer_id'])
-                ->with('success', 'Invoice created successfully. GST amount (₹' . number_format($gstAmount, 2) . ') saved to database.');
+                ->with('success', 'Invoice created successfully');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -168,7 +168,7 @@ class InvoiceController extends Controller
 
             return redirect()
                 ->route('dealers.show', $invoice->dealer_id)
-                ->with('success', 'Invoice updated successfully. GST amount (₹' . number_format($gstAmount, 2) . ') updated in database.');
+                ->with('success', 'Invoice updated successfully');
         } catch (\Exception $e) {
             DB::rollBack();
 
