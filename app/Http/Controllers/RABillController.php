@@ -6,11 +6,10 @@ use App\Models\RABill;
 use App\Models\Customer;
 use App\Models\Project;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
-use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
 
 class RABillController extends Controller
 {
@@ -33,6 +32,15 @@ class RABillController extends Controller
                         'created_at'
                     ]);
 
+                // Apply date filters
+                if ($request->from_date) {
+                    $raBills->whereDate('date', '>=', $request->from_date);
+                }
+
+                if ($request->to_date) {
+                    $raBills->whereDate('date', '<=', $request->to_date);
+                }
+
                 return DataTables::of($raBills)
                     ->editColumn('date', function ($bill) {
                         return $bill->date ? $bill->date->format('d/m/Y') : '';
@@ -46,65 +54,61 @@ class RABillController extends Controller
                     ->editColumn('ra_bill_amount', function ($bill) {
                         return '₹' . number_format($bill->ra_bill_amount, 0);
                     })
-
                     ->editColumn('net_amount', function ($bill) {
                         return '₹' . number_format($bill->net_amount, 0);
                     })
                     ->addColumn('action', function ($bill) {
                         return '
-                        <div class="">
-                            <a href="' . route('ra-bills.show', $bill->id) . '" class="btn btn-info btn-sm">View</a>
-                            <a href="' . route('ra-bills.edit', $bill->id) . '" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="' . route('ra-bills.destroy', $bill->id) . '" method="POST" style="display:inline;">
+                            <a href="' . route('ra-bills.show', $bill->id) . '" class="btn btn-info btn-sm">
+                                View
+                            </a>
+                            <a href="' . route('ra-bills.edit', $bill->id) . '" class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+                            <a href="' . route('ra-bills.download-pdf', $bill->id) . '" class="btn btn-success btn-sm">
+                                Download PDF
+                            </a>
+                            <form action="' . route('ra-bills.destroy', $bill->id) . '" method="POST" style="display:inline;" onsubmit="return confirm(\'Are you sure?\')">
                                 ' . csrf_field() . method_field('DELETE') . '
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\')" title="Delete">
-                                Delete
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    Delete
                                 </button>
                             </form>
-                        </div>
-                    ';
+                        ';
                     })
                     ->rawColumns(['action'])
                     ->make(true);
             } catch (\Exception $e) {
-                Log::error('DataTable error: ' . $e->getMessage());
-                return response()->json(['error' => 'Error loading data: ' . $e->getMessage()], 500);
+                return response()->json(['error' => $e->getMessage()], 500);
             }
         }
 
         return view('ra-bills.index');
     }
 
-    public function create(): View
+    public function create()
     {
         try {
             $customers = Customer::orderBy('name')->get();
+            $projects = Project::orderBy('name')->get();
+
+            // Generate next bill number for display
+            $nextBillNo = RABill::generateBillNo();
+
+            return view('ra-bills.create', compact('customers', 'projects', 'nextBillNo'));
         } catch (\Exception $e) {
-            $customers = collect();
-            Log::warning('Customer table not found: ' . $e->getMessage());
+            return redirect()->route('ra-bills.index')->with('error', 'Error loading create page: ' . $e->getMessage());
         }
-
-        try {
-            $projects = Project::where('active', 1)->orderBy('name')->get();
-        } catch (\Exception $e) {
-            $projects = collect();
-            Log::warning('Project table not found: ' . $e->getMessage());
-        }
-
-        $nextBillNo = RABill::generateBillNo();
-
-        return view('ra-bills.create', compact('customers', 'projects', 'nextBillNo'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
-        Log::info('Store method called with data:', $request->all());
-
         try {
+            // Validate the request
             $validated = $request->validate([
-                'date' => 'required|date',
                 'customer_id' => 'required|exists:customers,id',
                 'project_id' => 'required|exists:projects,id',
+                'date' => 'required|date',
                 'ra_bill_amount' => 'required|numeric|min:0',
                 'dept_taxes_overheads' => 'required|numeric|min:0',
                 'tds_1_percent' => 'required|numeric|min:0',
@@ -112,68 +116,71 @@ class RABillController extends Controller
                 'welfare_cess' => 'nullable|numeric|min:0',
                 'testing_charges' => 'nullable|numeric|min:0',
             ]);
-
-            Log::info('Validation passed:', $validated);
 
             // Set default values for nullable fields
             $validated['rmd_amount'] = $validated['rmd_amount'] ?? 0;
             $validated['welfare_cess'] = $validated['welfare_cess'] ?? 0;
             $validated['testing_charges'] = $validated['testing_charges'] ?? 0;
 
+            // Start database transaction
             DB::beginTransaction();
 
-            $raBill = RABill::create($validated);
+            try {
+                // Create the RA Bill (calculations will be done automatically in model)
+                $raBill = RABill::create($validated);
 
-            Log::info('RABill created:', $raBill->toArray());
+                DB::commit();
 
-            DB::commit();
-
-            return redirect()
-                ->route('ra-bills.show', $raBill)
-                ->with('success', 'R.A. Bill created successfully with Bill No: ' . $raBill->bill_no);
+                return redirect()->route('ra-bills.index')
+                    ->with('success', 'RA Bill created successfully! Bill No: ' . $raBill->bill_no);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                throw $e;
+            }
         } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Validation failed:', $e->errors());
-            return back()->withErrors($e->errors())->withInput();
+            Log::error('Validation error: ' . json_encode($e->errors()));
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput()
+                ->with('error', 'Please check the form for errors.');
         } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Store error: ' . $e->getMessage());
-            Log::error('Stack trace: ' . $e->getTraceAsString());
-
-            return back()
-                ->withErrors(['error' => 'Failed to create R.A. Bill: ' . $e->getMessage()])
+            return redirect()->back()
+                ->with('error', 'Error creating RA Bill: ' . $e->getMessage())
                 ->withInput();
         }
     }
-    public function show(RABill $raBill): View
-    {
-        $raBill->load(['customer', 'project']);
-        return view('ra-bills.show', compact('raBill'));
-    }
 
-    public function edit(RABill $raBill): View
+    public function show($id)
     {
         try {
+            $raBill = RABill::with(['customer', 'project'])->findOrFail($id);
+            return view('ra-bills.show', compact('raBill'));
+        } catch (\Exception $e) {
+            return redirect()->route('ra-bills.index')->with('error', 'RA Bill not found.');
+        }
+    }
+
+    public function edit($id)
+    {
+        try {
+            $raBill = RABill::findOrFail($id);
             $customers = Customer::orderBy('name')->get();
+            $projects = Project::orderBy('name')->get();
+            return view('ra-bills.edit', compact('raBill', 'customers', 'projects'));
         } catch (\Exception $e) {
-            $customers = collect();
+            return redirect()->route('ra-bills.index')->with('error', 'Error loading edit page.');
         }
-
-        try {
-            $projects = Project::where('active', 1)->orderBy('name')->get();
-        } catch (\Exception $e) {
-            $projects = collect();
-        }
-
-        return view('ra-bills.edit', compact('raBill', 'customers', 'projects'));
     }
 
-    public function update(Request $request, RABill $raBill): RedirectResponse
+    public function update(Request $request, $id)
     {
         try {
+            $raBill = RABill::findOrFail($id);
+
             $validated = $request->validate([
-                'date' => 'required|date',
                 'customer_id' => 'required|exists:customers,id',
                 'project_id' => 'required|exists:projects,id',
+                'date' => 'required|date',
                 'ra_bill_amount' => 'required|numeric|min:0',
                 'dept_taxes_overheads' => 'required|numeric|min:0',
                 'tds_1_percent' => 'required|numeric|min:0',
@@ -186,96 +193,81 @@ class RABillController extends Controller
             $validated['welfare_cess'] = $validated['welfare_cess'] ?? 0;
             $validated['testing_charges'] = $validated['testing_charges'] ?? 0;
 
-            DB::beginTransaction();
-
             $raBill->update($validated);
 
-            DB::commit();
-
-            return redirect()
-                ->route('ra-bills.show', $raBill)
-                ->with('success', 'R.A. Bill updated successfully.');
+            return redirect()->route('ra-bills.index')
+                ->with('success', 'RA Bill updated successfully!');
         } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Update error: ' . $e->getMessage());
-
-            return back()
-                ->withErrors(['error' => 'Failed to update R.A. Bill: ' . $e->getMessage()])
+            return redirect()->back()
+                ->with('error', 'Error updating RA Bill: ' . $e->getMessage())
                 ->withInput();
         }
     }
-    public function destroy(RABill $raBill): RedirectResponse
+
+    public function destroy($id)
     {
         try {
-            DB::beginTransaction();
+            $raBill = RABill::findOrFail($id);
             $raBill->delete();
-            DB::commit();
 
-            return redirect()
-                ->route('ra-bills.index')
-                ->with('success', 'R.A. Bill deleted successfully.');
+            return redirect()->route('ra-bills.index')
+                ->with('success', 'RA Bill deleted successfully!');
         } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Delete error: ' . $e->getMessage());
-
-            return back()
-                ->withErrors(['error' => 'Failed to delete R.A. Bill: ' . $e->getMessage()]);
+            return redirect()->route('ra-bills.index')
+                ->with('error', 'Error deleting RA Bill.');
         }
     }
 
-    public function generatePdf(RABill $raBill)
+    public function downloadPdf($id)
     {
-        $raBill->load(['customer', 'project']);
-
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('ra-bills.pdf', compact('raBill'))
-            ->setPaper('a4', 'portrait')
-            ->setOptions(['dpi' => 150, 'defaultFont' => 'Arial']);
-
-        return $pdf->download('RA-Bill-' . $raBill->bill_no . '.pdf');
-    }
-
-    public function previewPdf(Request $request)
-    {
-        $raBill = new RABill($request->all());
-
         try {
-            $raBill->customer = Customer::find($request->customer_id);
+            $raBill = RABill::with(['customer', 'project'])->find($id);
+
+            if (!$raBill) {
+                return redirect()->route('ra-bills.index')->with('error', 'RA Bill not found.');
+            }
+
+            // Use your proper PDF template instead of simple HTML
+            $pdf = Pdf::loadView('ra-bills.pdf', compact('raBill'))
+                ->setPaper('A4', 'portrait')
+                ->setOptions([
+                    'dpi' => 150,
+                    'defaultFont' => 'sans-serif',
+                    'isRemoteEnabled' => false,
+                    'debugKeepTemp' => false,
+                ]);
+
+            return $pdf->download($raBill->bill_no . '.pdf');
         } catch (\Exception $e) {
-            $raBill->customer = (object)['name' => 'Default Customer'];
+            return redirect()->route('ra-bills.index')
+                ->with('error', 'Error generating PDF: ' . $e->getMessage());
         }
-
-        try {
-            $raBill->project = Project::find($request->project_id);
-        } catch (\Exception $e) {
-            $raBill->project = (object)['name' => 'Default Project'];
-        }
-
-        $raBill->bill_no = RABill::generateBillNo();
-
-        $calculations = RABill::calculateAmounts(
-            $request->ra_bill_amount,
-            $request->dept_taxes_overheads,
-            $request->tds_1_percent,
-            $request->rmd_amount ?? 0,
-            $request->welfare_cess ?? 0,
-            $request->testing_charges ?? 0
-        );
-
-        foreach ($calculations as $key => $value) {
-            $raBill->$key = $value;
-        }
-
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('ra-bills.pdf', compact('raBill'))
-            ->setPaper('a4', 'portrait')
-            ->setOptions(['dpi' => 150, 'defaultFont' => 'Arial']);
-
-        return $pdf->stream('RA-Bill-Preview.pdf');
     }
 
-    public function getNextBillNo(): \Illuminate\Http\JsonResponse
+
+    public function calculateAmounts(Request $request)
     {
-        return response()->json([
-            'bill_no' => RABill::generateBillNo()
-        ]);
+        try {
+            $raBillAmount = floatval($request->ra_bill_amount ?? 0);
+            $deptTaxes = floatval($request->dept_taxes_overheads ?? 0);
+            $tds1 = floatval($request->tds_1_percent ?? 0);
+            $rmd = floatval($request->rmd_amount ?? 0);
+            $welfare = floatval($request->welfare_cess ?? 0);
+            $testing = floatval($request->testing_charges ?? 0);
+
+            $calculations = RABill::calculateAmounts($raBillAmount, $deptTaxes, $tds1, $rmd, $welfare, $testing);
+
+            return response()->json([
+                'total_c' => number_format($calculations['total_c'], 0),
+                'sgst_9_percent' => number_format($calculations['sgst_9_percent'], 0),
+                'cgst_9_percent' => number_format($calculations['cgst_9_percent'], 0),
+                'igst_0_percent' => number_format($calculations['igst_0_percent'], 0),
+                'total_with_gst' => number_format($calculations['total_with_gst'], 0),
+                'total_deductions' => number_format($calculations['total_deductions'], 0),
+                'net_amount' => number_format($calculations['net_amount'], 0),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

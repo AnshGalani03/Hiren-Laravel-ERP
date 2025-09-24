@@ -150,21 +150,24 @@
     background-color: #60be8f;
     color: #fff;
 }
-.dataTables_filter input[type="search"]{
+.dataTables_filter input[type="search"] {
     padding: 0 10px;
     line-height: 1.25rem;
-    border-radius: .375rem;
+    border-radius: 0.375rem;
     border-color: #d1d5db;
 }
-.dataTables_filter input[type="search"]:focus{
+.dataTables_filter input[type="search"]:focus {
     border-color: #d1d5db;
     box-shadow: none;
 }
-.rabill-amount .row{
+.rabill-amount .row {
     row-gap: 20px;
 }
-.amount-detail-cal > div{
+.amount-detail-cal > div {
     margin-bottom: 10px;
+}
+.ra-bill-info > div {
+    padding-bottom: 5px;
 }
 @media only screen and (max-width: 767px) {
     .quick-actions .col-md-3 {
@@ -288,13 +291,19 @@
     .team-member-modal .col-md-3 {
         width: 50%;
     }
-    .sub-contractors-header{
+    .sub-contractors-header {
         display: block !important;
     }
-    .sub-contractors-header a{
+    .sub-contractors-header a {
         margin-bottom: 10px;
     }
-    .product-create-form .col-md-6{
+    .product-create-form .col-md-6 {
         margin-bottom: 10px;
+    }
+    #dateFilterForm .col-md-4 {
+        margin-bottom: 10px;
+    }
+    .detail-calculation {
+        padding: 0 !important;
     }
 }

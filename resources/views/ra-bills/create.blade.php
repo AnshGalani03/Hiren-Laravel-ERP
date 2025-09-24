@@ -223,7 +223,6 @@
                         <!-- Form Actions -->
                         <div class="">
                             <a href="{{ route('ra-bills.index') }}" class="btn btn-danger">Cancel</a>
-                            <button type="button" id="previewBtn" class="btn btn-warning">Preview PDF</button>
                             <button type="submit" class="btn btn-primary">Create R.A. Bill</button>
                         </div>
                     </form>
@@ -270,32 +269,6 @@
             // Add event listeners
             inputs.forEach(inputId => {
                 document.getElementById(inputId).addEventListener('input', updateCalculations);
-            });
-
-            // PDF Preview
-            document.getElementById('previewBtn').addEventListener('click', function() {
-                const formData = new FormData(document.getElementById('raBillForm'));
-
-                fetch('{{ route("ra-bills.preview-pdf") }}', {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        }
-                    })
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.target = '_blank';
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error generating PDF preview');
-                    });
             });
 
             // Initial calculation

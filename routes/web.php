@@ -117,9 +117,10 @@ Route::middleware('auth')->group(function () {
     Route::post('exports/transactions-report', [ExportController::class, 'exportTransactionsReport'])->name('exports.transactions-report');
 
     Route::resource('ra-bills', RABillController::class);
-    Route::post('ra-bills/preview-pdf', [RABillController::class, 'previewPdf'])->name('ra-bills.preview-pdf');
-    Route::get('ra-bills/{raBill}/pdf', [RABillController::class, 'generatePdf'])->name('ra-bills.pdf');
-    Route::get('ra-bills/next-bill-no', [RABillController::class, 'getNextBillNo'])->name('ra-bills.next-bill-no');
+    Route::get('ra-bills/{id}/download-pdf', [RABillController::class, 'downloadPdf'])
+        ->name('ra-bills.download-pdf');
+    Route::post('ra-bills/calculate', [RABillController::class, 'calculateAmounts'])
+        ->name('ra-bills.calculate');
 });
 
 require __DIR__ . '/auth.php';
