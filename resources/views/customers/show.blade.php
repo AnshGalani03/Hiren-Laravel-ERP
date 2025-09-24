@@ -37,6 +37,10 @@
                             <td>{{ $customer->gst ?: 'N/A' }}</td>
                         </tr>
                         <tr>
+                            <td><strong>PAN Card:</strong></td>
+                            <td>{{ $customer->pan_card ?: 'N/A' }}</td>
+                        </tr>
+                        <tr>
                             <td><strong>Address:</strong></td>
                             <td>{{ $customer->address }}</td>
                         </tr>

@@ -11,7 +11,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $customers = Customer::select(['id', 'name', 'address', 'gst', 'phone_no', 'created_at']);
+            $customers = Customer::select(['id', 'name', 'address', 'gst', 'pan_card', 'phone_no', 'created_at']);
 
             return DataTables::of($customers)
                 ->addIndexColumn()
@@ -49,6 +49,7 @@ class CustomerController extends Controller
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:500',
             'gst' => 'nullable|string|max:50',
+            'pan_card' => 'nullable|string|max:20',
             'phone_no' => 'required|string|max:15',
         ]);
 
@@ -74,6 +75,7 @@ class CustomerController extends Controller
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:500',
             'gst' => 'nullable|string|max:50',
+            'pan_card' => 'nullable|string|max:20',
             'phone_no' => 'required|string|max:15',
         ]);
 

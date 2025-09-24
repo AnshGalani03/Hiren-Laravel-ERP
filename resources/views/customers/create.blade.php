@@ -45,6 +45,15 @@
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="gst" name="gst"
                             value="{{ old('gst') }}" placeholder="Optional">
                     </div>
+                    <div class="col-md-6">
+                        <label for="pan_card" class="form-label">PAN Card Number</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('pan_card') is-invalid @enderror"
+                            id="pan_card" name="pan_card" value="{{ old('pan_card') }}"
+                            placeholder="e.g., AAAAA0000A" maxlength="10" style="text-transform: uppercase;">
+                        @error('pan_card')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="row mb-4">
@@ -66,4 +75,11 @@
             </form>
         </div>
     </div>
+    <!-- PAN Card Auto-formatting Script -->
+    <script>
+        document.getElementById('pan_card').addEventListener('input', function(e) {
+            // Auto uppercase PAN card input
+            e.target.value = e.target.value.toUpperCase();
+        });
+    </script>
 </x-app-layout>

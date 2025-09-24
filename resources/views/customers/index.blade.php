@@ -21,7 +21,7 @@
                             <th>Address</th>
                             <th>GST</th>
                             <th>Phone</th>
-                            <th>Created Date</th>
+                            <th>PAN Card</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -67,8 +67,8 @@
                         responsivePriority: 5,
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at',
+                        data: 'pan_card',
+                        name: 'pan_card',
                         responsivePriority: 6,
                     },
                     {
