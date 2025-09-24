@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 20, 2025 at 12:32 PM
+-- Generation Time: Sep 23, 2025 at 04:28 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -706,7 +706,6 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 
 INSERT INTO `transactions` (`id`, `type`, `project_id`, `dealer_id`, `sub_contractor_id`, `incoming_id`, `outgoing_id`, `amount`, `date`, `description`, `remark`, `created_at`, `updated_at`) VALUES
 (1, 'outgoing', 1, 1, NULL, NULL, 1, 2000.00, '2025-09-01', 'Demo', NULL, '2025-09-13 06:01:03', '2025-09-13 06:01:03'),
-(2, 'incoming', 1, 1, NULL, 1, NULL, 5000.00, '2025-09-03', 'demo', NULL, '2025-09-13 06:01:27', '2025-09-13 06:01:27'),
 (3, 'incoming', NULL, NULL, 1, 5, NULL, 200.00, '2025-09-01', 'demo', NULL, '2025-09-13 06:01:49', '2025-09-13 06:01:49');
 
 -- --------------------------------------------------------

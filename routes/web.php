@@ -19,6 +19,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\RABillController;
 
 //Add Login Route in main page
 Route::get('/', function () {
@@ -114,6 +115,11 @@ Route::middleware('auth')->group(function () {
     Route::get('exports', [ExportController::class, 'index'])->name('exports.index');
     Route::post('exports/upad-report', [ExportController::class, 'exportUpadReport'])->name('exports.upad-report');
     Route::post('exports/transactions-report', [ExportController::class, 'exportTransactionsReport'])->name('exports.transactions-report');
+
+    Route::resource('ra-bills', RABillController::class);
+    Route::post('ra-bills/preview-pdf', [RABillController::class, 'previewPdf'])->name('ra-bills.preview-pdf');
+    Route::get('ra-bills/{raBill}/pdf', [RABillController::class, 'generatePdf'])->name('ra-bills.pdf');
+    Route::get('ra-bills/next-bill-no', [RABillController::class, 'getNextBillNo'])->name('ra-bills.next-bill-no');
 });
 
 require __DIR__ . '/auth.php';

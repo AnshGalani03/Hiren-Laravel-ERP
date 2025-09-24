@@ -160,6 +160,12 @@
     border-color: #d1d5db;
     box-shadow: none;
 }
+.rabill-amount .row{
+    row-gap: 20px;
+}
+.amount-detail-cal > div{
+    margin-bottom: 10px;
+}
 @media only screen and (max-width: 767px) {
     .quick-actions .col-md-3 {
         width: 50%;
