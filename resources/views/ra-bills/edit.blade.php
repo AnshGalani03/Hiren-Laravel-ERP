@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="bill-detail-header flex justify-between items-center">
+            <a href="{{ route('ra-bills.show', $raBill) }}"
+                class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left mr-2"></i> Back
+            </a>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Edit R.A. Bill - {{ $raBill->bill_no }}
             </h2>
-            <a href="{{ route('ra-bills.show', $raBill) }}"
-                class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Details
-            </a>
         </div>
     </x-slot>
 

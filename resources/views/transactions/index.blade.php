@@ -84,7 +84,7 @@
     <!-- Summary Cards -->
     <div class="row mb-4 transactions-summery-card">
         <div class="col-md-3">
-            <div class="card bg-success text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-arrow-up"></i> Total Incoming</h4>
                     <h2 id="total_incoming">₹0.00</h2>
@@ -92,7 +92,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-danger text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-arrow-down"></i> Total Outgoing</h4>
                     <h2 id="total_outgoing">₹0.00</h2>
@@ -100,7 +100,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-info text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-balance-scale"></i> Net Balance</h4>
                     <h2 id="net_balance">₹0.00</h2>
@@ -108,7 +108,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-secondary text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-list"></i> Total Records</h4>
                     <h2 id="total_records">0</h2>
@@ -328,15 +328,15 @@
                         $('#total_records').text(response.total_records);
 
                         // Update net balance card color
-                        var netCard = $('#net_balance').closest('.card');
-                        netCard.removeClass('bg-success bg-danger bg-warning');
-                        if (response.net_balance > 0) {
-                            netCard.addClass('bg-success');
-                        } else if (response.net_balance < 0) {
-                            netCard.addClass('bg-danger');
-                        } else {
-                            netCard.addClass('bg-warning');
-                        }
+                        // var netCard = $('#net_balance').closest('.card');
+                        // netCard.removeClass('bg-success bg-danger bg-warning');
+                        // if (response.net_balance > 0) {
+                        //     netCard.addClass('bg-success');
+                        // } else if (response.net_balance < 0) {
+                        //     netCard.addClass('bg-danger');
+                        // } else {
+                        //     netCard.addClass('bg-warning');
+                        // }
                     },
                     error: function(xhr) {
                         console.log('Summary Error:', xhr.responseText);

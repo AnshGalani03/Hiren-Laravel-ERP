@@ -21,8 +21,8 @@
 
     <div class="row mb-4">
         <div class="col-lg-12">
-            <a class="btn btn-secondary btn-sm" href="{{ route('bills.index') }}">
-                <i class="fas fa-arrow-left"></i> Back to Bills
+            <a class="btn btn-outline-secondary" href="{{ route('bills.index') }}">
+                <i class="fas fa-arrow-left"></i> Back
             </a>
         </div>
     </div>

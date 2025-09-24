@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
+            <a class="btn btn-outline-secondary" href="{{ route('products.index') }}">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Add New Product') }}
             </h2>
-            <a class="btn btn-secondary" href="{{ route('products.index') }}">
-                <i class="fas fa-arrow-left"></i> Back to List
-            </a>
         </div>
     </x-slot>
 
@@ -22,9 +22,6 @@
     @endif
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Product Information</h5>
-        </div>
         <div class="product-create-form p-6 text-gray-900">
             <form action="{{ route('products.store') }}" method="POST">
                 @csrf
@@ -40,7 +37,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="hsn_code" class="form-label">HSN Code</label>
-                        <input type="text" class="form-control @error('hsn_code') is-invalid @enderror"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('hsn_code') is-invalid @enderror"
                             id="hsn_code" name="hsn_code" value="{{ old('hsn_code') }}"
                             placeholder="e.g., 1234567890">
                         <small class="text-muted">HSN (Harmonized System of Nomenclature) code for tax classification</small>
@@ -51,12 +48,8 @@
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <a href="{{ route('products.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Cancel
-                    </a>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-save"></i> Create Product
-                    </button>
+                    <a href="{{ route('products.index') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Create Product</button>
                 </div>
             </form>
         </div>

@@ -28,7 +28,7 @@
     <!-- Project Summary Cards -->
     <div class="row mb-4 d-none">
         <div class="col-md-4">
-            <div class="card bg-primary text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4>Project Amount</h4>
                     <h2>₹{{ number_format($subContractor->amount_project, 2) }}</h2>
@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card bg-success text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4>Total Transactions</h4>
                     <h2 id="total-bills-amount">₹{{ number_format($subContractor->total_bill_amount, 2) }}</h2>
@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card bg-info text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4>Remaining</h4>
                     <h2 id="remaining-amount">₹{{ number_format($subContractor->remaining_amount, 2) }}</h2>
@@ -169,7 +169,7 @@
             <div class="row text-center g-3">
                 <!-- Total Incoming Card -->
                 <div class="col-md-4">
-                    <div class="card bg-success text-white h-100 shadow-sm">
+                    <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
                             <div class="d-flex justify-content-center align-items-center mb-2">
                                 <i class="fas fa-arrow-up me-2"></i>
@@ -182,7 +182,7 @@
 
                 <!-- Total Outgoing Card -->
                 <div class="col-md-4">
-                    <div class="card bg-danger text-white h-100 shadow-sm">
+                    <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
                             <div class="d-flex justify-content-center align-items-center mb-2">
                                 <i class="fas fa-arrow-down me-2"></i>
@@ -195,7 +195,7 @@
 
                 <!-- Net Balance Card -->
                 <div class="col-md-4">
-                    <div class="card bg-secondary text-white h-100 shadow-sm">
+                    <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
                             <div class="d-flex justify-content-center align-items-center mb-2">
                                 <i class="fas fa-balance-scale me-2"></i>

@@ -43,7 +43,7 @@
     <!-- Summary Cards -->
     <div class="invoices-summary row mb-4 mt-4">
         <div class="col-md-3">
-            <div class="card bg-primary text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-file-invoice"></i> Total Invoices</h4>
                     <h2 id="totalInvoices">0</h2>
@@ -51,7 +51,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-success text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-money-bill"></i> Total Amount</h4>
                     <h2 id="totalAmount">₹0.00</h2>
@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-info text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-users"></i> Unique Dealers</h4>
                     <h2 id="uniqueDealers">0</h2>
@@ -67,7 +67,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-warning text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4><i class="fas fa-chart-line"></i> GST Amount</h4>
                     <h2 id="totalGst">₹0.00</h2>

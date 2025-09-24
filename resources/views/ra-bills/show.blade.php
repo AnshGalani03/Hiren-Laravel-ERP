@@ -23,7 +23,7 @@
         <div class="col-lg-12 mb-4">
             <a href="{{ route('ra-bills.index') }}"
                 class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left mr-2"></i> Back to List
+                <i class="fas fa-arrow-left mr-2"></i> Back
             </a>
         </div>
     </div>

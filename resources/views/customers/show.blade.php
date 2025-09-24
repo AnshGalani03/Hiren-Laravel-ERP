@@ -14,7 +14,7 @@
     </x-slot>
     <div class="row mb-4">
         <div class="col-lg-12">
-            <a href="{{ route('customers.index') }}" class="btn btn-secondary">
+            <a href="{{ route('customers.index') }}" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
         </div>

@@ -29,7 +29,7 @@
     <!-- Financial Summary Cards -->
     <div class="financial-summary-card row mb-4">
         <div class="col-md-3">
-            <div class="card bg-success text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4>Total Income</h4>
                     <h2>₹{{ number_format($totalIncomes, 2) }}</h2>
@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-danger text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4>Total Expenses</h4>
                     <h2>₹{{ number_format($totalExpenses, 2) }}</h2>
@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card {{ $netProfit >= 0 ? 'bg-success' : 'bg-warning' }} text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4>Net {{ $netProfit >= 0 ? 'Profit' : 'Loss' }}</h4>
                     <h2>₹{{ number_format(abs($netProfit), 2) }}</h2>
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-info text-white">
+            <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4>Project Budget</h4>
                     <h2>₹{{ number_format($project->amount_project, 2) }}</h2>
@@ -303,7 +303,7 @@
         <div class="financial-summary-card card-body border-bottom bg-light">
             <div class="row text-center">
                 <div class="col-md-3">
-                    <div class="card bg-success text-white h-100">
+                    <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
                             <h6 class="card-title"><i class="fas fa-arrow-up"></i> Total Incoming</h6>
                             <h4 class="mb-0" id="project_total_incoming">₹0.00</h4>
@@ -312,7 +312,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card bg-danger text-white h-100">
+                    <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
                             <h6 class="card-title"><i class="fas fa-arrow-down"></i> Total Outgoing</h6>
                             <h4 class="mb-0" id="project_total_outgoing">₹0.00</h4>
@@ -321,7 +321,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card bg-info text-white h-100">
+                    <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
                             <h6 class="card-title"><i class="fas fa-balance-scale"></i> Net Balance</h6>
                             <h4 class="mb-0" id="project_net_balance">₹0.00</h4>
@@ -330,7 +330,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card bg-secondary text-white h-100">
+                    <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
                             <h6 class="card-title"><i class="fas fa-chart-pie"></i> Balance %</h6>
                             <h4 class="mb-0" id="project_balance_percentage">0%</h4>
@@ -534,15 +534,15 @@
                     $('#project_balance_percentage').text(percentage + '%');
 
                     // Update net balance card color based on profit/loss
-                    var netCard = $('#project_net_balance').closest('.card');
-                    netCard.removeClass('bg-success bg-danger bg-warning bg-info');
-                    if (summary.net_balance > 0) {
-                        netCard.addClass('bg-success');
-                    } else if (summary.net_balance < 0) {
-                        netCard.addClass('bg-danger');
-                    } else {
-                        netCard.addClass('bg-warning');
-                    }
+                    // var netCard = $('#project_net_balance').closest('.card');
+                    // netCard.removeClass('bg-success bg-danger bg-warning bg-info');
+                    // if (summary.net_balance > 0) {
+                    //     netCard.addClass('bg-success');
+                    // } else if (summary.net_balance < 0) {
+                    //     netCard.addClass('bg-danger');
+                    // } else {
+                    //     netCard.addClass('bg-warning');
+                    // }
                 }
             }
 

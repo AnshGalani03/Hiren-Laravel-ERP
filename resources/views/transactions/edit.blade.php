@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="module-edit-page d-flex justify-content-between align-items-center">
-            <a class="btn btn-secondary" href="{{ route('transactions.index') }}">
-                <i class="fas fa-arrow-left"></i> Back to Transactions
+            <a class="btn btn-outline-secondary" href="{{ route('transactions.index') }}">
+                <i class="fas fa-arrow-left"></i> Back
             </a>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Edit Transaction') }}

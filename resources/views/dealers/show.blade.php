@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card bg-primary text-white">
+                <div class="card summery-card-box">
                     <div class="card-body text-center">
                         <h4>Total Invoices</h4>
                         <h2>₹{{ number_format($totalInvoices, 2) }}</h2>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card bg-info text-white">
+                <div class="card summery-card-box">
                     <div class="card-body text-center">
                         <h4>Total Transactions</h4>
                         <h2>₹{{ number_format($totalTransactions, 2) }}</h2>
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card bg-success text-white">
+                <div class="card summery-card-box">
                     <div class="card-body text-center">
                         <h4>Pending Amount</h4>
                         <h2>₹{{ number_format($pendingAmount, 2) }}</h2>
@@ -149,7 +149,7 @@
         <div class="summery-card card-body border-bottom bg-light">
             <div class="row text-center">
                 <div class="col-md-4">
-                    <div class="card bg-success text-white">
+                    <div class="card summery-card-box">
                         <div class="card-body p-3">
                             <h6><i class="fas fa-file-invoice"></i> Total Invoices</h6>
                             <h4 id="dealer_total_invoices">0</h4>
@@ -157,7 +157,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card bg-primary text-white">
+                    <div class="card summery-card-box">
                         <div class="card-body p-3">
                             <h6><i class="fas fa-money-bill"></i> Total Amount</h6>
                             <h4 id="dealer_invoice_amount">₹0.00</h4>
@@ -165,7 +165,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card bg-info text-white">
+                    <div class="card summery-card-box">
                         <div class="card-body p-3">
                             <h6><i class="fas fa-calendar"></i> GST Amount</h6>
                             <h4 id="dealer_gst_amount">₹0.00</h4>
