@@ -119,6 +119,10 @@
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('bills.*') ? 'bg-gray-100 text-gray-900' : '' }}">
                                     Bills
                                 </a>
+                                <a href="{{ route('ra-bills.index') }}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('ra-bills.*') ? 'bg-gray-100 text-gray-900' : '' }}">
+                                    RA Bills
+                                </a>
                                 <a href="{{ route('exports.index') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('exports.*') ? 'bg-gray-100 text-gray-900' : '' }}">
                                     Export Reports
@@ -282,6 +286,9 @@
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('bills.index')" :active="request()->routeIs('bills.*')" class="pl-8">
                         {{ __('Bills') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('ra-bills.index')" :active="request()->routeIs('ra-bills.*')" class="pl-8">
+                        {{ __('RA Bills') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('exports.index')" :active="request()->routeIs('exports.*')" class="pl-8">
                         {{ __('Export Reports') }}
