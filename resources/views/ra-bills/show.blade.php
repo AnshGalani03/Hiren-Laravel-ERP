@@ -5,11 +5,13 @@
                 R.A. Bill Details - {{ $raBill->bill_no }}
             </h2>
             <div class="ra-bill-action-btn">
-                <a href="{{ route('ra-bills.edit', $raBill) }}" class="btn btn-warning">Edit</a>
+                <a href="{{ route('ra-bills.edit', $raBill) }}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{{ route('ra-bills.download-pdf', $raBill->id) }}" class="btn btn-success btn-sm">Download PDF
+                </a>
                 <form action="{{ route('ra-bills.destroy', $raBill) }}" method="POST" class="inline-block">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this R.A. Bill?')" class="btn btn-danger">
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this R.A. Bill?')" class="btn btn-danger btn-sm">
                         Delete
                     </button>
                 </form>
