@@ -4,8 +4,8 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Products Management') }}
             </h2>
-            <a class="btn btn-success" href="{{ route('products.create') }}">
-                <i class="fas fa-plus"></i> Add New Product
+            <a class="btn btn-success btn-sm" href="{{ route('products.create') }}">
+                Add New Product
             </a>
         </div>
     </x-slot>

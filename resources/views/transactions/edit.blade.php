@@ -126,12 +126,12 @@
                     </div>
 
                     <!-- Form Actions -->
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ route('transactions.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Cancel
+                    <div class="transaction-btn">
+                        <a href="{{ route('transactions.index') }}" class="btn btn-secondary btn-sm">
+                            Cancel
                         </a>
-                        <button type="submit" class="btn btn-warning">
-                            <i class="fas fa-save"></i> Update Transaction
+                        <button type="submit" class="btn btn-warning btn-sm">
+                            Update Transaction
                         </button>
                     </div>
                 </div>

@@ -65,10 +65,10 @@ class InvoiceController extends Controller
                 ->addColumn('action', function ($invoice) {
                     return '
                         <a href="' . route('invoices.edit', $invoice->id) . '" class="btn btn-sm btn-warning">
-                            <i class="fas fa-edit"></i> Edit
+                            Edit
                         </a>
                         <button class="btn btn-sm btn-danger delete-invoice" data-id="' . $invoice->id . '">
-                            <i class="fas fa-trash"></i> Delete
+                            Delete
                         </button>';
                 })
                 ->addIndexColumn()

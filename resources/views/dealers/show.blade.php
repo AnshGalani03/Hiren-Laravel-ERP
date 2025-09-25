@@ -25,7 +25,7 @@
             <div class="col-md-4">
                 <div class="card summery-card-box">
                     <div class="card-body text-center">
-                        <h4>Total Invoices</h4>
+                        <h4 class="pb-1">Total Invoices</h4>
                         <h2>₹{{ number_format($totalInvoices, 2) }}</h2>
                         <small>{{ $invoices->count() }} invoices</small>
                     </div>
@@ -34,7 +34,7 @@
             <div class="col-md-4">
                 <div class="card summery-card-box">
                     <div class="card-body text-center">
-                        <h4>Total Transactions</h4>
+                        <h4 class="pb-1">Total Transactions</h4>
                         <h2>₹{{ number_format($totalTransactions, 2) }}</h2>
                         <small>{{ $transactions->count() }} transactions</small>
                     </div>
@@ -43,7 +43,7 @@
             <div class="col-md-4">
                 <div class="card summery-card-box">
                     <div class="card-body text-center">
-                        <h4>Pending Amount</h4>
+                        <h4 class="pb-1">Pending Amount</h4>
                         <h2>₹{{ number_format($pendingAmount, 2) }}</h2>
                         <small>All activities</small>
                     </div>
@@ -151,7 +151,7 @@
                 <div class="col-md-4">
                     <div class="card summery-card-box">
                         <div class="card-body p-3">
-                            <h6><i class="fas fa-file-invoice"></i> Total Invoices</h6>
+                            <h6 class="pb-2"><i class="fas fa-file-invoice"></i> Total Invoices</h6>
                             <h4 id="dealer_total_invoices">0</h4>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                 <div class="col-md-4">
                     <div class="card summery-card-box">
                         <div class="card-body p-3">
-                            <h6><i class="fas fa-money-bill"></i> Total Amount</h6>
+                            <h6 class="pb-2"><i class="fas fa-money-bill"></i> Total Amount</h6>
                             <h4 id="dealer_invoice_amount">₹0.00</h4>
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                 <div class="col-md-4">
                     <div class="card summery-card-box">
                         <div class="card-body p-3">
-                            <h6><i class="fas fa-calendar"></i> GST Amount</h6>
+                            <h6 class="pb-2"><i class="fas fa-calendar"></i> GST Amount</h6>
                             <h4 id="dealer_gst_amount">₹0.00</h4>
                         </div>
                     </div>

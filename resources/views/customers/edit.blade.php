@@ -61,12 +61,12 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('customers.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Cancel
+                <div class="emp-btn">
+                    <a href="{{ route('customers.index') }}" class="btn btn-secondary btn-sm">
+                        Cancel
                     </a>
-                    <button type="submit" class="btn btn-warning">
-                        <i class="fas fa-save"></i> Update Customer
+                    <button type="submit" class="btn btn-warning btn-sm">
+                        Update Customer
                     </button>
                 </div>
             </form>

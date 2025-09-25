@@ -5,9 +5,9 @@
                 {{ __('Sub-Contractor Details: ') . $subContractor->contractor_name }}
             </h2>
             <div>
-                <a href="{{ route('transactions.create', ['type' => 'incoming', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-success">Add Income</a>
-                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-danger">Add Expense</a>
-                <a href="{{ route('sub-contractors.edit', $subContractor) }}" class="btn btn-warning">Edit</a>
+                <a href="{{ route('transactions.create', ['type' => 'incoming', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-success btn-sm">Add Income</a>
+                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-danger btn-sm">Add Expense</a>
+                <a href="{{ route('sub-contractors.edit', $subContractor) }}" class="btn btn-warning btn-sm">Edit</a>
             </div>
         </div>
     </x-slot>
@@ -154,10 +154,10 @@
                 </div>
                 <div class="col-md-3 ">
                     <label for="action" class="block mb-1">Action</label>
-                    <button type="button" class="btn btn-primary me-2" id="apply-filter">
+                    <button type="button" class="btn btn-primary me-2 btn-sm" id="apply-filter">
                         <i class="fas fa-filter"></i> Apply Filter
                     </button>
-                    <button type="button" class="btn btn-secondary" id="clear-filter">
+                    <button type="button" class="btn btn-secondary btn-sm" id="clear-filter">
                         <i class="fas fa-times"></i> Clear
                     </button>
                 </div>
@@ -172,7 +172,7 @@
                     <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
                             <div class="d-flex justify-content-center align-items-center mb-2">
-                                <i class="fas fa-arrow-up me-2"></i>
+                                <i class="fas fa-arrow-down me-2"></i>
                                 <h6 class="card-title mb-0">Total Incoming</h6>
                             </div>
                             <h4 class="mb-1" id="summary-incoming">Rs 0.00</h4>
@@ -185,7 +185,7 @@
                     <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
                             <div class="d-flex justify-content-center align-items-center mb-2">
-                                <i class="fas fa-arrow-down me-2"></i>
+                                <i class="fas fa-arrow-up me-2"></i>
                                 <h6 class="card-title mb-0">Total Outgoing</h6>
                             </div>
                             <h4 class="mb-1" id="summary-outgoing">Rs 0.00</h4>

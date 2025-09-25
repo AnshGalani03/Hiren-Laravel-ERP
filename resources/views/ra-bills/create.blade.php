@@ -1,8 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create R.A. Bill') }}
-        </h2>
+        <div class="bill-detail-header flex justify-between items-center">
+            <a href="{{ route('ra-bills.index') }}"
+                class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left mr-2"></i> Back
+            </a>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Create R.A. Bill') }}
+            </h2>
+        </div>
+
     </x-slot>
 
     <div class="py-12">
@@ -221,9 +228,9 @@
                         </div>
 
                         <!-- Form Actions -->
-                        <div class="">
-                            <a href="{{ route('ra-bills.index') }}" class="btn btn-danger">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Create R.A. Bill</button>
+                        <div class="ra-bill-btn">
+                            <a href="{{ route('ra-bills.index') }}" class="btn btn-danger btn-sm">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-sm">Create R.A. Bill</button>
                         </div>
                     </form>
                 </div>

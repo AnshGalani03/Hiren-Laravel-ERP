@@ -41,7 +41,7 @@
                         </tr>
                         <tr>
                             <td><strong>Date:</strong></td>
-                            <td>@formatDate($tender->date)</td>
+                            <td>{{ $tender->date ? $tender->date->format('d/m/Y') : 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td><strong>EMD/FDR Amount:</strong></td>

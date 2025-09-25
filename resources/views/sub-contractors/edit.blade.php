@@ -154,11 +154,11 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Update Sub-Contractor
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Update Sub-Contractor
                         </button>
-                        <a href="{{ route('sub-contractors.show', $subContractor->id) }}" class="btn btn-secondary ms-2">
-                            <i class="fas fa-times"></i> Cancel
+                        <a href="{{ route('sub-contractors.show', $subContractor->id) }}" class="btn btn-secondary btn-sm ms-2">
+                            Cancel
                         </a>
                     </div>
                 </div>

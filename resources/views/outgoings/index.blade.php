@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Outgoing Entries') }}
             </h2>
-            <a href="{{ route('outgoings.create') }}" class="btn btn-primary">Add New Outgoing</a>
+            <a href="{{ route('outgoings.create') }}" class="btn btn-primary btn-sm">Add New Outgoing</a>
         </div>
     </x-slot>
 

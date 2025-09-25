@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Dealers') }}
             </h2>
-            <a href="{{ route('dealers.create') }}" class="btn btn-primary">Add New Dealer</a>
+            <a href="{{ route('dealers.create') }}" class="btn btn-primary btn-sm">Add New Dealer</a>
         </div>
     </x-slot>
 

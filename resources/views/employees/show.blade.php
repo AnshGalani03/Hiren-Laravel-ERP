@@ -203,11 +203,11 @@
                             <td>{{ Str::limit($upad->remark, 20) ?: 'N/A' }}</td>
 
                             <td>
-                                <a href="{{ route('upads.edit', $upad) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ route('upads.edit', $upad) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</a>
                                 <form action="{{ route('upads.destroy', $upad) }}" method="POST" style="display:inline;">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger"
-                                        onclick="return confirm('Delete this record?')">Delete</button>
+                                        onclick="return confirm('Delete this record?')"><i class="fas fa-trash"></i> Delete</button>
                                 </form>
                             </td>
                         </tr>

@@ -31,7 +31,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4>Total Income</h4>
+                    <h4 class="pb-1">Total Income</h4>
                     <h2>₹{{ number_format($totalIncomes, 2) }}</h2>
                     <!-- <small>Project: ₹{{ number_format($totalProjectIncomes, 2) }} | Transactions: ₹{{ number_format($totalTransactionIncomes, 2) }}</small> -->
                 </div>
@@ -40,7 +40,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4>Total Expenses</h4>
+                    <h4 class="pb-1">Total Expenses</h4>
                     <h2>₹{{ number_format($totalExpenses, 2) }}</h2>
                     <!-- <small>Project: ₹{{ number_format($totalProjectExpenses, 2) }} | Transactions: ₹{{ number_format($totalTransactionExpenses, 2) }}</small> -->
                 </div>
@@ -49,7 +49,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4>Net {{ $netProfit >= 0 ? 'Profit' : 'Loss' }}</h4>
+                    <h4 class="pb-1">Net {{ $netProfit >= 0 ? 'Profit' : 'Loss' }}</h4>
                     <h2>₹{{ number_format(abs($netProfit), 2) }}</h2>
                     <!-- <small>{{ $netProfit >= 0 ? 'Profit' : 'Loss' }}</small> -->
                 </div>
@@ -58,7 +58,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4>Project Budget</h4>
+                    <h4 class="pb-1">Project Budget</h4>
                     <h2>₹{{ number_format($project->amount_project, 2) }}</h2>
                     <!-- <small>Budget vs Expense: {{ $totalExpenses > 0 ? number_format(($totalExpenses / $project->amount_project) * 100, 1) : 0 }}%</small> -->
                 </div>
@@ -305,7 +305,7 @@
                 <div class="col-md-3">
                     <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
-                            <h6 class="card-title"><i class="fas fa-arrow-up"></i> Total Incoming</h6>
+                            <h6 class="card-title"><i class="fas fa-arrow-down"></i> Total Incoming</h6>
                             <h4 class="mb-0" id="project_total_incoming">₹0.00</h4>
                             <small id="project_incoming_count">(0 transactions)</small>
                         </div>
@@ -314,7 +314,7 @@
                 <div class="col-md-3">
                     <div class="card summery-card-box h-100">
                         <div class="card-body p-3">
-                            <h6 class="card-title"><i class="fas fa-arrow-down"></i> Total Outgoing</h6>
+                            <h6 class="card-title"><i class="fas fa-arrow-up"></i> Total Outgoing</h6>
                             <h4 class="mb-0" id="project_total_outgoing">₹0.00</h4>
                             <small id="project_outgoing_count">(0 transactions)</small>
                         </div>

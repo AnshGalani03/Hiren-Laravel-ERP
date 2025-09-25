@@ -110,9 +110,9 @@
                     @enderror
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('tenders.index') }}" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Create Tender</button>
+                <div class="tender-btn">
+                    <a href="{{ route('tenders.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-sm">Create Tender</button>
                 </div>
             </form>
         </div>

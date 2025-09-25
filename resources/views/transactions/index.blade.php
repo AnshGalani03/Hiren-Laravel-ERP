@@ -5,10 +5,10 @@
                 {{ __('All Transactions') }}
             </h2>
             <div>
-                <a href="{{ route('transactions.create', ['type' => 'incoming']) }}" class="btn btn-primary">
+                <a href="{{ route('transactions.create', ['type' => 'incoming']) }}" class="btn btn-primary btn-sm">
                     Add Incoming
                 </a>
-                <a href="{{ route('transactions.create', ['type' => 'outgoing']) }}" class="btn btn-danger">
+                <a href="{{ route('transactions.create', ['type' => 'outgoing']) }}" class="btn btn-danger btn-sm">
                     Add Outgoing
                 </a>
             </div>
@@ -86,7 +86,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4><i class="fas fa-arrow-up"></i> Total Incoming</h4>
+                    <h4 class="pb-1"><i class="fas fa-arrow-down"></i> Total Incoming</h4>
                     <h2 id="total_incoming">₹0.00</h2>
                 </div>
             </div>
@@ -94,7 +94,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4><i class="fas fa-arrow-down"></i> Total Outgoing</h4>
+                    <h4 class="pb-1"><i class="fas fa-arrow-up"></i> Total Outgoing</h4>
                     <h2 id="total_outgoing">₹0.00</h2>
                 </div>
             </div>
@@ -102,7 +102,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4><i class="fas fa-balance-scale"></i> Net Balance</h4>
+                    <h4 class="pb-1"><i class="fas fa-balance-scale"></i> Net Balance</h4>
                     <h2 id="net_balance">₹0.00</h2>
                 </div>
             </div>
@@ -110,7 +110,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4><i class="fas fa-list"></i> Total Records</h4>
+                    <h4 class="pb-1"><i class="fas fa-list"></i> Total Records</h4>
                     <h2 id="total_records">0</h2>
                 </div>
             </div>

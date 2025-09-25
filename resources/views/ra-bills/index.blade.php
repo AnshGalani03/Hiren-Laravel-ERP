@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('R.A. Bills') }}
             </h2>
-            <a href="{{ route('ra-bills.create') }}" class="btn btn-primary">Create New R.A. Bill</a>
+            <a href="{{ route('ra-bills.create') }}" class="btn btn-primary btn-sm">Create New R.A. Bill</a>
         </div>
     </x-slot>
 

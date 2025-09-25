@@ -92,11 +92,11 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Create Invoice
+                        <button type="submit" class="btn btn-primary btn-sm">
+                             Create Invoice
                         </button>
-                        <a href="{{ route('dealers.show', $dealer->id) }}" class="btn btn-secondary ms-2">
-                            <i class="fas fa-times"></i> Cancel
+                        <a href="{{ route('dealers.show', $dealer->id) }}" class="btn btn-secondary btn-sm ms-2">
+                             Cancel
                         </a>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Projects') }}
             </h2>
-            <a href="{{ route('projects.create') }}" class="btn btn-primary">Add New Project</a>
+            <a href="{{ route('projects.create') }}" class="btn btn-primary btn-sm">Add New Project</a>
         </div>
     </x-slot>
 

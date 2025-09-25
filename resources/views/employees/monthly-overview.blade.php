@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="monthly-overview-header d-flex justify-content-between align-items-center">
-            <a href="{{ route('employees.show', $employee) }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Back to Details
+            <a href="{{ route('employees.show', $employee) }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back
             </a>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Monthly Overview: {{ $employee->name }}
@@ -28,7 +28,7 @@
                             <div class="mt-2">
                                 <a href="{{ route('employees.show', ['employee' => $employee, 'month' => $month['month_year']]) }}"
                                     class="btn btn-sm btn-primary">
-                                    <i class="fas fa-eye"></i> View Details
+                                    View Details
                                 </a>
                             </div>
                         </div>

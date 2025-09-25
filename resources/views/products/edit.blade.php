@@ -39,7 +39,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="hsn_code" class="form-label">HSN Code</label>
-                            <input type="text" class="form-control @error('hsn_code') is-invalid @enderror"
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('hsn_code') is-invalid @enderror"
                                 id="hsn_code" name="hsn_code"
                                 value="{{ old('hsn_code', $product->hsn_code) }}"
                                 placeholder="e.g., 1234567890">
@@ -52,12 +52,12 @@
                 </div>
 
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('products.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Cancel
+                <div class="product-btn">
+                    <a href="{{ route('products.index') }}" class="btn btn-secondary btn-sm">
+                        Cancel
                     </a>
-                    <button type="submit" class="btn btn-warning">
-                        <i class="fas fa-save"></i> Update Product
+                    <button type="submit" class="btn btn-warning btn-sm">
+                        Update Product
                     </button>
                 </div>
             </form>

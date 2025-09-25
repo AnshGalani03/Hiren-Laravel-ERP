@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Sub-Contractors') }}
             </h2>
-            <a href="{{ route('sub-contractors.create') }}" class="btn btn-primary">Add New Sub-Contractor</a>
+            <a href="{{ route('sub-contractors.create') }}" class="btn btn-primary btn-sm">Add New Sub-Contractor</a>
         </div>
     </x-slot>
 
@@ -42,10 +42,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
             </div>
 
             <div class="table-responsive-wrapper">

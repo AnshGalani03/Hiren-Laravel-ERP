@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Bills Management') }}
             </h2>
-            <a class="btn btn-primary" href="{{ route('bills.create') }}">
+            <a class="btn btn-primary btn-sm" href="{{ route('bills.create') }}">
                 Create New Bill
             </a>
         </div>

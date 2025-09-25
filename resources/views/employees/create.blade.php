@@ -134,9 +134,9 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('employees.index') }}" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Create Employee</button>
+                <div class="emp-btn">
+                    <a href="{{ route('employees.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-sm">Create Employee</button>
                 </div>
             </form>
         </div>

@@ -33,7 +33,7 @@
                 <div class="col-lg-3">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Action</label>
                     <button id="clearFilterBtn" class="btn btn-secondary w-100">
-                        <i class="fas fa-times mr-1"></i> Clear
+                        Clear
                     </button>
                 </div>
             </div>
@@ -45,7 +45,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4><i class="fas fa-file-invoice"></i> Total Invoices</h4>
+                    <h4 class="pb-1"><i class="fas fa-file-invoice"></i> Total Invoices</h4>
                     <h2 id="totalInvoices">0</h2>
                 </div>
             </div>
@@ -53,7 +53,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4><i class="fas fa-money-bill"></i> Total Amount</h4>
+                    <h4 class="pb-1"><i class="fas fa-money-bill"></i> Total Amount</h4>
                     <h2 id="totalAmount">₹0.00</h2>
                 </div>
             </div>
@@ -61,7 +61,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4><i class="fas fa-users"></i> Unique Dealers</h4>
+                    <h4 class="pb-1"><i class="fas fa-users"></i> Unique Dealers</h4>
                     <h2 id="uniqueDealers">0</h2>
                 </div>
             </div>
@@ -69,7 +69,7 @@
         <div class="col-md-3">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
-                    <h4><i class="fas fa-chart-line"></i> GST Amount</h4>
+                    <h4 class="pb-1"><i class="fas fa-chart-line"></i> GST Amount</h4>
                     <h2 id="totalGst">₹0.00</h2>
                 </div>
             </div>

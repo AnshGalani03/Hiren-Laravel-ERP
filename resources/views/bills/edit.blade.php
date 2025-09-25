@@ -174,12 +174,12 @@
                 <input type="hidden" id="total_input" name="total_amount" value="{{ $bill->total_amount }}">
 
                 <!-- Submit Buttons -->
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('bills.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Cancel
+                <div class="bill-buttons">
+                    <a href="{{ route('bills.index') }}" class="btn btn-secondary btn-sm">
+                        Cancel
                     </a>
-                    <button type="submit" class="btn btn-warning">
-                        <i class="fas fa-save"></i> Update Bill
+                    <button type="submit" class="btn btn-warning btn-sm">
+                        Update Bill
                     </button>
                 </div>
             </form>

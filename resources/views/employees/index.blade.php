@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Employees') }}
             </h2>
-            <a href="{{ route('employees.create') }}" class="btn btn-primary">Add New Employee</a>
+            <a href="{{ route('employees.create') }}" class="btn btn-primary btn-sm">Add New Employee</a>
         </div>
     </x-slot>
 

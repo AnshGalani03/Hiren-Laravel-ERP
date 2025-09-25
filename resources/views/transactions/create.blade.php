@@ -158,9 +158,9 @@
                     @enderror
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('transactions.index') }}" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Create {{ ucfirst($type) }}</button>
+                <div class="transaction-btn">
+                    <a href="{{ route('transactions.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-sm">Create {{ ucfirst($type) }}</button>
                 </div>
             </form>
         </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 23, 2025 at 04:28 AM
+-- Generation Time: Sep 24, 2025 at 01:38 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -123,6 +123,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `address` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `gst` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pan_card` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone_no` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -133,8 +134,8 @@ CREATE TABLE IF NOT EXISTS `customers` (
 -- Dumping data for table `customers`
 --
 
-INSERT INTO `customers` (`id`, `name`, `address`, `gst`, `phone_no`, `created_at`, `updated_at`) VALUES
-(1, 'Naitik', 'Surat', 'GSTPANFH4585GST', '4525658525', '2025-09-13 05:55:15', '2025-09-13 05:55:15');
+INSERT INTO `customers` (`id`, `name`, `address`, `gst`, `pan_card`, `phone_no`, `created_at`, `updated_at`) VALUES
+(1, 'Naitik', 'Surat', 'GSTPANFH4585GST', 'BAJPC4350M', '4525658525', '2025-09-13 05:55:15', '2025-09-24 01:49:47');
 
 -- --------------------------------------------------------
 
@@ -156,14 +157,15 @@ CREATE TABLE IF NOT EXISTS `dealers` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `dealers`
 --
 
 INSERT INTO `dealers` (`id`, `dealer_name`, `mobile_no`, `gst`, `address`, `account_no`, `account_name`, `ifsc`, `bank_name`, `created_at`, `updated_at`) VALUES
-(1, 'Ansh', '4525658545', 'GST4565GST45', 'Surat, Gujarat', '2545625854', 'ICICI', 'ICICI4585ICI', 'Demo', '2025-09-13 05:47:38', '2025-09-13 05:47:38');
+(1, 'Ansh', '4525658545', 'GST4565GST45', 'Surat, Gujarat', '2545625854', 'ICICI', 'ICICI4585ICI', 'Demo', '2025-09-13 05:47:38', '2025-09-13 05:47:38'),
+(2, 'Milan', '4585652585', 'GST123456GST', 'Surat', '4585658458545', 'Milan', 'ICICI01', 'ICICI', '2025-09-24 07:00:30', '2025-09-24 07:00:30');
 
 -- --------------------------------------------------------
 
@@ -302,14 +304,15 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `invoices_dealer_id_foreign` (`dealer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `invoices`
 --
 
 INSERT INTO `invoices` (`id`, `dealer_id`, `bill_no`, `amount`, `original_amount`, `gst_rate`, `date`, `remark`, `created_at`, `updated_at`) VALUES
-(3, 1, '50', 900.00, 5000.00, 18.00, '2025-09-20', 'Demo', '2025-09-20 06:59:01', '2025-09-20 06:59:01');
+(1, 1, '01', 1620.00, 9000.00, 18.00, '2025-09-24', 'Demo', '2025-09-24 06:58:42', '2025-09-24 06:58:42'),
+(2, 2, '05', 90000.00, 500000.00, 18.00, '2025-09-01', 'Demo', '2025-09-24 07:01:21', '2025-09-24 07:01:21');
 
 -- --------------------------------------------------------
 
@@ -363,7 +366,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -407,7 +410,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (35, '2025_09_11_115949_replace_dealer_with_customer_in_bills_table', 13),
 (36, '2025_09_12_063258_add_hsn_code_to_products_table', 14),
 (37, '2025_09_20_073627_add_contractor_type_to_sub_contractors_table', 15),
-(38, '2025_09_20_112555_add_gst_fields_to_invoices_table', 16);
+(42, '2025_09_23_123249_create_r_a_bills_table', 16),
+(43, '2025_09_24_044710_add_project_id_to_r_a_bills_table', 17),
+(44, '2025_09_24_054004_drop_work_description_from_r_a_bills_table', 18),
+(45, '2025_09_24_070739_add_pan_card_to_customers_table', 19),
+(46, '2025_09_20_112555_add_gst_fields_to_invoices_table', 20);
 
 -- --------------------------------------------------------
 
@@ -567,6 +574,47 @@ CREATE TABLE IF NOT EXISTS `project_incomes` (
   KEY `project_incomes_project_id_foreign` (`project_id`),
   KEY `project_incomes_incoming_id_foreign` (`incoming_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `r_a_bills`
+--
+
+DROP TABLE IF EXISTS `r_a_bills`;
+CREATE TABLE IF NOT EXISTS `r_a_bills` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `bill_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `customer_id` bigint UNSIGNED NOT NULL,
+  `project_id` bigint UNSIGNED DEFAULT NULL,
+  `ra_bill_amount` decimal(15,2) NOT NULL,
+  `dept_taxes_overheads` decimal(15,2) NOT NULL,
+  `tds_1_percent` decimal(15,2) NOT NULL,
+  `rmd_amount` decimal(15,2) NOT NULL,
+  `welfare_cess` decimal(15,2) NOT NULL,
+  `testing_charges` decimal(15,2) NOT NULL,
+  `total_c` decimal(15,2) NOT NULL,
+  `sgst_9_percent` decimal(15,2) NOT NULL,
+  `cgst_9_percent` decimal(15,2) NOT NULL,
+  `igst_0_percent` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `total_with_gst` decimal(15,2) NOT NULL,
+  `total_deductions` decimal(15,2) NOT NULL,
+  `net_amount` decimal(15,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `r_a_bills_customer_id_foreign` (`customer_id`),
+  KEY `r_a_bills_project_id_foreign` (`project_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `r_a_bills`
+--
+
+INSERT INTO `r_a_bills` (`id`, `bill_no`, `date`, `customer_id`, `project_id`, `ra_bill_amount`, `dept_taxes_overheads`, `tds_1_percent`, `rmd_amount`, `welfare_cess`, `testing_charges`, `total_c`, `sgst_9_percent`, `cgst_9_percent`, `igst_0_percent`, `total_with_gst`, `total_deductions`, `net_amount`, `created_at`, `updated_at`) VALUES
+(1, 'HSNRA25001', '2025-09-02', 1, 1, 2406964.00, 95711.00, 23113.00, 90300.00, 28402.00, 36200.00, 2311253.00, 208012.77, 208012.77, 0.00, 2727278.54, 178015.00, 2549263.54, '2025-09-24 00:18:36', '2025-09-24 04:57:39'),
+(2, 'HSNRA25002', '2025-09-24', 1, 1, 2406964.00, 95711.00, 123113.00, 90300.00, 28402.00, 36200.00, 2311253.00, 208012.77, 208012.77, 0.00, 2727278.54, 278015.00, 2449263.54, '2025-09-24 04:22:47', '2025-09-24 04:23:01');
 
 -- --------------------------------------------------------
 

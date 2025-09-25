@@ -26,9 +26,9 @@
                     @enderror
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('incomings.index') }}" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Create Incoming Entry</button>
+                <div class="incoming-btn">
+                    <a href="{{ route('incomings.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-sm">Create Incoming Entry</button>
                 </div>
             </form>
         </div>
