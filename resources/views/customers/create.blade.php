@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="module-edit-page d-flex justify-content-between align-items-center">
+            <a class="btn btn-outline-secondary" href="{{ route('customers.index') }}">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Add New Customer') }}
             </h2>
-            <a class="btn btn-secondary" href="{{ route('customers.index') }}">
-                <i class="fas fa-arrow-left"></i> Back to List
-            </a>
         </div>
     </x-slot>
 
@@ -64,12 +64,12 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('customers.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Cancel
+                <div class="customer-btn">
+                    <a href="{{ route('customers.index') }}" class="btn btn-secondary btn-sm">
+                        Cancel
                     </a>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-save"></i> Create Customer
+                    <button type="submit" class="btn btn-success btn-sm">
+                        Create Customer
                     </button>
                 </div>
             </form>
