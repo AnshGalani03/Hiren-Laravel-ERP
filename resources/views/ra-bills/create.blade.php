@@ -42,32 +42,37 @@
                                 </div>
 
                                 <div class="col-lg-3 col-md-6 col-sm-12">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Customer <span class="text-red-500">*</span></label>
-                                    <select name="customer_id" id="customer_id" required
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('customer_id') border-red-500 @enderror">
-                                        <option value="">Select Customer</option>
-                                        @foreach($customers as $customer)
-                                        <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
-                                            {{ $customer->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
+                                    <div class="product-list">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Customer <span class="text-red-500">*</span></label>
+                                        <select name="customer_id" id="customer_id" required
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('customer_id') border-red-500 @enderror">
+                                            <option value="">Select Customer</option>
+                                            @foreach($customers as $customer)
+                                            <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
+                                                {{ $customer->name }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     @error('customer_id')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <div class="col-lg-3 col-md-6 col-sm-12">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Project <span class="text-red-500">*</span></label>
-                                    <select name="project_id" id="project_id" required
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('project_id') border-red-500 @enderror">
-                                        <option value="">Select Project</option>
-                                        @foreach($projects as $project)
-                                        <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>
-                                            {{ $project->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
+                                    <div class="product-list">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Project <span class="text-red-500">*</span></label>
+                                        <select name="project_id" id="project_id" required
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('project_id') border-red-500 @enderror">
+                                            <option value="">Select Project</option>
+                                            @foreach($projects as $project)
+                                            <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>
+                                                {{ $project->name }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     @error('project_id')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror

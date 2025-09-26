@@ -65,63 +65,73 @@
                     <!-- Categories (Incoming/Outgoing) -->
                     <div class="row mb-4">
                         <div class="col-md-6" id="incoming-category" style="display: none;">
-                            <label for="incoming_id" class="form-label">Incoming Category <span class="text-danger">*</span></label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="incoming_id" name="incoming_id">
-                                <option value="">Select Incoming Category</option>
-                                @foreach($incomings as $incoming)
-                                <option value="{{ $incoming->id }}" {{ old('incoming_id', $transaction->incoming_id) == $incoming->id ? 'selected' : '' }}>
-                                    {{ $incoming->name }}
-                                </option>
-                                @endforeach
-                            </select>
+                            <div class="transactions-filter-wrapper">
+                                <label for="incoming_id" class="d-block form-label">Incoming Category <span class="text-danger">*</span></label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="incoming_id" name="incoming_id">
+                                    <option value="">Select Incoming Category</option>
+                                    @foreach($incomings as $incoming)
+                                    <option value="{{ $incoming->id }}" {{ old('incoming_id', $transaction->incoming_id) == $incoming->id ? 'selected' : '' }}>
+                                        {{ $incoming->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-6" id="outgoing-category" style="display: none;">
-                            <label for="outgoing_id" class="form-label">Outgoing Category <span class="text-danger">*</span></label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="outgoing_id" name="outgoing_id">
-                                <option value="">Select Outgoing Category</option>
-                                @foreach($outgoings as $outgoing)
-                                <option value="{{ $outgoing->id }}" {{ old('outgoing_id', $transaction->outgoing_id) == $outgoing->id ? 'selected' : '' }}>
-                                    {{ $outgoing->name }}
-                                </option>
-                                @endforeach
-                            </select>
+                            <div class="transactions-filter-wrapper">
+                                <label for="outgoing_id" class="d-block form-label">Outgoing Category <span class="text-danger">*</span></label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="outgoing_id" name="outgoing_id">
+                                    <option value="">Select Outgoing Category</option>
+                                    @foreach($outgoings as $outgoing)
+                                    <option value="{{ $outgoing->id }}" {{ old('outgoing_id', $transaction->outgoing_id) == $outgoing->id ? 'selected' : '' }}>
+                                        {{ $outgoing->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Linked Entities -->
                     <div class="row mb-4">
                         <div class="col-md-4">
-                            <label for="project_id" class="form-label">Project (Optional)</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="project_id" name="project_id">
-                                <option value="">Select Project</option>
-                                @foreach($projects as $project)
-                                <option value="{{ $project->id }}" {{ old('project_id', $transaction->project_id) == $project->id ? 'selected' : '' }}>
-                                    {{ $project->name }}
-                                </option>
-                                @endforeach
-                            </select>
+                            <div class="transactions-filter-wrapper">
+                                <label for="project_id" class="form-label">Project</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="project_id" name="project_id">
+                                    <option value="">Select Project</option>
+                                    @foreach($projects as $project)
+                                    <option value="{{ $project->id }}" {{ old('project_id', $transaction->project_id) == $project->id ? 'selected' : '' }}>
+                                        {{ $project->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-4">
-                            <label for="dealer_id" class="form-label">Dealer (Optional)</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="dealer_id" name="dealer_id">
-                                <option value="">Select Dealer</option>
-                                @foreach($dealers as $dealer)
-                                <option value="{{ $dealer->id }}" {{ old('dealer_id', $transaction->dealer_id) == $dealer->id ? 'selected' : '' }}>
-                                    {{ $dealer->dealer_name }}
-                                </option>
-                                @endforeach
-                            </select>
+                            <div class="transactions-filter-wrapper">
+                                <label for="dealer_id" class="form-label">Dealer</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="dealer_id" name="dealer_id">
+                                    <option value="">Select Dealer</option>
+                                    @foreach($dealers as $dealer)
+                                    <option value="{{ $dealer->id }}" {{ old('dealer_id', $transaction->dealer_id) == $dealer->id ? 'selected' : '' }}>
+                                        {{ $dealer->dealer_name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-4">
-                            <label for="sub_contractor_id" class="form-label">Sub-Contractor (Optional)</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="sub_contractor_id" name="sub_contractor_id">
-                                <option value="">Select Sub-Contractor</option>
-                                @foreach($subContractors as $subContractor)
-                                <option value="{{ $subContractor->id }}" {{ old('sub_contractor_id', $transaction->sub_contractor_id) == $subContractor->id ? 'selected' : '' }}>
-                                    {{ $subContractor->contractor_name }}
-                                </option>
-                                @endforeach
-                            </select>
+                            <div class="transactions-filter-wrapper">
+                                <label for="sub_contractor_id" class="form-label">Sub-Contractor</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="sub_contractor_id" name="sub_contractor_id">
+                                    <option value="">Select Sub-Contractor</option>
+                                    @foreach($subContractors as $subContractor)
+                                    <option value="{{ $subContractor->id }}" {{ old('sub_contractor_id', $transaction->sub_contractor_id) == $subContractor->id ? 'selected' : '' }}>
+                                        {{ $subContractor->contractor_name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -170,7 +180,6 @@
             $('#type').change(function() {
                 toggleCategoryFields();
             });
-
         });
     </script>
     @endpush

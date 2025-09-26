@@ -16,13 +16,15 @@
             <div class="bills-filters row">
                 <!-- Filter section -->
                 <div class="col-md-3">
-                    <label for="filterCustomer" class="form-label">Customer</label>
-                    <select id="filterCustomer" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control">
-                        <option value="">All Customers</option>
-                        @foreach($customers as $customer)
-                        <option value="{{ $customer->name }}">{{ $customer->name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="bill-customer-list">
+                        <label for="filterCustomer" class="form-label">Customer</label>
+                        <select id="filterCustomer" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control">
+                            <option value="">All Customers</option>
+                            @foreach($customers as $customer)
+                            <option value="{{ $customer->name }}">{{ $customer->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
                 <div class="col-md-3">
@@ -145,7 +147,8 @@
 
             // Reset filters
             $('#resetFilters').click(function() {
-                $('#filterCustomer, #filterStatus, #filterStartDate, #filterEndDate').val('');
+                $(' #filterStatus, #filterStartDate, #filterEndDate').val('');
+                $('#filterCustomer').val(null).trigger('change');
                 billsTable.draw();
             });
 

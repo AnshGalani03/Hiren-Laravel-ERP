@@ -190,3 +190,11 @@ $(document).ready(function () {
         }, 3000);
     });
 });
+
+$(document).ready(function () {
+    $(
+        "#dealerFilter, #filterCustomer, #customer_id, #product-list, #project_id, #upad_employee_id, #trans_project, #trans_dealer, #trans_sub_contractor, #project_filter, #dealer_filter, #sub_contractor_id, #incoming_id, #outgoing_id, #dealer_id"
+    ).select2({
+        width: "100%",
+    });
+});

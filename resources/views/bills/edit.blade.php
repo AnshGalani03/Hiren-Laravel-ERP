@@ -28,7 +28,7 @@
                 @method('PUT')
 
                 <!-- Bill Number and Date Row -->
-                <div class="row mb-4">
+                <div class="row bill-number-and-date">
                     <div class="col-md-6">
                         <label for="bill_number" class="form-label">Bill Number</label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="bill_number" name="bill_number"
@@ -44,19 +44,22 @@
                 </div>
 
                 <!-- Customer Row -->
-                <div class="row mb-4">
+                <div class="row customer-row">
                     <div class="col-md-6">
-                        <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="customer_id" name="customer_id" required>
-                            <option value="">Select Customer</option>
-                            @foreach($customers as $customer)
-                            <option value="{{ $customer->id }}"
-                                {{ (old('customer_id', $bill->customer_id) == $customer->id) ? 'selected' : '' }}>
-                                {{ $customer->name }}
-                            </option>
-                            @endforeach
-                        </select>
+                        <div class="bill-customer-list">
+                            <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="customer_id" name="customer_id" required>
+                                <option value="">Select Customer</option>
+                                @foreach($customers as $customer)
+                                <option value="{{ $customer->id }}"
+                                    {{ (old('customer_id', $bill->customer_id) == $customer->id) ? 'selected' : '' }}>
+                                    {{ $customer->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
+
                     <!-- Status and Notes Row -->
                     <div class="col-md-6">
                         <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
@@ -89,8 +92,6 @@
                     </div>
                 </div>
 
-
-
                 <!-- Bill Items Section -->
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -105,14 +106,16 @@
                             @foreach($bill->billItems as $index => $item)
                             <div class="row bill-item mb-3" data-index="{{ $index }}">
                                 <div class="col-md-4">
-                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control product-select" name="items[{{ $index }}][product_id]" required>
-                                        <option value="">Select Product</option>
-                                        @foreach($products as $product)
-                                        <option value="{{ $product->id }}" {{ $item->product_id == $product->id ? 'selected' : '' }}>
-                                            {{ $product->product_name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
+                                    <div class="product-list">
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control product-select product-lists" name="items[{{ $index }}][product_id]" required>
+                                            <option value="">Select Product</option>
+                                            @foreach($products as $product)
+                                            <option value="{{ $product->id }}" {{ $item->product_id == $product->id ? 'selected' : '' }}>
+                                                {{ $product->product_name }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-md-2">
                                     <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control quantity" name="items[{{ $index }}][quantity]"
@@ -165,8 +168,6 @@
                             placeholder="Additional notes or comments">{{ old('notes', $bill->notes) }}</textarea>
                     </div>
                 </div>
-
-
 
                 <!-- Hidden Fields for Totals -->
                 <input type="hidden" id="subtotal_input" name="subtotal" value="{{ $bill->subtotal }}">
@@ -221,12 +222,14 @@
                 const itemHtml = `
                     <div class="row bill-item mb-3" data-index="${itemIndex}">
                         <div class="col-md-4">
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control product-select" name="items[${itemIndex}][product_id]" required>
+                        <div class="product-list">
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control product-select product-lists" name="items[${itemIndex}][product_id]" required>
                                 <option value="">Select Product</option>
                                 @foreach($products as $product)
                                 <option value="{{ $product->id }}">{{ $product->product_name }}</option>
                                 @endforeach
                             </select>
+                        </div>
                         </div>
                         <div class="col-md-2">
                             <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control quantity" name="items[${itemIndex}][quantity]" 
@@ -247,6 +250,12 @@
                     </div>
                 `;
                 $('#billItems').append(itemHtml);
+                // Initialize Select2 on all select elements that haven't been initialized yet
+                $('.product-select:not(.select2-hidden-accessible)').select2({
+                    placeholder: "Select Product",
+                    allowClear: true,
+                    width: '100%'
+                });
                 itemIndex++;
             }
 
@@ -294,6 +303,8 @@
 
             // Initial calculation
             calculateTotals();
+
+            $(".product-lists").select2();
         });
     </script>
     @endpush

@@ -21,33 +21,39 @@
             <form id="filter-form">
                 <div class="row">
                     <div class="col-md-2 mb-3">
-                        <label for="project_filter" class="form-label">Project</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="project_filter" name="project_id">
-                            <option value="">All Projects</option>
-                            @foreach($projects as $project)
-                            <option value="{{ $project->id }}">{{ $project->name }}</option>
-                            @endforeach
-                        </select>
+                        <div class="transactions-filter-wrapper">
+                            <label for="project_filter" class="form-label">Project</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="project_filter" name="project_id">
+                                <option value="">All Projects</option>
+                                @foreach($projects as $project)
+                                <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div class="col-md-2 mb-3">
-                        <label for="dealer_filter" class="form-label">Dealer</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="dealer_filter" name="dealer_id">
-                            <option value="">All Dealers</option>
-                            @foreach($dealers as $dealer)
-                            <option value="{{ $dealer->id }}">{{ $dealer->dealer_name }}</option>
-                            @endforeach
-                        </select>
+                        <div class="transactions-filter-wrapper">
+                            <label for="dealer_filter" class="form-label">Dealer</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="dealer_filter" name="dealer_id">
+                                <option value="">All Dealers</option>
+                                @foreach($dealers as $dealer)
+                                <option value="{{ $dealer->id }}">{{ $dealer->dealer_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div class="col-md-2 mb-3">
-                        <label for="sub_contractor_id" class="form-label">Sub-Contractor</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="sub_contractor_id" name="sub_contractor_id">
-                            <option value="">All Sub-Contractors</option>
-                            @foreach($subContractors as $subContractor)
-                            <option value="{{ $subContractor->id }}">{{ $subContractor->contractor_name }}</option>
-                            @endforeach
-                        </select>
+                        <div class="transactions-filter-wrapper">
+                            <label for="sub_contractor_id" class="form-label">Sub-Contractor</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="sub_contractor_id" name="sub_contractor_id">
+                                <option value="">All Sub-Contractors</option>
+                                @foreach($subContractors as $subContractor)
+                                <option value="{{ $subContractor->id }}">{{ $subContractor->contractor_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div class="col-md-2 mb-3">
@@ -268,9 +274,10 @@
 
             // Reset filters
             $('#reset_filters').click(function() {
-                $('#project_filter').val('');
-                $('#dealer_filter').val('');
-                $('#type_filter').val('');
+                $('#project_filter').val(null).trigger('change');
+                $('#dealer_filter').val(null).trigger('change');
+                $('#type_filter').val(null).trigger('change');
+                $('#sub_contractor_id').val(null).trigger('change');
 
                 // Reset date range to last 30 days
                 var start = moment().subtract(30, 'days');

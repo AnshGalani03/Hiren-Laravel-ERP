@@ -24,13 +24,16 @@
                                 <label for="upad_employee_id" class="block text-sm font-medium text-gray-700 mb-2">
                                     Employee (Optional)
                                 </label>
-                                <select name="employee_id" id="upad_employee_id"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="">All Employees</option>
-                                    @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="product-list">
+                                    <select name="employee_id" id="upad_employee_id"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <option value="">All Employees</option>
+                                        @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                             </div>
 
                             <div class="mb-2">
@@ -108,39 +111,45 @@
                                 <label for="trans_project" class="block text-sm font-medium text-gray-700 mb-2">
                                     Project
                                 </label>
-                                <select name="project_id" id="trans_project"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    <option value="">All Projects</option>
-                                    @foreach(\App\Models\Project::orderBy('name')->get() as $project)
-                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="product-list">
+                                    <select name="project_id" id="trans_project"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                        <option value="">All Projects</option>
+                                        @foreach(\App\Models\Project::orderBy('name')->get() as $project)
+                                        <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="mb-2">
                                 <label for="trans_dealer" class="block text-sm font-medium text-gray-700 mb-2">
                                     Dealer
                                 </label>
-                                <select name="dealer_id" id="trans_dealer"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    <option value="">All Dealers</option>
-                                    @foreach(\App\Models\Dealer::orderBy('dealer_name')->get() as $dealer)
-                                    <option value="{{ $dealer->id }}">{{ $dealer->dealer_name }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="product-list">
+                                    <select name="dealer_id" id="trans_dealer"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                        <option value="">All Dealers</option>
+                                        @foreach(\App\Models\Dealer::orderBy('dealer_name')->get() as $dealer)
+                                        <option value="{{ $dealer->id }}">{{ $dealer->dealer_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="mb-2">
                                 <label for="trans_sub_contractor" class="block text-sm font-medium text-gray-700 mb-2">
                                     Sub-Contractor
                                 </label>
-                                <select name="sub_contractor_id" id="trans_sub_contractor"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    <option value="">All Sub-Contractors</option>
-                                    @foreach(\App\Models\SubContractor::orderBy('contractor_name')->get() as $subContractor)
-                                    <option value="{{ $subContractor->id }}">{{ $subContractor->contractor_name }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="product-list">
+                                    <select name="sub_contractor_id" id="trans_sub_contractor"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                        <option value="">All Sub-Contractors</option>
+                                        @foreach(\App\Models\SubContractor::orderBy('contractor_name')->get() as $subContractor)
+                                        <option value="{{ $subContractor->id }}">{{ $subContractor->contractor_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
 

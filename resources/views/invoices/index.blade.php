@@ -9,16 +9,18 @@
 
     <!-- Filters -->
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6">
+        <div class="invoices-filters p-6">
             <div class="row">
                 <div class="col-lg-3">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Dealer</label>
-                    <select id="dealerFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">All Dealers</option>
-                        @foreach($dealers as $dealer)
-                        <option value="{{ $dealer->id }}">{{ $dealer->dealer_name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="invoices-dealer-list">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Dealer</label>
+                        <select id="dealerFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">All Dealers</option>
+                            @foreach($dealers as $dealer)
+                            <option value="{{ $dealer->id }}">{{ $dealer->dealer_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <div class="col-lg-3">
                     <label class="block text-sm font-medium text-gray-700 mb-2">From Date</label>
@@ -31,7 +33,7 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div class="col-lg-3">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Action</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2 invoice-action-label">Action</label>
                     <button id="clearFilterBtn" class="btn btn-secondary w-100">
                         Clear
                     </button>
@@ -191,7 +193,7 @@
             });
 
             $('#clearFilterBtn').on('click', function() {
-                $('#dealerFilter').val('');
+                $('#dealerFilter').val(null).trigger('change');
                 $('#startDateFilter').val('');
                 $('#endDateFilter').val('');
                 table.ajax.reload();

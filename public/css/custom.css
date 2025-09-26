@@ -173,6 +173,56 @@
     box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
         rgba(17, 17, 26, 0.1) 0px 0px 8px;
 }
+.invoices-dealer-list .select2-container .select2-selection--single,
+.bill-customer-list .select2-container .select2-selection--single,
+.product-list .select2-container .select2-selection--single,
+.transactions-filter-wrapper .select2-container .select2-selection--single {
+    height: 40px;
+}
+.invoices-dealer-list
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered,
+.bill-customer-list
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered,
+.product-list
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered,
+.transactions-filter-wrapper
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered {
+    line-height: 40px;
+}
+.invoices-dealer-list
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow,
+.bill-customer-list
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow,
+.product-list
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow,
+.transactions-filter-wrapper
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow {
+    height: 35px;
+}
+.select2-container--default .select2-selection--single {
+    border: 1px solid #dee2e6 !important;
+}
+.bill-number-and-date .col-md-6,
+.customer-row .col-md-6 {
+    margin-bottom: 10px;
+}
+
 @media only screen and (max-width: 767px) {
     .quick-actions .col-md-3 {
         width: 50%;
@@ -246,9 +296,11 @@
     .transaction-table-header h6 {
         margin-bottom: 10px;
     }
-    .invoices-summary .col-md-3 {
-        width: 50%;
-        margin-bottom: 10px;
+    .invoices-summary.row {
+        row-gap: 10px;
+    }
+    .invoices-summary .card {
+        margin: 0 10px;
     }
     .bills-filters .col-md-3 {
         margin-bottom: 10px;
@@ -309,5 +361,20 @@
     }
     .detail-calculation {
         padding: 0 !important;
+    }
+    .invoices-dealer-list .select2-container,
+    .bill-customer-list .select2-container,
+    .product-list .select2-container,
+    .transactions-filter-wrapper .select2-container {
+        width: 100% !important;
+    }
+    .invoices-filters .row {
+        row-gap: 10px;
+    }
+    .invoice-action-label {
+        display: none !important;
+    }
+    .bill-number-and-date {
+        margin-bottom: 0 !important;
     }
 }

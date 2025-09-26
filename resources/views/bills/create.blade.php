@@ -16,17 +16,20 @@
                 @csrf
 
                 <!-- Customer and Date Row -->
-                <div class="row mb-4">
+                <div class="row bill-number-and-date">
                     <div class="col-md-6">
-                        <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="customer_id" name="customer_id" required>
-                            <option value="">Select Customer</option>
-                            @foreach($customers as $customer)
-                            <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
-                                {{ $customer->name }}
-                            </option>
-                            @endforeach
-                        </select>
+                        <div class="bill-customer-list">
+                            <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="customer_id" name="customer_id" required>
+                                <option value="">Select Customer</option>
+                                @foreach($customers as $customer)
+                                <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
+                                    {{ $customer->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                     </div>
                     <div class="col-md-6">
                         <label for="bill_date" class="form-label">Bill Date <span class="text-danger">*</span></label>
@@ -36,7 +39,7 @@
                 </div>
 
                 <!-- GST Checkbox and Rate Row -->
-                <div class="row mb-4">
+                <div class="row bill-number-and-date">
                     <div class="col-md-6">
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="is_gst" name="is_gst"
@@ -56,7 +59,7 @@
                 </div>
 
                 <!-- Status and Notes Row -->
-                <div class="row mb-4">
+                <div class="row bill-number-and-date">
                     <div class="col-md-6">
                         <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                         <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="status" name="status" required>
@@ -171,12 +174,14 @@
                 const itemHtml = `
                     <div class="row bill-item mb-3" data-index="${itemIndex}">
                         <div class="col-md-4">
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control product-select" name="items[${itemIndex}][product_id]" required>
+                        <div class="product-list">
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control product-select product-lists" name="items[${itemIndex}][product_id]" required>
                                 <option value="">Select Product</option>
                                 @foreach($products as $product)
                                 <option value="{{ $product->id }}">{{ $product->product_name }}</option>
                                 @endforeach
                             </select>
+                        </div>
                         </div>
                         <div class="col-md-2">
                             <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control quantity" name="items[${itemIndex}][quantity]" 
@@ -197,6 +202,12 @@
                     </div>
                 `;
                 $('#billItems').append(itemHtml);
+                // Initialize Select2 on all select elements that haven't been initialized yet
+                $('.product-lists:not(.select2-hidden-accessible)').select2({
+                    placeholder: "Select Product",
+                    // allowClear: true,
+                    width: '100%'
+                });
                 itemIndex++;
             }
 
@@ -244,6 +255,9 @@
 
             // Add first item by default
             addBillItem();
+
+            $(".product-lists").select2();
+
         });
     </script>
     @endpush

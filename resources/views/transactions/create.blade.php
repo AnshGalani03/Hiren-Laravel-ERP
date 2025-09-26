@@ -48,27 +48,30 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        @if($type == 'incoming')
-                        <label for="incoming_id" class="form-label">Income Category <span class="text-danger">*</span></label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('incoming_id') is-invalid @enderror" id="incoming_id" name="incoming_id" required>
-                            <option value="">Select Income Category</option>
-                            @foreach($incomings as $incoming)
-                            <option value="{{ $incoming->id }}" {{ old('incoming_id') == $incoming->id ? 'selected' : '' }}>
-                                {{ $incoming->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                        @else
-                        <label for="outgoing_id" class="form-label">Expense Category <span class="text-danger">*</span></label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('outgoing_id') is-invalid @enderror" id="outgoing_id" name="outgoing_id" required>
-                            <option value="">Select Expense Category</option>
-                            @foreach($outgoings as $outgoing)
-                            <option value="{{ $outgoing->id }}" {{ old('outgoing_id') == $outgoing->id ? 'selected' : '' }}>
-                                {{ $outgoing->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                        @endif
+                        <div class="transactions-filter-wrapper">
+                            @if($type == 'incoming')
+                            <label for="incoming_id" class="form-label">Income Category <span class="text-danger">*</span></label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('incoming_id') is-invalid @enderror" id="incoming_id" name="incoming_id" required>
+                                <option value="">Select Income Category</option>
+                                @foreach($incomings as $incoming)
+                                <option value="{{ $incoming->id }}" {{ old('incoming_id') == $incoming->id ? 'selected' : '' }}>
+                                    {{ $incoming->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @else
+                            <label for="outgoing_id" class="form-label">Expense Category <span class="text-danger">*</span></label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('outgoing_id') is-invalid @enderror" id="outgoing_id" name="outgoing_id" required>
+                                <option value="">Select Expense Category</option>
+                                @foreach($outgoings as $outgoing)
+                                <option value="{{ $outgoing->id }}" {{ old('outgoing_id') == $outgoing->id ? 'selected' : '' }}>
+                                    {{ $outgoing->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @endif
+                        </div>
+
                         @error('incoming_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -91,35 +94,39 @@
                 <!-- Link to Project/Dealer -->
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h5 class="mb-0">Link to Project or Dealer (Optional)</h5>
+                        <h5 class="mb-0">Link to Project or Dealer or Sub-Contractor (Optional)</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="project_id" class="form-label">Link to Project</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('project_id') is-invalid @enderror" id="project_id" name="project_id">
-                                    <option value="">Select Project (Optional)</option>
-                                    @foreach($projects as $project)
-                                    <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>
-                                        {{ $project->name }} - {{ $project->department_name }}
-                                    </option>
-                                    @endforeach
-                                </select>
+                                <div class="transactions-filter-wrapper">
+                                    <label for="project_id" class="form-label">Link to Project</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('project_id') is-invalid @enderror" id="project_id" name="project_id">
+                                        <option value="">Select Project</option>
+                                        @foreach($projects as $project)
+                                        <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>
+                                            {{ $project->name }} - {{ $project->department_name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 @error('project_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="dealer_id" class="form-label">Link to Dealer</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('dealer_id') is-invalid @enderror" id="dealer_id" name="dealer_id">
-                                    <option value="">Select Dealer (Optional)</option>
-                                    @foreach($dealers as $dealer)
-                                    <option value="{{ $dealer->id }}" {{ old('dealer_id') == $dealer->id ? 'selected' : '' }}>
-                                        {{ $dealer->dealer_name }}
-                                    </option>
-                                    @endforeach
-                                </select>
+                                <div class="transactions-filter-wrapper">
+                                    <label for="dealer_id" class="form-label">Link to Dealer</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('dealer_id') is-invalid @enderror" id="dealer_id" name="dealer_id">
+                                        <option value="">Select Dealer</option>
+                                        @foreach($dealers as $dealer)
+                                        <option value="{{ $dealer->id }}" {{ old('dealer_id') == $dealer->id ? 'selected' : '' }}>
+                                            {{ $dealer->dealer_name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 @error('dealer_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -134,15 +141,17 @@
                             </div>
                             @else
                             <div class="col-md-6">
-                                <label for="sub_contractor_id" class="form-label">Sub-Contractor (Optional)</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="sub_contractor_id" name="sub_contractor_id">
-                                    <option value="">Select Sub-Contractor</option>
-                                    @foreach($subContractors as $subContractor)
-                                    <option value="{{ $subContractor->id }}" {{ old('sub_contractor_id') == $subContractor->id ? 'selected' : '' }}>
-                                        {{ $subContractor->contractor_name }}
-                                    </option>
-                                    @endforeach
-                                </select>
+                                <div class="transactions-filter-wrapper">
+                                    <label for="sub_contractor_id" class="form-label">Sub-Contractor (Optional)</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="sub_contractor_id" name="sub_contractor_id">
+                                        <option value="">Select Sub-Contractor</option>
+                                        @foreach($subContractors as $subContractor)
+                                        <option value="{{ $subContractor->id }}" {{ old('sub_contractor_id') == $subContractor->id ? 'selected' : '' }}>
+                                            {{ $subContractor->contractor_name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                             @endif
                         </div>
