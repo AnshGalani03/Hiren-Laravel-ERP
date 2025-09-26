@@ -20,7 +20,7 @@
                             <th>Sr. No</th>
                             <th>Product Name</th>
                             <th>HSN Code</th>
-                            <th>Date Added</th>
+                            <!-- <th>Date Added</th> -->
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -43,29 +43,29 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
-                        responsivePriority: 1,
+                        responsivePriority: 3,
                     },
                     {
                         data: 'product_name',
                         name: 'product_name',
-                        responsivePriority: 2,
+                        responsivePriority: 1,
                     },
                     {
                         data: 'hsn_code',
                         name: 'hsn_code',
-                        responsivePriority: 3,
+                        responsivePriority: 2,
                     },
-                    {
-                        data: 'date',
-                        name: 'date',
-                        responsivePriority: 4,
-                    },
+                    // {
+                    //     data: 'date',
+                    //     name: 'date',
+                    //     responsivePriority: 4,
+                    // },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false,
-                        responsivePriority: 2,
+                        responsivePriority: 4,
                     }
                 ],
             });

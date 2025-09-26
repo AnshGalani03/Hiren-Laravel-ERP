@@ -16,7 +16,7 @@
                         <table class="table table-bordered" id="incomings-table" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th class="d-none d-md-table-cell">Sr. No</th>
+                                    <th>Sr. No</th>
                                     <th>Name</th>
                                     <!-- <th>Created At</th> -->
                                     <th>Actions</th>
@@ -45,7 +45,6 @@
                         searchable: false,
                         orderable: false,
                         responsivePriority: 3,
-                        className: 'd-none d-md-table-cell'
                     },
                     {
                         data: 'name',
