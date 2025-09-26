@@ -155,6 +155,10 @@
     border-color: #478572;
     color: #fff;
 }
+.bg-incoming{
+    background: #42999b;
+    
+}
 .btn:focus {
     box-shadow: none;
 }

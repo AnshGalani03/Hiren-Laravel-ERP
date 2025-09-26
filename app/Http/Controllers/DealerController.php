@@ -209,7 +209,7 @@ class DealerController extends Controller
                 })
                 ->editColumn('type', function ($tx) {
                     $icon = $tx->type === 'incoming' ? 'fa-arrow-down' : 'fa-arrow-up';
-                    $class = $tx->type === 'incoming' ? 'success' : 'expense';
+                    $class = $tx->type === 'incoming' ? 'incoming' : 'expense';
                     return "<span class='badge bg-{$class}'><i class='fas {$icon}'></i> " . ucfirst($tx->type) . "</span>";
                 })
                 ->addColumn('action', function ($tx) {
