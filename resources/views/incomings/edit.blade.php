@@ -27,7 +27,7 @@
                     @enderror
                 </div>
 
-                <div class="incoming-btn">
+                <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('incomings.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
                     <button type="submit" class="btn btn-primary btn-sm">Update Incoming Entry</button>
                 </div>

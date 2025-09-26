@@ -126,11 +126,11 @@
                     </div>
 
                     <!-- Form Actions -->
-                    <div class="transaction-btn">
+                    <div class="d-flex justify-content-end gap-2 mt-3">
                         <a href="{{ route('transactions.index') }}" class="btn btn-secondary btn-sm">
                             Cancel
                         </a>
-                        <button type="submit" class="btn btn-warning btn-sm">
+                        <button type="submit" class="btn btn-primary btn-sm">
                             Update Transaction
                         </button>
                     </div>

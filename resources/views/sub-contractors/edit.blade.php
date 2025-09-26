@@ -154,12 +154,14 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary btn-sm">
-                            Update Sub-Contractor
-                        </button>
-                        <a href="{{ route('sub-contractors.show', $subContractor->id) }}" class="btn btn-secondary btn-sm ms-2">
-                            Cancel
-                        </a>
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{{ route('sub-contractors.show', $subContractor->id) }}" class="btn btn-secondary btn-sm ms-2">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                Update Sub-Contractor
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>

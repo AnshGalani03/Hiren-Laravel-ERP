@@ -118,7 +118,7 @@
                 <input type="hidden" id="total_input" name="total_amount" value="0">
 
                 <!-- Submit Buttons -->
-                <div class="bill-buttons">
+                <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('bills.index') }}" class="btn btn-secondary btn-sm">
                         Cancel
                     </a>

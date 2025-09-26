@@ -110,7 +110,7 @@
                     @enderror
                 </div>
 
-                <div class="tender-btn">
+                <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('tenders.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
                     <button type="submit" class="btn btn-primary btn-sm">Create Tender</button>
                 </div>

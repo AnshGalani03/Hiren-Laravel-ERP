@@ -220,7 +220,7 @@
                 </div>
 
                 <!-- Form Actions -->
-                <div class="ra-bill-buttons">
+                <div class="d-flex justify-content-end gap-2 mt-3">
                     <a href="{{ route('ra-bills.show', $raBill) }}" class="btn btn-danger btn-sm">Cancel</a>
                     <button type="submit" class="btn btn-primary btn-sm">Update R.A. Bill</button>
                 </div>

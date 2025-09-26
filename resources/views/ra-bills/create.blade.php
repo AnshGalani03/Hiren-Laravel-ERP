@@ -228,7 +228,7 @@
                         </div>
 
                         <!-- Form Actions -->
-                        <div class="ra-bill-btn">
+                        <div class="d-flex justify-content-end gap-2 mt-3">
                             <a href="{{ route('ra-bills.index') }}" class="btn btn-danger btn-sm">Cancel</a>
                             <button type="submit" class="btn btn-primary btn-sm">Create R.A. Bill</button>
                         </div>

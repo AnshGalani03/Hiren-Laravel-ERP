@@ -5,11 +5,11 @@
                 {{ __('Tender Details: ') . $tender->work_name }}
             </h2>
             <div>
-                <a href="{{ route('tenders.edit', $tender) }}" class="btn btn-warning">Edit Tender</a>
+                <a href="{{ route('tenders.edit', $tender) }}" class="btn btn-warning btn-sm">Edit Tender</a>
                 <form action="{{ route('tenders.destroy', $tender) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete Tender</button>
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete Tender</button>
                 </form>
             </div>
         </div>

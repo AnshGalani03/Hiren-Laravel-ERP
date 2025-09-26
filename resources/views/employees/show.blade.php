@@ -6,10 +6,10 @@
             </h2>
             <div>
                 <a href="{{ route('upads.create', ['employee_id' => $employee->id]) }}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-plus"></i> Add Upad
+                    Add Upad
                 </a>
                 <a href="{{ route('employees.edit', $employee) }}" class="btn btn-warning btn-sm">
-                    <i class="fas fa-edit"></i> Edit Employee
+                    Edit Employee
                 </a>
             </div>
         </div>
@@ -104,7 +104,7 @@
         <!-- Header with Filter and Buttons on Same Line -->
         <div class="card-header p-4">
             <div class="salary-upad-management d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-money-bill"></i> Salary & Upad Management</h5>
+                <h5 class="mb-0">Upad Management</h5>
 
                 <!-- Right side: Month Filter + Buttons -->
                 <div class="salary-upad-management-btn d-flex align-items-center">

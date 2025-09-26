@@ -111,7 +111,7 @@
                     @enderror
                 </div>
 
-                <div class="project-btn">
+                <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('projects.show', $project) }}" class="btn btn-secondary btn-sm">Cancel</a>
                     <button type="submit" class="btn btn-primary btn-sm">Update Project</button>
                 </div>

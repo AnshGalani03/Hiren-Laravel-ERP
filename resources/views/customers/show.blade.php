@@ -6,9 +6,8 @@
             </h2>
             <div>
                 <a href="{{ route('customers.edit', $customer) }}" class="btn btn-warning btn-sm">
-                    <i class="fas fa-edit"></i> Edit
+                    Edit Customer
                 </a>
-
             </div>
         </div>
     </x-slot>

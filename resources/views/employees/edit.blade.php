@@ -50,7 +50,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="alt_contact_no" class="form-label">Alternative Contact No</label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('alt_contact_no') is-invalid @enderror"
-                            id="alt_contact_no" name="alt_contact_no" value="{{ old('alt_contact_no', $employee->alt_contact_no) }}">
+                            id="alt_contact_no" name="alt_contact_no" value="{{ old('alt_contact_no', $employee->alt_contact_no) }}" required>
                         @error('alt_contact_no')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -61,7 +61,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="pan_no" class="form-label">PAN No</label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('pan_no') is-invalid @enderror"
-                            id="pan_no" name="pan_no" value="{{ old('pan_no', $employee->pan_no) }}">
+                            id="pan_no" name="pan_no" value="{{ old('pan_no', $employee->pan_no) }}" required>
                         @error('pan_no')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -70,7 +70,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="aadhar_no" class="form-label">Aadhar No</label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('aadhar_no') is-invalid @enderror"
-                            id="aadhar_no" name="aadhar_no" value="{{ old('aadhar_no', $employee->aadhar_no) }}">
+                            id="aadhar_no" name="aadhar_no" value="{{ old('aadhar_no', $employee->aadhar_no) }}" required>
                         @error('aadhar_no')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -90,7 +90,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="pf" class="form-label">PF Number</label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('pf') is-invalid @enderror"
-                            id="pf" name="pf" value="{{ old('pf', $employee->pf) }}" placeholder="e.g., PF12345678">
+                            id="pf" name="pf" value="{{ old('pf', $employee->pf) }}">
                         @error('pf')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -99,7 +99,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="esic" class="form-label">ESIC Number</label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('esic') is-invalid @enderror"
-                            id="esic" name="esic" value="{{ old('esic', $employee->esic) }}" placeholder="e.g., ESIC87654321">
+                            id="esic" name="esic" value="{{ old('esic', $employee->esic) }}">
                         @error('esic')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -135,7 +135,7 @@
                     </div>
                 </div>
 
-                <div class="emp-btn">
+                <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('employees.show', $employee) }}" class="btn btn-secondary btn-sm">Cancel</a>
                     <button type="submit" class="btn btn-primary btn-sm">Update Employee</button>
                 </div>

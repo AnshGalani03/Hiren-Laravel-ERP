@@ -92,12 +92,14 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary btn-sm">
-                             Create Invoice
-                        </button>
-                        <a href="{{ route('dealers.show', $dealer->id) }}" class="btn btn-secondary btn-sm ms-2">
-                             Cancel
-                        </a>
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{{ route('dealers.show', $dealer->id) }}" class="btn btn-secondary btn-sm ms-2">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                Create Invoice
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>

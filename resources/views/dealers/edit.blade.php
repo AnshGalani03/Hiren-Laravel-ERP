@@ -97,7 +97,7 @@
                     @enderror
                 </div>
 
-                <div class="dealer-btn">
+                <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('dealers.show', $dealer) }}" class="btn btn-secondary btn-sm">Cancel</a>
                     <button type="submit" class="btn btn-primary btn-sm">Update Dealer</button>
                 </div>

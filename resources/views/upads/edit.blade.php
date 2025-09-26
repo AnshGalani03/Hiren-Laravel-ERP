@@ -57,9 +57,9 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('employees.show', $upad->employee) }}" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Update Upad</button>
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{{ route('employees.show', $upad->employee) }}" class="btn btn-secondary btn-sm">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-sm">Update Upad</button>
                 </div>
             </form>
         </div>

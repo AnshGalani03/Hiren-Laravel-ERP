@@ -38,16 +38,14 @@
                     <div class="col-md-6">
                         <label for="hsn_code" class="form-label">HSN Code</label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('hsn_code') is-invalid @enderror"
-                            id="hsn_code" name="hsn_code" value="{{ old('hsn_code') }}"
-                            placeholder="e.g., 1234567890">
-                        <small class="text-muted">HSN (Harmonized System of Nomenclature) code for tax classification</small>
+                            id="hsn_code" name="hsn_code" value="{{ old('hsn_code') }}">
                         @error('hsn_code')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
 
-                <div class="product-btn">
+                <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('products.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
                     <button type="submit" class="btn btn-primary btn-sm">Create Product</button>
                 </div>
