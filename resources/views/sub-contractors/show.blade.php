@@ -5,7 +5,7 @@
                 {{ __('Sub-Contractor Details: ') . $subContractor->contractor_name }}
             </h2>
             <div>
-                <a href="{{ route('transactions.create', ['type' => 'incoming', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-success btn-sm">Add Income</a>
+                <a href="{{ route('transactions.create', ['type' => 'incoming', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-primary btn-sm">Add Income</a>
                 <a href="{{ route('transactions.create', ['type' => 'outgoing', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-expense btn-sm">Add Expense</a>
                 <a href="{{ route('sub-contractors.edit', $subContractor) }}" class="btn btn-warning btn-sm">Edit</a>
             </div>
@@ -214,7 +214,7 @@
             <div class="transaction-table-header d-flex justify-content-between mb-3">
                 <h6>Transaction Details</h6>
                 <div>
-                    <a href="{{ route('transactions.create', ['type' => 'incoming', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-sm btn-success">Add Income</a>
+                    <a href="{{ route('transactions.create', ['type' => 'incoming', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-sm btn-primary">Add Income</a>
                     <a href="{{ route('transactions.create', ['type' => 'outgoing', 'sub_contractor_id' => $subContractor->id]) }}" class="btn btn-sm btn-expense">Add Expense</a>
                 </div>
             </div>
