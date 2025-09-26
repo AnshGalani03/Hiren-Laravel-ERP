@@ -8,7 +8,7 @@
                 <a href="{{ route('transactions.create', ['type' => 'incoming']) }}" class="btn btn-primary btn-sm">
                     Add Incoming
                 </a>
-                <a href="{{ route('transactions.create', ['type' => 'outgoing']) }}" class="btn btn-danger btn-sm">
+                <a href="{{ route('transactions.create', ['type' => 'outgoing']) }}" class="btn btn-success btn-sm">
                     Add Outgoing
                 </a>
             </div>
@@ -200,6 +200,7 @@
                     data: function(d) {
                         d.project_id = $('#project_filter').val();
                         d.dealer_id = $('#dealer_filter').val();
+                        d.sub_contractor_id = $('#sub_contractor_id').val();
                         d.type = $('#type_filter').val();
                         d.from_date = $('#daterange').data('daterangepicker').startDate.format('YYYY-MM-DD');
                         d.to_date = $('#daterange').data('daterangepicker').endDate.format('YYYY-MM-DD');
@@ -264,7 +265,7 @@
             });
 
             // Filter event handlers
-            $('#project_filter, #dealer_filter, #type_filter').change(function() {
+            $('#project_filter, #dealer_filter, #type_filter, #sub_contractor_id').change(function() {
                 table.draw();
             });
 

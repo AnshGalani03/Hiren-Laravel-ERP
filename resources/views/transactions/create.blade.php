@@ -21,7 +21,7 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Transaction Type</label>
                         <div class="form-control-static">
-                            <span class="badge bg-{{ $type == 'incoming' ? 'success' : 'danger' }} fs-6">
+                            <span class="badge bg-{{ $type == 'incoming' ? 'success' : 'expense' }} fs-6">
                                 {{ ucfirst($type) }}
                             </span>
                         </div>

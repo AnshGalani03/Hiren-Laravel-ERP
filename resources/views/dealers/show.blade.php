@@ -6,7 +6,7 @@
             </h2>
             <div>
                 <a href="{{ route('invoices.create', ['dealer_id' => $dealer->id]) }}" class="btn btn-success btn-sm">Add Invoice</a>
-                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'dealer_id' => $dealer->id]) }}" class="btn btn-danger btn-sm">Add Expense</a>
+                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'dealer_id' => $dealer->id]) }}" class="btn btn-expense btn-sm">Add Expense</a>
                 <a href="{{ route('dealers.edit', $dealer) }}" class="btn btn-warning btn-sm">Edit Dealer</a>
             </div>
         </div>
@@ -204,7 +204,7 @@
                 <a href="{{ route('transactions.create', ['type' => 'incoming', 'dealer_id' => $dealer->id]) }}" class="btn btn-success btn-sm d-none">
                     <i class="fas fa-plus"></i> Add Income
                 </a>
-                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'dealer_id' => $dealer->id]) }}" class="btn btn-danger btn-sm">
+                <a href="{{ route('transactions.create', ['type' => 'outgoing', 'dealer_id' => $dealer->id]) }}" class="btn btn-expense btn-sm">
                     <i class="fas fa-plus"></i> Add Expense
                 </a>
             </div>

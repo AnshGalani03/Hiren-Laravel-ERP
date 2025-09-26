@@ -208,8 +208,8 @@ class DealerController extends Controller
                     return $tx->project ? $tx->project->name : 'N/A';
                 })
                 ->editColumn('type', function ($tx) {
-                    $icon = $tx->type === 'incoming' ? 'fa-arrow-up' : 'fa-arrow-down';
-                    $class = $tx->type === 'incoming' ? 'success' : 'danger';
+                    $icon = $tx->type === 'incoming' ? 'fa-arrow-down' : 'fa-arrow-up';
+                    $class = $tx->type === 'incoming' ? 'success' : 'expense';
                     return "<span class='badge bg-{$class}'><i class='fas {$icon}'></i> " . ucfirst($tx->type) . "</span>";
                 })
                 ->addColumn('action', function ($tx) {

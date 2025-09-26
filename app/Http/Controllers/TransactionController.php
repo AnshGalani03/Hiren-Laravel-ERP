@@ -54,8 +54,8 @@ class TransactionController extends Controller
                     return implode(' ', $linked) ?: 'None';
                 })
                 ->editColumn('type', function ($transaction) {
-                    $class = $transaction->type == 'incoming' ? 'success' : 'danger';
-                    $icon = $transaction->type == 'incoming' ? 'fa-arrow-up' : 'fa-arrow-down';
+                    $class = $transaction->type == 'incoming' ? 'success' : 'expense';
+                    $icon = $transaction->type == 'incoming' ? 'fa-arrow-down' : 'fa-arrow-up';
                     return '<span class="badge bg-' . $class . '"><i class="fas ' . $icon . '"></i> ' . ucfirst($transaction->type) . '</span>';
                 })
                 ->addColumn('action', function ($transaction) {

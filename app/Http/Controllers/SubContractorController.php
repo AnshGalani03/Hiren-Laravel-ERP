@@ -174,8 +174,8 @@ class SubContractorController extends Controller
                     return $transaction->date ? $transaction->date->format('d/m/Y') : 'N/A';
                 })
                 ->editColumn('type', function ($transaction) {
-                    $class = $transaction->type == 'incoming' ? 'success' : 'danger';
-                    $icon = $transaction->type == 'incoming' ? 'fa-arrow-up' : 'fa-arrow-down';
+                    $class = $transaction->type == 'incoming' ? 'success' : 'expense';
+                    $icon = $transaction->type == 'incoming' ? 'fa-arrow-down' : 'fa-arrow-up';
                     return '<span class="badge bg-' . $class . '"><i class="fas ' . $icon . '"></i> ' . ucfirst($transaction->type) . '</span>';
                 })
                 ->addColumn('category', function ($transaction) {

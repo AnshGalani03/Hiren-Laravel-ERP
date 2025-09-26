@@ -139,6 +139,22 @@
     border-color: #63afad;
     color: #fff;
 }
+.btn-expense {
+    background: #478572;
+    border-color: #478572;
+    color: #fff;
+}
+.btn-expense:hover,
+.btn-expense:focus {
+    background: #60c69a;
+    border-color: #60c69a;
+    color: #fff;
+}
+.bg-expense {
+    background: #478572;
+    border-color: #478572;
+    color: #fff;
+}
 .btn:focus {
     box-shadow: none;
 }
