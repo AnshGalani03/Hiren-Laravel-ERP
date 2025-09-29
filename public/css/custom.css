@@ -242,7 +242,9 @@
 .customer-row .col-md-6 {
     margin-bottom: 10px;
 }
-
+.back-btn{
+    width: max-content;
+}
 @media only screen and (max-width: 767px) {
     .quick-actions .col-md-3 {
         width: 50%;
