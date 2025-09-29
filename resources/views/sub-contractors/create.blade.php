@@ -17,7 +17,7 @@
             <form action="{{ route('sub-contractors.store') }}" method="POST">
                 @csrf
 
-                <div class="row mb-3">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-6">
                         <label for="contractor_name" class="form-label">Contractor Name <span class="text-danger">*</span></label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('contractor_name') is-invalid @enderror"
@@ -43,7 +43,7 @@
                 </div>
 
                 <!-- Third Party Name Row (conditional) -->
-                <div class="row mb-3" id="third_party_row" style="display: none;">
+                <div class="row gy-2 mb-2" id="third_party_row" style="display: none;">
                     <div class="col-md-12">
                         <label for="third_party_name" class="form-label">Third Party Name <span class="text-danger">*</span></label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('third_party_name') is-invalid @enderror"
@@ -59,7 +59,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-6">
                         <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
                         <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('date') is-invalid @enderror"
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-6">
                         <label for="department_name" class="form-label">Department Name <span class="text-danger">*</span></label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('department_name') is-invalid @enderror"
@@ -104,7 +104,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-6">
                         <label for="time_limit" class="form-label">Time Limit <span class="text-danger">*</span></label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('time_limit') is-invalid @enderror"
@@ -127,7 +127,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-12">
                         <label for="emd_fdr_detail" class="form-label">EMD/FDR Detail</label>
                         <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('emd_fdr_detail') is-invalid @enderror"
@@ -139,7 +139,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-12">
                         <label for="remark" class="form-label">Remark</label>
                         <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('remark') is-invalid @enderror"
@@ -151,7 +151,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-12">
                         <div class="d-flex justify-content-end gap-2">
                             <a href="{{ route('sub-contractors.index') }}" class="btn btn-secondary btn-sm ms-2">

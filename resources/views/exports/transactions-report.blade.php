@@ -312,7 +312,7 @@
 
     {{-- Footer --}}
     <div class="footer">
-        <p>This is a system generated report | {{ config('company.name', 'Shingala Hiren Nareshbhai') }} | Page 1</p>
+        <p>This is a system generated report | {{ config('company.name', 'Shingala Hiren Nareshbhai') }}</p>
     </div>
 </body>
 

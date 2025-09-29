@@ -18,7 +18,7 @@
                 @csrf
                 @method('PATCH')
 
-                <div class="row mb-3">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-6">
                         <label for="bill_no" class="form-label">Bill No <span class="text-danger">*</span></label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('bill_no') is-invalid @enderror"
@@ -40,7 +40,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-6">
                         <label for="original_amount" class="form-label">Total Amount <span class="text-danger">*</span></label>
                         <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('original_amount') is-invalid @enderror"
@@ -67,7 +67,7 @@
                 </div>
 
                 <!-- GST Amount Display -->
-                <div class="row mb-3">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-6">
                         <label class="form-label">GST Amount (Calculated)</label>
                         <div class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control bg-light" id="gst_display">₹{{ number_format($invoice->amount, 2) }}</div>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-12">
                         <label for="remark" class="form-label">Remark</label>
                         <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('remark') is-invalid @enderror"
@@ -92,7 +92,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row gy-2 mb-2">
                     <div class="col-md-12">
                         <div class="d-flex justify-content-end gap-2">
                             <a href="{{ route('dealers.show', $invoice->dealer_id) }}" class="btn btn-secondary btn-sm ms-2">

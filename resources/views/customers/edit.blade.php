@@ -44,13 +44,12 @@
                     <div class="col-md-6">
                         <label for="gst" class="form-label">GST Number</label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="gst" name="gst"
-                            value="{{ old('gst', $customer->gst) }}" placeholder="Optional">
+                            value="{{ old('gst', $customer->gst) }}" required>
                     </div>
                     <div class="col-md-6">
                         <label for="pan_card" class="form-label">PAN Card Number</label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control"
-                            id="pan_card" name="pan_card" value="{{ old('pan_card', $customer->pan_card) }}"
-                            placeholder="e.g., AAAAA0000A" maxlength="10" style="text-transform: uppercase;">
+                            id="pan_card" name="pan_card" value="{{ old('pan_card', $customer->pan_card) }}" style="text-transform: uppercase;" required>
                     </div>
                 </div>
                 <div class="row mb-4">

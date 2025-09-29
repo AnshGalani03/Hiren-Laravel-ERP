@@ -13,7 +13,7 @@
 
             <!-- Filter Options -->
             <div class="mb-4 ">
-                <div class="row">
+                <div class="row gy-2">
                     <div class="col-lg-3">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Contractor Type</label>
                         <select id="contractorTypeFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">

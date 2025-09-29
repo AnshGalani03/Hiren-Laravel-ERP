@@ -328,7 +328,7 @@
     .bill-detail-header {
         display: block !important;
     }
-    .bill-detail-header h2 {
+    .bill-detail-header h2, .bill-detail-header a, .bill-detail-header button {
         margin-bottom: 10px;
     }
     .row.bill-item {
