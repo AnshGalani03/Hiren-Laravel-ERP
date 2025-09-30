@@ -10,6 +10,7 @@ use Yajra\DataTables\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\RedirectResponse;
 
 class RABillController extends Controller
 {
@@ -84,6 +85,112 @@ class RABillController extends Controller
         }
 
         return view('ra-bills.index');
+    }
+
+    // 🗑️ NEW: Show Trashed (Deleted) R.A. Bills
+    public function trashed(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+                $trashedBills = RABill::onlyTrashed() // Only show soft deleted records
+                                    ->with(['customer', 'project'])
+                                    ->select([
+                                        'id', 
+                                        'bill_no', 
+                                        'date', 
+                                        'customer_id', 
+                                        'project_id', 
+                                        'ra_bill_amount', 
+                                        'net_amount',
+                                        'deleted_at'
+                                    ]);
+
+                return DataTables::of($trashedBills)
+                    ->editColumn('date', function ($bill) {
+                        return $bill->date ? $bill->date->format('d/m/Y') : '';
+                    })
+                    ->editColumn('deleted_at', function ($bill) {
+                        return $bill->deleted_at ? $bill->deleted_at->format('d/m/Y') : '';
+                    })
+                    ->addColumn('customer_name', function ($bill) {
+                        return $bill->customer ? $bill->customer->name : 'N/A';
+                    })
+                    ->addColumn('project_name', function ($bill) {
+                        return $bill->project ? $bill->project->name : 'N/A';
+                    })
+                    ->editColumn('ra_bill_amount', function ($bill) {
+                        return '₹' . number_format($bill->ra_bill_amount, 0);
+                    })
+                    ->editColumn('net_amount', function ($bill) {
+                        return '₹' . number_format($bill->net_amount, 0);
+                    })
+                    ->addColumn('action', function ($bill) {
+                        return '
+                        <div class="">
+                            <form action="' . route('ra-bills.restore', $bill->id) . '" method="POST" style="display:inline;">
+                                ' . csrf_field() . '
+                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm(\'Are you sure you want to restore this R.A. Bill?\')" title="Restore">
+                                  Restore
+                                </button>
+                            </form>
+                            <form action="' . route('ra-bills.force-delete', $bill->id) . '" method="POST" style="display:inline;">
+                                ' . csrf_field() . method_field('DELETE') . '
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to permanently delete this R.A. Bill? This cannot be undone!\')" title="Permanent Delete">
+                                    Delete Forever
+                                </button>
+                            </form>
+                        </div>
+                    ';
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    
+            } catch (\Exception $e) {
+                Log::error('Trashed DataTable error: ' . $e->getMessage());
+                return response()->json(['error' => 'Error loading trashed data: ' . $e->getMessage()], 500);
+            }
+        }
+
+        return view('ra-bills.trashed');
+    }
+
+    // 🔄 NEW: Restore Deleted R.A. Bill
+    public function restore($id): RedirectResponse
+    {
+        try {
+            $raBill = RABill::onlyTrashed()->findOrFail($id);
+            $raBill->restore();
+
+            return redirect()
+                ->route('ra-bills.trashed')
+                ->with('success', 'R.A. Bill restored successfully: ' . $raBill->bill_no);
+
+        } catch (\Exception $e) {
+            Log::error('Restore error: ' . $e->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to restore R.A. Bill: ' . $e->getMessage()]);
+        }
+    }
+
+    // ❌ NEW: Permanently Delete R.A. Bill
+    public function forceDelete($id): RedirectResponse
+    {
+        try {
+            $raBill = RABill::onlyTrashed()->findOrFail($id);
+            $billNo = $raBill->bill_no;
+            $raBill->forceDelete(); // Permanently delete
+
+            return redirect()
+                ->route('ra-bills.trashed')
+                ->with('success', 'R.A. Bill permanently deleted: ' . $billNo);
+
+        } catch (\Exception $e) {
+            Log::error('Force delete error: ' . $e->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to permanently delete R.A. Bill: ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -204,17 +311,24 @@ class RABillController extends Controller
         }
     }
 
-    public function destroy($id)
+    // 🗑️ UPDATED: Now uses soft delete
+    public function destroy(RABill $raBill): RedirectResponse
     {
         try {
-            $raBill = RABill::findOrFail($id);
-            $raBill->delete();
+            DB::beginTransaction();
+            $raBill->delete(); // This will soft delete
+            DB::commit();
 
-            return redirect()->route('ra-bills.index')
-                ->with('success', 'RA Bill deleted successfully!');
+            return redirect()
+                ->route('ra-bills.index')
+                ->with('success', 'R.A. Bill moved to trash: ' . $raBill->bill_no . '. You can restore it from the trash.');
+
         } catch (\Exception $e) {
-            return redirect()->route('ra-bills.index')
-                ->with('error', 'Error deleting RA Bill.');
+            DB::rollBack();
+            Log::error('Delete error: ' . $e->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to delete R.A. Bill: ' . $e->getMessage()]);
         }
     }
 

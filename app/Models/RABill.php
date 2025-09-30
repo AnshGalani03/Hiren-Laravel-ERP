@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RABill extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
-    // ✅ FIX: Change table name to match your database
-    protected $table = 'r_a_bills'; // Changed from 'ra_bills' to 'r_a_bills'
+    protected $table = 'r_a_bills';
 
-    // ✅ ADD: Missing fillable property
     protected $fillable = [
         'bill_no',
         'customer_id',
