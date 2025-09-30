@@ -49,7 +49,7 @@ class SubContractorController extends Controller
             return DataTables::of($subContractors)
                 ->addIndexColumn()
                 ->editColumn('contractor_name', function ($subContractor) {
-                    $displayName = $subContractor->display_name;
+                    $displayName = $subContractor->contractor_name;
                     $badge = $subContractor->contractor_type === 'self'
                         ? '<span class="badge badge-pill self-label">Self</span>'
                         : '<span class="badge badge-pill third-party-label">Third Party</span>';
