@@ -252,8 +252,8 @@ class ProjectController extends Controller
                     return implode('<br>', $links) ?: '<span class="text-muted">None</span>';
                 })
                 ->editColumn('type', function ($tx) {
-                    $icon = $tx->type === 'incoming' ? 'fa-arrow-up' : 'fa-arrow-down';
-                    $class = $tx->type === 'incoming' ? 'success' : 'danger';
+                    $icon = $tx->type === 'incoming' ? 'fa-arrow-down' : 'fa-arrow-up';
+                    $class = $tx->type === 'incoming' ? 'incoming' : 'expense';
                     return "<span class='badge bg-{$class}'><i class='fas {$icon}'></i> " . ucfirst($tx->type) . "</span>";
                 })
                 ->addColumn('action', function ($tx) {
