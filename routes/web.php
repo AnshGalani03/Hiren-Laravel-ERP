@@ -43,6 +43,11 @@ Route::middleware('auth')->group(function () {
     Route::get('dealers/{dealer}/invoices-data', [DealerController::class, 'invoicesData'])->name('dealers.invoices-data');
     Route::get('dealers/{dealer}/transactions-data', [DealerController::class, 'transactionsData'])->name('dealers.transactions-data');
 
+    // Recovery Routes for Dealers
+    Route::get('dealers-trashed', [DealerController::class, 'trashed'])->name('dealers.trashed');
+    Route::post('dealers/{id}/restore', [DealerController::class, 'restore'])->name('dealers.restore');
+    Route::delete('dealers/{id}/force-delete', [DealerController::class, 'forceDelete'])->name('dealers.force-delete');
+
     // Invoice Routes
     Route::get('invoices', [InvoiceController::class, 'index'])->name('invoices.index');
     Route::get('invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
@@ -116,13 +121,14 @@ Route::middleware('auth')->group(function () {
     Route::post('exports/upad-report', [ExportController::class, 'exportUpadReport'])->name('exports.upad-report');
     Route::post('exports/transactions-report', [ExportController::class, 'exportTransactionsReport'])->name('exports.transactions-report');
 
+    // RA Bill Routes
     Route::resource('ra-bills', RABillController::class);
     Route::get('ra-bills/{id}/download-pdf', [RABillController::class, 'downloadPdf'])
         ->name('ra-bills.download-pdf');
     Route::post('ra-bills/calculate', [RABillController::class, 'calculateAmounts'])
         ->name('ra-bills.calculate');
 
-    // Recovery Routes
+    // RA Bill Recovery Routes
     Route::get('ra-bills-trashed', [RABillController::class, 'trashed'])->name('ra-bills.trashed');
     Route::post('ra-bills/{id}/restore', [RABillController::class, 'restore'])->name('ra-bills.restore');
     Route::delete('ra-bills/{id}/force-delete', [RABillController::class, 'forceDelete'])->name('ra-bills.force-delete');

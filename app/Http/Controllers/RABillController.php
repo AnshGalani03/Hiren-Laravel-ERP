@@ -130,13 +130,13 @@ class RABillController extends Controller
                             <form action="' . route('ra-bills.restore', $bill->id) . '" method="POST" style="display:inline;">
                                 ' . csrf_field() . '
                                 <button type="submit" class="btn btn-success btn-sm" onclick="return confirm(\'Are you sure you want to restore this R.A. Bill?\')" title="Restore">
-                                  Restore
+                                  <i class="fas fa-undo"></i> Restore
                                 </button>
                             </form>
                             <form action="' . route('ra-bills.force-delete', $bill->id) . '" method="POST" style="display:inline;">
                                 ' . csrf_field() . method_field('DELETE') . '
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to permanently delete this R.A. Bill? This cannot be undone!\')" title="Permanent Delete">
-                                    Delete Forever
+                                    <i class="fas fa-trash-alt"></i> Delete Forever
                                 </button>
                             </form>
                         </div>
@@ -146,7 +146,7 @@ class RABillController extends Controller
                     ->make(true);
                     
             } catch (\Exception $e) {
-                Log::error('Trashed DataTable error: ' . $e->getMessage());
+                // Log::error('Trashed DataTable error: ' . $e->getMessage());
                 return response()->json(['error' => 'Error loading trashed data: ' . $e->getMessage()], 500);
             }
         }
@@ -173,7 +173,7 @@ class RABillController extends Controller
         }
     }
 
-    // ❌ NEW: Permanently Delete R.A. Bill
+    // Permanently Delete R.A. Bill
     public function forceDelete($id): RedirectResponse
     {
         try {
@@ -186,7 +186,7 @@ class RABillController extends Controller
                 ->with('success', 'R.A. Bill permanently deleted: ' . $billNo);
 
         } catch (\Exception $e) {
-            Log::error('Force delete error: ' . $e->getMessage());
+            // Log::error('Force delete error: ' . $e->getMessage());
 
             return back()
                 ->withErrors(['error' => 'Failed to permanently delete R.A. Bill: ' . $e->getMessage()]);
@@ -311,7 +311,7 @@ class RABillController extends Controller
         }
     }
 
-    // 🗑️ UPDATED: Now uses soft delete
+    // UPDATED: Now uses soft delete
     public function destroy(RABill $raBill): RedirectResponse
     {
         try {

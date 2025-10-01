@@ -2,30 +2,31 @@
     <x-slot name="header">
         <div class="bill-detail-header flex justify-between items-center">
             <div class="flex space-x-2">
-                <a href="{{ route('ra-bills.index') }}"
+                <a href="{{ route('dealers.index') }}"
                     class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left mr-2"></i> Back to Active R.A. Bills
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Active Dealers
                 </a>
             </div>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Trashed R.A. Bills
-            </h2>
+            <div class="flex justify-between items-center">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    Trashed Dealers
+                </h2>
+            </div>
         </div>
     </x-slot>
-
+    
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900">
             <div class="table-responsive-wrapper">
                 <div class="table-responsive">
-                    <table id="trashed-bills-table" class="table table-bordered" style="width:100%">
+
+                    <table id="trashed-dealers-table" class="table table-bordered" style="width:100%">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th>Bill No</th>
-                                <th>Date</th>
-                                <th>Customer</th>
-                                <th>Project</th>
-                                <th>Amount</th>
-                                <th>Net Amount</th>
+                                <th>Dealer Name</th>
+                                <th>Mobile No</th>
+                                <th>GST</th>
+                                <th>Address</th>
                                 <th>Deleted At</th>
                                 <th>Actions</th>
                             </tr>
@@ -35,50 +36,41 @@
             </div>
         </div>
     </div>
+
     @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#trashed-bills-table').DataTable({
+            $('#trashed-dealers-table').DataTable({
                 processing: true,
                 serverSide: true,
-                responsive: true,
                 scrollX: true,
+                responsive: true,
                 autoWidth: false,
-                ajax: "{{ route('ra-bills.trashed') }}",
+                ajax: "{{ route('dealers.trashed') }}",
                 columns: [{
-                        data: 'bill_no',
-                        name: 'bill_no',
+                        data: 'dealer_name',
+                        name: 'dealer_name',
                         responsivePriority: 1
                     },
                     {
-                        data: 'date',
-                        name: 'date',
-                        responsivePriority: 4
-                    },
-                    {
-                        data: 'customer_name',
-                        name: 'customer_name',
+                        data: 'mobile_no',
+                        name: 'mobile_no',
                         responsivePriority: 2
                     },
                     {
-                        data: 'project_name',
-                        name: 'project_name',
+                        data: 'gst',
+                        name: 'gst',
                         responsivePriority: 3
                     },
                     {
-                        data: 'ra_bill_amount',
-                        name: 'ra_bill_amount',
-                        responsivePriority: 5
-                    },
-                    {
-                        data: 'net_amount',
-                        name: 'net_amount',
-                        responsivePriority: 6
+                        data: 'address',
+                        name: 'address',
+                        responsivePriority: 4
                     },
                     {
                         data: 'deleted_at',
                         name: 'deleted_at',
-                        responsivePriority: 7
+                        responsivePriority: 5
                     },
                     {
                         data: 'action',
@@ -89,7 +81,7 @@
                     }
                 ],
                 order: [
-                    [6, 'desc']
+                    [4, 'desc']
                 ], // Order by deleted_at descending
                 pageLength: 25,
                 responsive: true

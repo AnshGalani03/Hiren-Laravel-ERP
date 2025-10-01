@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Dealer extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'dealer_name',
@@ -20,6 +22,13 @@ class Dealer extends Model
         'bank_name'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime', // Add this
+        ];
+    }
+    
     public function invoices()
     {
         return $this->hasMany(Invoice::class);

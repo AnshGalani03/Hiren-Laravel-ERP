@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Dealer;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+
 
 
 class DealerController extends Controller
@@ -24,7 +28,7 @@ class DealerController extends Controller
                         <a href="' . route('dealers.edit', $dealer->id) . '" class="btn btn-warning btn-sm">Edit</a>
                         <form action="' . route('dealers.destroy', $dealer->id) . '" method="POST" style="display:inline;">
                             ' . csrf_field() . method_field('DELETE') . '
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\')">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure? This will move to trash.\')">Delete</button>
                         </form>
                     ';
                 })
@@ -33,6 +37,91 @@ class DealerController extends Controller
         }
 
         return view('dealers.index');
+    }
+
+    // NEW: Show Trashed (Deleted) Dealers
+    public function trashed(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+                $trashedDealers = Dealer::onlyTrashed() // Only show soft deleted records
+                    ->select([
+                        'id',
+                        'dealer_name',
+                        'mobile_no',
+                        'gst',
+                        'address',
+                        'deleted_at'
+                    ]);
+
+                return DataTables::of($trashedDealers)
+                    ->editColumn('deleted_at', function ($dealer) {
+                        return $dealer->deleted_at ? $dealer->deleted_at->format('d/m/Y') : '';
+                    })
+                    ->addColumn('action', function ($dealer) {
+                        return '
+                            <div class="">
+                                <form action="' . route('dealers.restore', $dealer->id) . '" method="POST" style="display:inline;">
+                                    ' . csrf_field() . '
+                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm(\'Are you sure you want to restore this Dealer?\')" title="Restore">
+                                        <i class="fas fa-undo"></i> Restore
+                                    </button>
+                                </form>
+                                <form action="' . route('dealers.force-delete', $dealer->id) . '" method="POST" style="display:inline;">
+                                    ' . csrf_field() . method_field('DELETE') . '
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to permanently delete this Dealer? This cannot be undone!\')" title="Permanent Delete">
+                                        <i class="fas fa-trash-alt"></i> Delete Forever
+                                    </button>
+                                </form>
+                            </div>
+                            ';
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            } catch (\Exception $e) {
+                // Log::error('Trashed DataTable error: ' . $e->getMessage());
+                return response()->json(['error' => 'Error loading trashed data: ' . $e->getMessage()], 500);
+            }
+        }
+
+        return view('dealers.trashed');
+    }
+
+    // NEW: Restore Deleted Dealer
+    public function restore($id): RedirectResponse
+    {
+        try {
+            $dealer = Dealer::onlyTrashed()->findOrFail($id);
+            $dealer->restore();
+
+            return redirect()
+                ->route('dealers.trashed')
+                ->with('success', 'Dealer restored successfully: ' . $dealer->dealer_name);
+        } catch (\Exception $e) {
+            // Log::error('Restore error: ' . $e->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to restore Dealer: ' . $e->getMessage()]);
+        }
+    }
+
+    // NEW: Permanently Delete Dealer
+    public function forceDelete($id): RedirectResponse
+    {
+        try {
+            $dealer = Dealer::onlyTrashed()->findOrFail($id);
+            $dealerName = $dealer->dealer_name;
+            $dealer->forceDelete(); // Permanently delete
+
+            return redirect()
+                ->route('dealers.trashed')
+                ->with('success', 'Dealer permanently deleted: ' . $dealerName);
+        } catch (\Exception $e) {
+            // Log::error('Force delete error: ' . $e->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to permanently delete Dealer: ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -83,17 +172,30 @@ class DealerController extends Controller
         return redirect()->route('dealers.index')->with('success', 'Dealer updated successfully.');
     }
 
+    //  UPDATED: Now uses soft delete
     public function destroy(Dealer $dealer)
     {
-        $dealer->delete();
-        return redirect()->route('dealers.index')->with('success', 'Dealer deleted successfully.');
-    }
+        try {
+            DB::beginTransaction();
+            $dealer->delete(); // This will soft delete
+            DB::commit();
 
+            return redirect()
+                ->route('dealers.index')
+                ->with('success', 'Dealer moved to trash: ' . $dealer->dealer_name . '. You can restore it from the trash.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error('Delete error: ' . $e->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to delete Dealer: ' . $e->getMessage()]);
+        }
+    }
     public function invoicesData(Request $request, Dealer $dealer)
     {
         if ($request->ajax()) {
             $baseQuery = $dealer->invoices()->select(['id', 'bill_no', 'amount', 'original_amount', 'gst_rate', 'date', 'remark']);
-    
+
             // Apply filters
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $baseQuery->whereBetween('date', [
@@ -101,7 +203,7 @@ class DealerController extends Controller
                     Carbon::parse($request->to_date)->endOfDay(),
                 ]);
             }
-    
+
             // Calculate summary with correct queries
             $summaryQuery = $dealer->invoices();
             if ($request->filled('from_date') && $request->filled('to_date')) {
@@ -110,13 +212,13 @@ class DealerController extends Controller
                     Carbon::parse($request->to_date)->endOfDay(),
                 ]);
             }
-    
+
             $totalInvoices = $summaryQuery->count() ?: 0;
             $totalOriginalAmount = $summaryQuery->sum('original_amount') ?: 0;
             $totalGstAmount = $summaryQuery->sum('amount') ?: 0; // Sum of GST amounts
-            
+
             // REMOVED: Average calculation
-    
+
             return DataTables::of($baseQuery)
                 ->addIndexColumn()
                 ->editColumn('amount', function ($invoice) {
@@ -128,7 +230,7 @@ class DealerController extends Controller
                 ->editColumn('remark', function ($invoice) {
                     return $invoice->remark ?: 'N/A';
                 })
-                
+
                 ->addColumn('action', function ($invoice) {
                     return '
                         <a href="' . route('invoices.edit', $invoice->id) . '" class="btn btn-warning btn-sm">
@@ -150,10 +252,10 @@ class DealerController extends Controller
                 ])
                 ->make(true);
         }
-    
+
         return response()->json(['error' => 'Invalid request'], 400);
     }
-    
+
 
     public function transactionsData(Request $request, Dealer $dealer)
     {
