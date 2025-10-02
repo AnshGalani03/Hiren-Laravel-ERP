@@ -245,7 +245,7 @@ class RABillController extends Controller
                 throw $e;
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Validation error: ' . json_encode($e->errors()));
+            // Log::error('Validation error: ' . json_encode($e->errors()));
             return redirect()->back()
                 ->withErrors($e->errors())
                 ->withInput()

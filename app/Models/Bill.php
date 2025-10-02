@@ -58,7 +58,7 @@ class Bill extends Model
     public static function generateBillNumber()
     {
         $currentYear = now()->format('y'); // 25 for 2025
-        $prefix = 'HSN' . $currentYear;
+        $prefix = 'SHN' . $currentYear;
 
         // Get the last bill number for current year
         $lastBill = self::where('bill_number', 'like', $prefix . '%')

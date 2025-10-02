@@ -64,7 +64,7 @@ class RABill extends Model
     public static function generateBillNo(): string
     {
         $currentYear = date('y');
-        $prefix = "HSNRA{$currentYear}";
+        $prefix = "SHNRA{$currentYear}";
         
         $lastBill = self::where('bill_no', 'like', $prefix . '%')
             ->orderBy('bill_no', 'desc')
