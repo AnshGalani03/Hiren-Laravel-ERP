@@ -68,6 +68,10 @@
                             <td>{{ $subContractor->contractor_name }}</td>
                         </tr>
                         <tr>
+                            <td><strong>Agency Name:</strong></td>
+                            <td>{{ $subContractor->agency_name }}</td>
+                        </tr>
+                        <tr>
                             <td><strong>Project Name:</strong></td>
                             <td>{{ $subContractor->project_name }}</td>
                         </tr>
@@ -103,10 +107,10 @@
                     <h5 class="mb-0">Additional Details</h5>
                 </div>
                 <div class="card-body">
-                    @if($subContractor->contractor_type === 'third_party' && $subContractor->third_party_name)
+                    @if($subContractor->contractor_type === 'agency' && $subContractor->agency_name)
                     <div class="mb-3">
                         <strong>Contractor Type:</strong>
-                        <p>Third Party: {{ $subContractor->third_party_name }}</p>
+                        <p>Agency</p>
                     </div>
                     @else
                     <div class="mb-3">
