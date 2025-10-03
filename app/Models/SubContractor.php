@@ -9,8 +9,8 @@ class SubContractor extends Model
 {
     protected $fillable = [
         'contractor_name',
-        'contractor_type', // 'self' or 'third_party'
-        'third_party_name', // name when type is third_party
+        'contractor_type', // 'self' or 'agency'
+        'agency_name',
         'date',
         'project_name',
         'department_name',

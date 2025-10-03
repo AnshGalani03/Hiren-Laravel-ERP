@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class SubContractorController extends Controller
 {
@@ -21,7 +22,7 @@ class SubContractorController extends Controller
                 'id',
                 'contractor_name',
                 'contractor_type',
-                'third_party_name',
+                'agency_name',
                 'department_name',
                 'amount_project',
                 'date',
@@ -52,9 +53,10 @@ class SubContractorController extends Controller
                     $displayName = $subContractor->contractor_name;
                     $badge = $subContractor->contractor_type === 'self'
                         ? '<span class="badge badge-pill self-label">Self</span>'
-                        : '<span class="badge badge-pill third-party-label">Third Party</span>';
+                        : '<span class="badge badge-pill third-party-label">Agency</span>';
 
                     return $displayName . ' <span class="ml-2">' . $badge . '</span>';
+                    // return $displayName;
                 })
                 ->editColumn('date', function ($subContractor) {
                     return $subContractor->date ? $subContractor->date->format('d/m/Y') : '';
@@ -89,35 +91,56 @@ class SubContractorController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'contractor_name' => 'required|string|max:255',
-            'contractor_type' => 'required|in:self,third_party',
-            'third_party_name' => 'required_if:contractor_type,third_party|nullable|string|max:255',
-            'date' => 'required|date',
-            'project_name' => 'required|string|max:255',
-            'department_name' => 'required|string|max:255',
-            'amount_project' => 'required|numeric|min:0|max:999999999.99',
-            'time_limit' => 'required|string|max:255',
-            'work_order_date' => 'nullable|date',
-            'emd_fdr_detail' => 'nullable|string|max:1000',
-            'remark' => 'nullable|string|max:1000',
-        ]);
-
-        DB::beginTransaction();
-
         try {
+            // Log incoming request for debugging
+            // Log::info('SubContractor Store Request:', $request->all());
+
+            $validated = $request->validate([
+                'contractor_name' => 'required|string|max:255',
+                'contractor_type' => 'required|in:self,agency',
+                'agency_name' => 'required|string|max:255',
+                'date' => 'required|date',
+                'project_name' => 'required|string|max:255',
+                'department_name' => 'required|string|max:255',
+                'amount_project' => 'required|numeric|min:0|max:999999999.99',
+                'time_limit' => 'required|string|max:255',
+                'work_order_date' => 'nullable|date',
+                'emd_fdr_detail' => 'nullable|string|max:1000',
+                'remark' => 'nullable|string|max:1000',
+            ]);
+
+            Log::info('SubContractor Validated Data:', $validated);
+
+            DB::beginTransaction();
+
             $subContractor = SubContractor::create($validated);
+
+            // Log::info('SubContractor Created:', $subContractor->toArray());
 
             DB::commit();
 
             return redirect()
                 ->route('sub-contractors.index')
                 ->with('success', 'Sub-contractor created successfully.');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Log::error('SubContractor Validation Errors:', $e->errors());
+            return back()
+                ->withErrors($e->errors())
+                ->withInput()
+                ->with('error', 'Please check the form for validation errors.');
+
         } catch (\Exception $e) {
             DB::rollBack();
+            // Log::error('SubContractor Store Error:', [
+            //     'message' => $e->getMessage(),
+            //     'file' => $e->getFile(),
+            //     'line' => $e->getLine(),
+            //     'trace' => $e->getTraceAsString()
+            // ]);
 
             return back()
-                ->withErrors(['error' => 'Failed to create sub-contractor. Please try again.'])
+                ->withErrors(['error' => 'Failed to create sub-contractor: ' . $e->getMessage()])
                 ->withInput();
         }
     }
@@ -209,8 +232,6 @@ class SubContractorController extends Controller
         return response()->json(['error' => 'Invalid request'], 400);
     }
 
-
-
     public function edit(SubContractor $subContractor): View
     {
         return view('sub-contractors.edit', compact('subContractor'));
@@ -220,8 +241,8 @@ class SubContractorController extends Controller
     {
         $validated = $request->validate([
             'contractor_name' => 'required|string|max:255',
-            'contractor_type' => 'required|in:self,third_party',
-            'third_party_name' => 'required_if:contractor_type,third_party|nullable|string|max:255',
+            'contractor_type' => 'required|in:self,agency',
+            'agency_name' => 'required|string|max:255',
             'date' => 'required|date',
             'project_name' => 'required|string|max:255',
             'department_name' => 'required|string|max:255',

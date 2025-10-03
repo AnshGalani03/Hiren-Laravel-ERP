@@ -19,7 +19,7 @@
                         <select id="contractorTypeFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
                             <option value="">All Types</option>
                             <option value="self">Self</option>
-                            <option value="third_party">Third Party</option>
+                            <option value="agency">Agency</option>
                         </select>
                     </div>
                     <div class="col-lg-3">

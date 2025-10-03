@@ -35,7 +35,7 @@
                             id="contractor_type" name="contractor_type" required>
                             <option value="">Select Contractor Type</option>
                             <option value="self" {{ old('contractor_type', $subContractor->contractor_type) == 'self' ? 'selected' : '' }}>Self</option>
-                            <option value="third_party" {{ old('contractor_type', $subContractor->contractor_type) == 'third_party' ? 'selected' : '' }}>Third Party</option>
+                            <option value="agency" {{ old('contractor_type', $subContractor->contractor_type) == 'agency' ? 'selected' : '' }}>Agency</option>
                         </select>
                         @error('contractor_type')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -44,19 +44,16 @@
                 </div>
 
                 <!-- Third Party Name Row (conditional) -->
-                <div class="row gy-2 mb-2" id="third_party_row" style="display: none;">
+                <div class="row gy-2 mb-2" id="third_party_row">
                     <div class="col-md-12">
-                        <label for="third_party_name" class="form-label">Third Party Name <span class="text-danger">*</span></label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('third_party_name') is-invalid @enderror"
-                            id="third_party_name" name="third_party_name"
-                            value="{{ old('third_party_name', $subContractor->third_party_name) }}"
-                            placeholder="Enter third party contractor name">
-                        @error('third_party_name')
+                        <label for="agency_name" class="form-label">Agency Name <span class="text-danger">*</span></label>
+                        <input type="text" name="agency_name" id="agency_name"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('agency_name') is-invalid @enderror"
+                            value="{{ old('agency_name', $subContractor->agency_name) }}" required
+                            placeholder="Agency Name">
+                        @error('agency_name')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div>
-                    <div class="col-md-6">
-                        <!-- Empty column for alignment -->
                     </div>
                 </div>
 
@@ -167,31 +164,4 @@
             </form>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const contractorTypeSelect = document.getElementById('contractor_type');
-            const thirdPartyRow = document.getElementById('third_party_row');
-            const thirdPartyInput = document.getElementById('third_party_name');
-
-            function toggleThirdPartyField() {
-                if (contractorTypeSelect.value === 'third_party') {
-                    thirdPartyRow.style.display = 'flex';
-                    thirdPartyInput.setAttribute('required', 'required');
-                } else {
-                    thirdPartyRow.style.display = 'none';
-                    thirdPartyInput.removeAttribute('required');
-                    // Don't clear the value on edit page unless switching to self
-                    if (contractorTypeSelect.value === 'self') {
-                        thirdPartyInput.value = '';
-                    }
-                }
-            }
-
-            // Initialize on page load
-            toggleThirdPartyField();
-
-            // Handle changes
-            contractorTypeSelect.addEventListener('change', toggleThirdPartyField);
-        });
-    </script>
 </x-app-layout>
