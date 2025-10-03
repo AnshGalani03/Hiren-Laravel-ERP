@@ -30,7 +30,7 @@ class ProjectController extends Controller
                 // ->editColumn('date', function ($project) {
                 //     return $project->date ? $project->date->format('d/m/Y') : '';
                 // })
-                
+
                 ->editColumn('work_order_date', function ($project) {
                     return $project->work_order_date ? $project->work_order_date->format('d/m/Y') : 'N/A';
                 })
@@ -250,16 +250,16 @@ class ProjectController extends Controller
                     return $tx->type === 'incoming' ?
                         ($tx->incoming->name ?? 'N/A') : ($tx->outgoing->name ?? 'N/A');
                 })
-                ->addColumn('linked_to', function ($tx) {
-                    $links = [];
-                    if ($tx->project) {
-                        $links[] = "<span class='badge bg-info'>Project: {$tx->project->name}</span>";
-                    }
-                    if ($tx->dealer) {
-                        $links[] = "<span class='badge bg-secondary'>Dealer: {$tx->dealer->dealer_name}</span>";
-                    }
-                    return implode('<br>', $links) ?: '<span class="text-muted">None</span>';
-                })
+                // ->addColumn('linked_to', function ($tx) {
+                //     $links = [];
+                //     if ($tx->project) {
+                //         $links[] = "<span class='badge bg-info'>Project: {$tx->project->name}</span>";
+                //     }
+                //     if ($tx->dealer) {
+                //         $links[] = "<span class='badge bg-secondary'>Dealer: {$tx->dealer->dealer_name}</span>";
+                //     }
+                //     return implode('<br>', $links) ?: '<span class="text-muted">None</span>';
+                // })
                 ->editColumn('type', function ($tx) {
                     $icon = $tx->type === 'incoming' ? 'fa-arrow-down' : 'fa-arrow-up';
                     $class = $tx->type === 'incoming' ? 'incoming' : 'expense';
@@ -270,9 +270,12 @@ class ProjectController extends Controller
                     <a href="' . route('transactions.edit', $tx->id) . '" class="btn btn-warning btn-sm">
                         <i class="fas fa-edit"></i> Edit
                     </a>
-                    <button class="btn btn-danger btn-sm delete-transaction" data-id="' . $tx->id . '">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
+                   <form action="' . route('transactions.destroy', $tx->id) . '" method="POST" style="display:inline;" class="delete-form">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure? This will move to trash.\')" title="Delete">
+                                Delete
+                            </button>
+                        </form>
                 ';
                 })
                 ->rawColumns(['amount', 'linked_to', 'type', 'action'])

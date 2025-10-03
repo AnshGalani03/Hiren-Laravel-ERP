@@ -122,14 +122,12 @@ class SubContractorController extends Controller
             return redirect()
                 ->route('sub-contractors.index')
                 ->with('success', 'Sub-contractor created successfully.');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Log::error('SubContractor Validation Errors:', $e->errors());
             return back()
                 ->withErrors($e->errors())
                 ->withInput()
                 ->with('error', 'Please check the form for validation errors.');
-
         } catch (\Exception $e) {
             DB::rollBack();
             // Log::error('SubContractor Store Error:', [
@@ -213,9 +211,12 @@ class SubContractorController extends Controller
                         <a href="' . route('transactions.edit', $transaction) . '" class="btn btn-sm btn-warning">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <button class="btn btn-sm btn-danger delete-transaction" data-id="' . $transaction->id . '">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
+                        <form action="' . route('transactions.destroy', $transaction->id) . '" method="POST" style="display:inline;" class="delete-form">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure? This will move to trash.\')" title="Delete">
+                                Delete
+                            </button>
+                        </form>
                     ';
                 })
                 ->rawColumns(['action', 'type', 'amount'])

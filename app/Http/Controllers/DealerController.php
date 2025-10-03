@@ -426,9 +426,12 @@ class DealerController extends Controller
                         <a href="' . route('transactions.edit', $tx->id) . '" class="btn btn-warning btn-sm">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <button class="btn btn-danger btn-sm delete-transaction" data-id="' . $tx->id . '">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
+                        <form action="' . route('transactions.destroy', $tx->id) . '" method="POST" style="display:inline;" class="delete-form">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure? This will move to trash.\')" title="Delete">
+                                Delete
+                            </button>
+                        </form>
                     ';
                 })
                 ->rawColumns(['amount', 'type', 'action'])

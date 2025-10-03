@@ -70,7 +70,7 @@ class TransactionController extends Controller
                         <form action="' . route('transactions.destroy', $transaction->id) . '" method="POST" style="display:inline;" class="delete-form">
                             ' . csrf_field() . method_field('DELETE') . '
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure? This will move to trash.\')" title="Delete">
-                                <i class="fas fa-trash"></i> Delete
+                                Delete
                             </button>
                         </form>
                     ';
@@ -89,7 +89,7 @@ class TransactionController extends Controller
 
 
 
-    // 🗑️ NEW: Show Trashed (Deleted) Transactions
+    // Show Trashed (Deleted) Transactions
     public function trashed(Request $request)
     {
         if ($request->ajax()) {

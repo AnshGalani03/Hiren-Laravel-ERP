@@ -358,7 +358,6 @@
                                 <th>Description</th>
                                 <th>Amount</th>
                                 <th>Date</th>
-                                <th class="d-none d-md-table-cell">Linked To</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -423,12 +422,8 @@
                         targets: 3
                     }, // Description
                     {
-                        responsivePriority: 7,
-                        targets: 6
-                    }, // Linked To
-                    {
                         responsivePriority: 1,
-                        targets: 7
+                        targets: 6
                     } // Actions
                 ],
                 columns: [{
@@ -456,11 +451,6 @@
                     {
                         data: 'date',
                         name: 'date'
-                    },
-                    {
-                        data: 'linked_to',
-                        name: 'linked_to',
-                        className: 'd-none d-md-table-cell'
                     },
                     {
                         data: 'action',

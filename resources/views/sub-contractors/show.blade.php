@@ -228,10 +228,10 @@
                     <thead>
                         <tr>
                             <th>Sr. No</th>
+                            <th>Type</th>
                             <th>Description</th>
                             <th>Amount</th>
                             <th>Date</th>
-                            <th>Type</th>
                             <th>Category</th>
                             <th>Actions</th>
                         </tr>
@@ -293,6 +293,11 @@
                         responsivePriority: 1,
                     },
                     {
+                        data: 'type',
+                        name: 'type',
+                        responsivePriority: 3,
+                    },
+                    {
                         data: 'description',
                         name: 'description',
                         responsivePriority: 4,
@@ -307,11 +312,7 @@
                         name: 'date',
                         responsivePriority: 6,
                     },
-                    {
-                        data: 'type',
-                        name: 'type',
-                        responsivePriority: 3,
-                    },
+
                     {
                         data: 'category',
                         name: 'category',

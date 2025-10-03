@@ -22,12 +22,12 @@
                     <table id="trashed-transactions-table" class="table table-bordered" style="width:100%">
                         <thead class="bg-gray-50">
                             <tr>
+                                <th>Date</th>
                                 <th>Type</th>
                                 <th>Description</th>
                                 <th>Category</th>
                                 <th>Amount</th>
-                                <th>Date</th>
-                                <th>Linked To</th>
+                                <!-- <th>Linked To</th> -->
                                 <th>Deleted At</th>
                                 <th>Actions</th>
                             </tr>
@@ -49,6 +49,11 @@
                 autoWidth: false,
                 ajax: "{{ route('transactions.trashed') }}",
                 columns: [{
+                        data: 'date',
+                        name: 'date',
+                        responsivePriority: 1
+                    },
+                    {
                         data: 'type',
                         name: 'type',
                         responsivePriority: 1
@@ -68,16 +73,11 @@
                         name: 'amount',
                         responsivePriority: 2
                     },
-                    {
-                        data: 'date',
-                        name: 'date',
-                        responsivePriority: 5
-                    },
-                    {
-                        data: 'linked_to',
-                        name: 'linked_to',
-                        responsivePriority: 6
-                    },
+                    // {
+                    //     data: 'linked_to',
+                    //     name: 'linked_to',
+                    //     responsivePriority: 6
+                    // },
                     {
                         data: 'deleted_at',
                         name: 'deleted_at',
@@ -92,7 +92,7 @@
                     }
                 ],
                 order: [
-                    [6, 'desc']
+                    [5, 'desc']
                 ], // Order by deleted_at descending
                 pageLength: 25,
                 responsive: true
