@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
-
+use App\Models\DealerBankAccount;
 
 
 class DealerController extends Controller
@@ -131,14 +131,53 @@ class DealerController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'dealer_name' => 'required|string|max:255',
-            'mobile_no' => 'required|string|max:15',
-            'address' => 'required|string',
-        ]);
+        try {
+            $request->validate([
+                'dealer_name' => 'required|string|max:255',
+                'mobile_no' => 'required|string|max:15',
+                'address' => 'required|string',
+                'gst' => 'nullable|string',
 
-        Dealer::create($request->all());
-        return redirect()->route('dealers.index')->with('success', 'Dealer created successfully.');
+                // Simplified bank account validation
+                'bank_accounts' => 'required|array|min:1',
+                'bank_accounts.*.account_name' => 'required|string|max:255',
+                'bank_accounts.*.account_no' => 'required|string',
+                'bank_accounts.*.bank_name' => 'required|string|max:255',
+                'bank_accounts.*.ifsc' => 'required|string',
+                'bank_accounts.*.notes' => 'nullable|string|max:500',
+
+            ]);
+
+            DB::beginTransaction();
+
+            // Create dealer
+            $dealer = Dealer::create([
+                'dealer_name' => $request->dealer_name,
+                'mobile_no' => $request->mobile_no,
+                'address' => $request->address,
+                'gst' => $request->gst,
+            ]);
+
+            // Create bank accounts
+            foreach ($request->bank_accounts as $bankAccount) {
+                DealerBankAccount::create([
+                    'dealer_id' => $dealer->id,
+                    'account_name' => $bankAccount['account_name'],
+                    'account_no' => $bankAccount['account_no'],
+                    'bank_name' => $bankAccount['bank_name'],
+                    'ifsc' => $bankAccount['ifsc'],
+                    'notes' => $bankAccount['notes'],
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('dealers.index')->with('success', 'Dealer created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->with('error', 'Error creating dealer: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     public function show(Dealer $dealer)
@@ -157,40 +196,108 @@ class DealerController extends Controller
 
     public function edit(Dealer $dealer)
     {
-        return view('dealers.edit', compact('dealer'));
+        try {
+            $dealer->load('bankAccounts');
+            return view('dealers.edit', compact('dealer'));
+        } catch (\Exception $e) {
+            return redirect()->route('dealers.index')
+                ->with('error', 'Error loading dealer for editing: ' . $e->getMessage());
+        }
     }
 
     public function update(Request $request, Dealer $dealer)
     {
-        $request->validate([
-            'dealer_name' => 'required|string|max:255',
-            'mobile_no' => 'required|string|max:15',
-            'address' => 'required|string',
-        ]);
+        try {
+            $validated = $request->validate([
+                'dealer_name' => 'required|string|max:255',
+                'mobile_no' => 'required|string|max:15',
+                'gst' => 'nullable|string|max:15',
+                'address' => 'required|string',
 
-        $dealer->update($request->all());
-        return redirect()->route('dealers.index')->with('success', 'Dealer updated successfully.');
+                // Simplified bank account validation
+                'bank_accounts' => 'required|array|min:1',
+                'bank_accounts.*.id' => 'nullable|exists:dealer_bank_accounts,id',
+                'bank_accounts.*.account_name' => 'required|string|max:255',
+                'bank_accounts.*.account_no' => 'required|string|max:20',
+                'bank_accounts.*.bank_name' => 'required|string|max:255',
+                'bank_accounts.*.ifsc' => 'required|string|max:11',
+                'bank_accounts.*.notes' => 'nullable|string|max:500',
+            ]);
+
+            DB::beginTransaction();
+
+            // Update dealer basic info
+            $dealer->update([
+                'dealer_name' => $validated['dealer_name'],
+                'mobile_no' => $validated['mobile_no'],
+                'address' => $validated['address'],
+                'gst' => $validated['gst'],
+            ]);
+
+            // Get existing bank account IDs
+            $existingIds = collect($validated['bank_accounts'])
+                ->pluck('id')
+                ->filter()
+                ->toArray();
+
+            // Delete bank accounts that are not in the submitted data
+            $dealer->bankAccounts()->whereNotIn('id', $existingIds)->delete();
+
+            // Update or create bank accounts
+            foreach ($validated['bank_accounts'] as $bankAccountData) {
+                if (isset($bankAccountData['id']) && $bankAccountData['id']) {
+                    // Update existing account
+                    $dealer->bankAccounts()->where('id', $bankAccountData['id'])->update([
+                        'account_name' => $bankAccountData['account_name'],
+                        'account_no' => $bankAccountData['account_no'],
+                        'bank_name' => $bankAccountData['bank_name'],
+                        'ifsc' => $bankAccountData['ifsc'],
+                        'notes' => $bankAccountData['notes'],
+                    ]);
+                } else {
+                    // Create new account
+                    $dealer->bankAccounts()->create([
+                        'account_name' => $bankAccountData['account_name'],
+                        'account_no' => $bankAccountData['account_no'],
+                        'bank_name' => $bankAccountData['bank_name'],
+                        'ifsc' => $bankAccountData['ifsc'],
+                        'notes' => $bankAccountData['notes'],
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('dealers.index')
+                ->with('success', 'Dealer updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->with('error', 'Error updating dealer: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     //  UPDATED: Now uses soft delete
     public function destroy(Dealer $dealer)
     {
         try {
-            DB::beginTransaction();
-            $dealer->delete(); // This will soft delete
-            DB::commit();
+            // Check if dealer has related records
+            if ($dealer->invoices()->count() > 0 || $dealer->transactions()->count() > 0) {
+                return redirect()->route('dealers.index')
+                    ->with('error', 'Cannot delete dealer. It has related invoices or transactions.');
+            }
 
-            return redirect()
-                ->route('dealers.index')
-                ->with('success', 'Dealer moved to trash: ' . $dealer->dealer_name . '. You can restore it from the trash.');
+            $dealer->delete(); // This will also delete bank accounts due to cascade
+
+            return redirect()->route('dealers.index')
+                ->with('success', 'Dealer deleted successfully.');
         } catch (\Exception $e) {
-            DB::rollBack();
-            // Log::error('Delete error: ' . $e->getMessage());
-
-            return back()
-                ->withErrors(['error' => 'Failed to delete Dealer: ' . $e->getMessage()]);
+            return redirect()->route('dealers.index')
+                ->with('error', 'Error deleting dealer: ' . $e->getMessage());
         }
     }
+
     public function invoicesData(Request $request, Dealer $dealer)
     {
         if ($request->ajax()) {

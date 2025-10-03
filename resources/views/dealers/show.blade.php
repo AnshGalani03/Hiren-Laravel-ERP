@@ -83,32 +83,72 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Bank Details Card -->
-        <div class="col-md-6 mb-3">
-            <div class="card h-100">
+    <!-- Bank Accounts Section -->
+    <div class="row mt-3 mb-3">
+        <div class="col-12">
+            <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0">Bank Details</h5>
+                    <h5 class="mb-0">
+                        <i class="fas fa-university"></i> Bank Accounts ({{ $dealer->bankAccounts->count() }})
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <table class="table table-borderless mb-0">
-                        <tr>
-                            <td width="40%"><strong>Account No:</strong></td>
-                            <td>{{ $dealer->account_no ?: 'N/A' }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Account Name:</strong></td>
-                            <td>{{ $dealer->account_name ?: 'N/A' }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>IFSC:</strong></td>
-                            <td>{{ $dealer->ifsc ?: 'N/A' }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Bank Name:</strong></td>
-                            <td>{{ $dealer->bank_name ?: 'N/A' }}</td>
-                        </tr>
-                    </table>
+                    @if($dealer->bankAccounts && $dealer->bankAccounts->count() > 0)
+                    <div class="row gy-3">
+                        @foreach($dealer->bankAccounts as $account)
+                        <div class="col-lg-6 mb-3">
+                            <div class="card border">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="card-title mb-0">Bank Account #{{ $loop->iteration }}</h6>
+                                    </div>
+
+                                    <table class="table table-sm table-borderless mb-0">
+                                        <tr>
+                                            <td class="fw-bold" style="width: 40%;">Account Holder:</td>
+                                            <td>{{ $account->account_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Account Number:</td>
+                                            <td>{{ $account->account_no }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Bank Name:</td>
+                                            <td>{{ $account->bank_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">IFSC Code:</td>
+                                            <td>{{ $account->ifsc }}</td>
+                                        </tr>
+                                        @if($account->branch_name)
+                                        <tr>
+                                            <td class="fw-bold">Branch:</td>
+                                            <td>{{ $account->branch_name }}</td>
+                                        </tr>
+                                        @endif
+                                        @if($account->notes)
+                                        <tr>
+                                            <td class="fw-bold">Notes:</td>
+                                            <td>{{ $account->notes }}</td>
+                                        </tr>
+                                        @endif
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @else
+                    <div class="text-center py-4">
+                        <i class="fas fa-university fa-3x text-muted mb-3"></i>
+                        <p class="text-muted pb-2">No bank accounts added yet.</p>
+                        <a href="{{ route('dealers.edit', $dealer->id) }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Add Bank Account
+                        </a>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>

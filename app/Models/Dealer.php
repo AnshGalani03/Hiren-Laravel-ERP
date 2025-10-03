@@ -16,10 +16,10 @@ class Dealer extends Model
         'mobile_no',
         'gst',
         'address',
-        'account_no',
-        'account_name',
-        'ifsc',
-        'bank_name'
+        // 'account_no',
+        // 'account_name',
+        // 'ifsc',
+        // 'bank_name'
     ];
 
     protected function casts(): array
@@ -28,7 +28,13 @@ class Dealer extends Model
             'deleted_at' => 'datetime', // Add this
         ];
     }
-    
+
+    // Relationship with bank accounts
+    public function bankAccounts()
+    {
+        return $this->hasMany(DealerBankAccount::class);
+    }
+
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
