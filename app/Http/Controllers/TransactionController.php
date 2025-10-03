@@ -5,12 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Transaction;
 use App\Models\Project;
 use App\Models\Dealer;
+use App\Models\SubContractor;
 use App\Models\Incoming;
 use App\Models\Outgoing;
-use App\Models\SubContractor;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
+
+
 
 class TransactionController extends Controller
 {
@@ -61,7 +67,12 @@ class TransactionController extends Controller
                 ->addColumn('action', function ($transaction) {
                     return '
                         <a href="' . route('transactions.edit', $transaction) . '" class="btn btn-warning btn-sm">Edit</a>
-                        <button class="btn btn-danger btn-sm delete-transaction" data-id="' . $transaction->id . '">Delete</button>
+                        <form action="' . route('transactions.destroy', $transaction->id) . '" method="POST" style="display:inline;" class="delete-form">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure? This will move to trash.\')" title="Delete">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
                     ';
                 })
                 ->rawColumns(['type', 'linked_to', 'action', 'amount'])
@@ -75,6 +86,132 @@ class TransactionController extends Controller
 
         return view('transactions.index', compact('projects', 'dealers', 'subContractors'));
     }
+
+
+
+    // 🗑️ NEW: Show Trashed (Deleted) Transactions
+    public function trashed(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+                $trashedTransactions = Transaction::onlyTrashed() // Only show soft deleted records
+                    ->with(['project', 'dealer', 'subContractor', 'incoming', 'outgoing'])
+                    ->select([
+                        'id',
+                        'type',
+                        'amount',
+                        'description',
+                        'date',
+                        'project_id',
+                        'dealer_id',
+                        'sub_contractor_id',
+                        'incoming_id',
+                        'outgoing_id',
+                        'deleted_at'
+                    ]);
+
+                return DataTables::of($trashedTransactions)
+                    ->editColumn('date', function ($transaction) {
+                        return $transaction->date ? $transaction->date->format('d/m/Y') : '';
+                    })
+                    ->editColumn('deleted_at', function ($transaction) {
+                        return $transaction->deleted_at ? $transaction->deleted_at->format('d/m/Y') : '';
+                    })
+                    ->editColumn('amount', function ($transaction) {
+                        $class = $transaction->type == 'incoming' ? 'text-success' : 'text-danger';
+                        $sign = $transaction->type == 'incoming' ? '+' : '-';
+                        return '<span class="' . $class . '">' . $sign . '₹' . number_format($transaction->amount, 2) . '</span>';
+                    })
+                    ->addColumn('category', function ($transaction) {
+                        if ($transaction->type == 'incoming') {
+                            return $transaction->incoming ? $transaction->incoming->name : 'N/A';
+                        } else {
+                            return $transaction->outgoing ? $transaction->outgoing->name : 'N/A';
+                        }
+                    })
+                    ->addColumn('linked_to', function ($transaction) {
+                        $linked = [];
+                        if ($transaction->project) {
+                            $linked[] = 'Project: ' . $transaction->project->name;
+                        }
+                        if ($transaction->dealer) {
+                            $linked[] = 'Dealer: ' . $transaction->dealer->dealer_name;
+                        }
+                        if ($transaction->subContractor) {
+                            $linked[] = 'Sub-Contractor: ' . $transaction->subContractor->contractor_name;
+                        }
+                        return implode(', ', $linked) ?: 'None';
+                    })
+                    ->editColumn('type', function ($transaction) {
+                        return ucfirst($transaction->type);
+                    })
+                    ->addColumn('action', function ($transaction) {
+                        return '
+                        <div class="">
+                            <form action="' . route('transactions.restore', $transaction->id) . '" method="POST" style="display:inline;">
+                                ' . csrf_field() . '
+                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm(\'Are you sure you want to restore this Transaction?\')" title="Restore">
+                                    <i class="fas fa-undo"></i> Restore
+                                </button>
+                            </form>
+                            <form action="' . route('transactions.force-delete', $transaction->id) . '" method="POST" style="display:inline;">
+                                ' . csrf_field() . method_field('DELETE') . '
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to permanently delete this Transaction? This cannot be undone!\')" title="Permanent Delete">
+                                    <i class="fas fa-trash-alt"></i> Delete Forever
+                                </button>
+                            </form>
+                        </div>
+                        ';
+                    })
+                    ->rawColumns(['action', 'amount'])
+                    ->make(true);
+            } catch (\Exception $e) {
+                Log::error('Trashed DataTable error: ' . $e->getMessage());
+                return response()->json(['error' => 'Error loading trashed data: ' . $e->getMessage()], 500);
+            }
+        }
+
+        return view('transactions.trashed');
+    }
+
+
+    // 🔄 NEW: Restore Deleted Transaction
+    public function restore($id): RedirectResponse
+    {
+        try {
+            $transaction = Transaction::onlyTrashed()->findOrFail($id);
+            $transaction->restore();
+
+            return redirect()
+                ->route('transactions.trashed')
+                ->with('success', 'Transaction restored successfully');
+        } catch (\Exception $e) {
+            Log::error('Restore error: ' . $e->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to restore Transaction: ' . $e->getMessage()]);
+        }
+    }
+
+    // ❌ NEW: Permanently Delete Transaction
+    public function forceDelete($id): RedirectResponse
+    {
+        try {
+            $transaction = Transaction::onlyTrashed()->findOrFail($id);
+            $description = $transaction->description;
+            $transaction->forceDelete(); // Permanently delete
+
+            return redirect()
+                ->route('transactions.trashed')
+                ->with('success', 'Transaction permanently deleted: ' . $description);
+        } catch (\Exception $e) {
+            Log::error('Force delete error: ' . $e->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to permanently delete Transaction: ' . $e->getMessage()]);
+        }
+    }
+
 
     // NEW: Separate method to apply filters consistently
     private function applyFilters($query, $request)
@@ -208,19 +345,25 @@ class TransactionController extends Controller
         ]);
     }
 
+    // 🗑️ UPDATED: Now uses soft delete and redirects with flash message
     public function destroy(Transaction $transaction)
     {
         try {
-            $transaction->delete();
-            return response()->json([
-                'success' => true,
-                'message' => 'Transaction deleted successfully.'
-            ]);
+            DB::beginTransaction();
+            $transactionDescription = $transaction->description; // Store description before deletion
+            $transaction->delete(); // This will soft delete
+            DB::commit();
+
+            return redirect()
+                ->route('transactions.index')
+                ->with('success', 'Transaction moved to trash You can restore it from the trash.');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error deleting transaction: ' . $e->getMessage()
-            ], 500);
+            DB::rollBack();
+            Log::error('Delete error: ' . $e->getMessage());
+
+            return redirect()
+                ->route('transactions.index')
+                ->withErrors(['error' => 'Failed to delete Transaction: ' . $e->getMessage()]);
         }
     }
 }

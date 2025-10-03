@@ -94,6 +94,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
     Route::get('transactions/summary', [TransactionController::class, 'summary'])->name('transactions.summary');
 
+    // Recovery Routes for Transactions
+    Route::get('transactions-trashed', [TransactionController::class, 'trashed'])->name('transactions.trashed');
+    Route::post('transactions/{id}/restore', [TransactionController::class, 'restore'])->name('transactions.restore');
+    Route::delete('transactions/{id}/force-delete', [TransactionController::class, 'forceDelete'])->name('transactions.force-delete');
+
     // Sub-contractor Routes
     Route::resource('sub-contractors', SubContractorController::class);
     Route::get('sub-contractors/{subContractor}/bills-data', [SubContractorController::class, 'billsData'])->name('sub-contractors.bills-data');

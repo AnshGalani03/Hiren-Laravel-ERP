@@ -1,0 +1,103 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="bill-detail-header flex justify-between items-center">
+            <div class="flex space-x-2">
+                <a href="{{ route('transactions.index') }}"
+                    class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Active Transactions
+                </a>
+            </div>
+            <div class="flex justify-between items-center">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    Trashed Transactions
+                </h2>
+            </div>
+        </div>
+    </x-slot>
+
+    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="p-6 text-gray-900">
+            <div class="table-responsive-wrapper">
+                <div class="table-responsive">
+                    <table id="trashed-transactions-table" class="table table-bordered" style="width:100%">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Linked To</th>
+                                <th>Deleted At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#trashed-transactions-table').DataTable({
+                processing: true,
+                serverSide: true,
+                scrollX: true,
+                responsive: true,
+                autoWidth: false,
+                ajax: "{{ route('transactions.trashed') }}",
+                columns: [{
+                        data: 'type',
+                        name: 'type',
+                        responsivePriority: 1
+                    },
+                    {
+                        data: 'description',
+                        name: 'description',
+                        responsivePriority: 4
+                    },
+                    {
+                        data: 'category',
+                        name: 'category',
+                        responsivePriority: 3
+                    },
+                    {
+                        data: 'amount',
+                        name: 'amount',
+                        responsivePriority: 2
+                    },
+                    {
+                        data: 'date',
+                        name: 'date',
+                        responsivePriority: 5
+                    },
+                    {
+                        data: 'linked_to',
+                        name: 'linked_to',
+                        responsivePriority: 6
+                    },
+                    {
+                        data: 'deleted_at',
+                        name: 'deleted_at',
+                        responsivePriority: 7
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        responsivePriority: 1
+                    }
+                ],
+                order: [
+                    [6, 'desc']
+                ], // Order by deleted_at descending
+                pageLength: 25,
+                responsive: true
+            });
+        });
+    </script>
+    @endpush
+</x-app-layout>
