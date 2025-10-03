@@ -38,21 +38,21 @@
                 </div>
 
                 <div class="row">
+
                     <div class="col-md-6 mb-3">
-                        <label for="date" class="form-label">Project Date <span class="text-danger">*</span></label>
-                        <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('date') is-invalid @enderror"
-                            id="date" name="date" value="{{ old('date', $project->date->format('Y-m-d')) }}" required>
-                        @error('date')
+                        <label for="work_order_date" class="form-label">Work Order Date</label>
+                        <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('work_order_date') is-invalid @enderror"
+                            id="work_order_date" name="work_order_date" value="{{ old('work_order_date', $project->work_order_date ? $project->work_order_date->format('Y-m-d') : '') }}">
+                        @error('work_order_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label for="work_order_date" class="form-label">Work Order Date</label>
-                        <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('work_order_date') is-invalid @enderror"
-                            id="work_order_date" name="work_order_date"
-                            value="{{ old('work_order_date', $project->work_order_date ? $project->work_order_date->format('Y-m-d') : '') }}">
-                        @error('work_order_date')
+                        <label for="amount_project" class="form-label">Project Amount <span class="text-danger">*</span></label>
+                        <input type="number" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('amount_project') is-invalid @enderror"
+                            id="amount_project" name="amount_project" value="{{ old('amount_project', $project->amount_project) }}" required>
+                        @error('amount_project')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -60,10 +60,34 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="amount_project" class="form-label">Project Amount <span class="text-danger">*</span></label>
-                        <input type="number" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('amount_project') is-invalid @enderror"
-                            id="amount_project" name="amount_project" value="{{ old('amount_project', $project->amount_project) }}" required>
-                        @error('amount_project')
+                        <label for="percentage" class="form-label">Percentage <span class="text-danger">*</span></label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('percentage') is-invalid @enderror"
+                            id="percentage" name="percentage" value="{{ old('percentage', $project->percentage) }}" required>
+                        @error('percentage')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="final_project_amount" class="form-label">Final Project Amount <span class="text-danger">*</span></label>
+                        <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('final_project_amount') is-invalid @enderror"
+                            id="final_project_amount" name="final_project_amount" value="{{ old('final_project_amount', $project->final_project_amount) }}"
+                            placeholder="" required>
+                        @error('final_project_amount')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Add this before the EMD/FDR Detail section -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="active" class="form-label">Project Status</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('active') is-invalid @enderror" id="active" name="active">
+                            <option value="1" {{ old('active', $project->active) == '1' ? 'selected' : '' }}>Active</option>
+                            <option value="0" {{ old('active', $project->active) == '0' ? 'selected' : '' }}>Inactive</option>
+                        </select>
+                        @error('active')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -74,20 +98,6 @@
                             id="time_limit" name="time_limit" value="{{ old('time_limit', $project->time_limit) }}"
                             placeholder="e.g., 6 months, 1 year" required>
                         @error('time_limit')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <!-- Add this before the EMD/FDR Detail section -->
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label for="active" class="form-label">Project Status</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control @error('active') is-invalid @enderror" id="active" name="active">
-                            <option value="1" {{ old('active', $project->active) == '1' ? 'selected' : '' }}>Active</option>
-                            <option value="0" {{ old('active', $project->active) == '0' ? 'selected' : '' }}>Inactive</option>
-                        </select>
-                        @error('active')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

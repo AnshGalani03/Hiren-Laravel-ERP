@@ -41,8 +41,8 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Department</th>
-                                <th>Amount</th>
-                                <th>Date</th>
+                                <th>Percentage</th>
+                                <th>Final Amount</th>
                                 <th>Time Limit</th>
                                 <th>Work Order Date</th>
                                 <th>Status</th>
@@ -81,14 +81,14 @@
                         responsivePriority: 2
                     },
                     {
-                        data: 'amount_project',
-                        name: 'amount_project',
-                        responsivePriority: 2
+                        data: 'percentage',
+                        name: 'percentage',
+                        responsivePriority: 3
                     },
                     {
-                        data: 'date',
-                        name: 'date',
-                        responsivePriority: 3
+                        data: 'final_project_amount',
+                        name: 'final_project_amount',
+                        responsivePriority: 4
                     },
                     {
                         data: 'time_limit',

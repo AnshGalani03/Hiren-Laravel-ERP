@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>{{ $invoice->filename}}</title>
+    <title>{{ $invoice->getSerialNumber() }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css" media="screen">

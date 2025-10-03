@@ -305,11 +305,11 @@ class BillController extends Controller
 
             $items[] = $invoiceItem;
         }
-
+        $sequenceNumber = (int) preg_replace('/[^0-9]/', '', $bill->bill_number) ?: $bill->id;
         $invoice = Invoice::make()
             ->series('BILL')
-            ->sequence($bill->id)
-            ->serialNumberFormat('{SERIES}-{SEQUENCE}')
+            ->sequence($sequenceNumber)
+            ->serialNumberFormat($bill->bill_number)
             ->seller($client)
             ->buyer($customer)
             ->date($bill->bill_date)

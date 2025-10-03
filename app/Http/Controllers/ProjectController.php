@@ -15,7 +15,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $projects = Project::select(['id', 'name', 'date', 'department_name', 'amount_project', 'time_limit', 'emd_fdr_detail', 'work_order_date', 'remark', 'active']);
+            $projects = Project::select(['id', 'name', 'percentage', 'department_name', 'amount_project', 'time_limit', 'emd_fdr_detail', 'work_order_date', 'remark', 'active', 'final_project_amount']);
 
             // Filter by active status if requested
             if ($request->filled('status') && $request->status != '') {
@@ -27,14 +27,21 @@ class ProjectController extends Controller
             }
 
             return DataTables::of($projects)
-                ->editColumn('date', function ($project) {
-                    return $project->date ? $project->date->format('d/m/Y') : '';
-                })
+                // ->editColumn('date', function ($project) {
+                //     return $project->date ? $project->date->format('d/m/Y') : '';
+                // })
+                
                 ->editColumn('work_order_date', function ($project) {
                     return $project->work_order_date ? $project->work_order_date->format('d/m/Y') : 'N/A';
                 })
                 ->editColumn('amount_project', function ($project) {
                     return '₹' . number_format($project->amount_project, 2);
+                })
+                ->addColumn('percentage_display', function ($project) {
+                    return $project->formatted_percentage;
+                })
+                ->editColumn('final_project_amount', function ($project) {
+                    return '₹' . number_format($project->final_project_amount, 2);
                 })
                 ->addColumn('status', function ($project) {
                     if ($project->active) {
@@ -75,9 +82,10 @@ class ProjectController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'date' => 'required|date',
             'department_name' => 'required|string|max:255',
             'amount_project' => 'required|numeric|min:0',
+            'percentage' => 'required|numeric|min:0',
+            'final_project_amount' => 'required|numeric|min:0',
             'time_limit' => 'required|string|max:255',
             'active' => 'boolean',
         ]);
@@ -140,9 +148,10 @@ class ProjectController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'date' => 'required|date',
             'department_name' => 'required|string|max:255',
             'amount_project' => 'required|numeric|min:0',
+            'percentage' => 'nullable|string|max:50',
+            'final_project_amount' => 'nullable|numeric|min:0',
             'time_limit' => 'required|string|max:255',
             'active' => 'boolean',
         ]);

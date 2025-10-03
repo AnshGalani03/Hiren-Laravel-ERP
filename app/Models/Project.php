@@ -19,13 +19,16 @@ class Project extends Model
         'emd_fdr_detail',
         'work_order_date',
         'remark',
+        'percentage',
+        'final_project_amount',
         'active'  // Added active field
     ];
 
     protected $casts = [
         'date' => 'date',
         'work_order_date' => 'date',
-        'active' => 'boolean'  // Added boolean casting
+        'active' => 'boolean',  // Added boolean casting
+        'final_project_amount' => 'decimal:2',
     ];
 
     public function expenses()

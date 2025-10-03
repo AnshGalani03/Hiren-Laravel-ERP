@@ -28,7 +28,7 @@
     </div>
     <!-- Financial Summary Cards -->
     <div class="financial-summary-card row mb-4">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4 class="pb-1">Total Income</h4>
@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4 class="pb-1">Total Expenses</h4>
@@ -46,7 +46,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4 class="pb-1">Net {{ $netProfit >= 0 ? 'Profit' : 'Loss' }}</h4>
@@ -55,7 +55,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 d-none">
             <div class="card summery-card-box">
                 <div class="card-body text-center">
                     <h4 class="pb-1">Project Budget</h4>
@@ -95,10 +95,6 @@
                             <td>{{ $project->department_name }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Project Date:</strong></td>
-                            <td>{{ $project->date ? $project->date->format('d/m/Y') : 'N/A' }}</td>
-                        </tr>
-                        <tr>
                             <td><strong>Work Order Date:</strong></td>
                             <td>{{ $project->work_order_date ? $project->work_order_date->format('d/m/Y') : 'N/A' }}</td>
                         </tr>
@@ -109,6 +105,14 @@
                         <tr>
                             <td><strong>Project Amount:</strong></td>
                             <td>₹{{ number_format($project->amount_project, 2) }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Percentage:</strong></td>
+                            <td>{{ $project->percentage }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Final Project Amount:</strong></td>
+                            <td>₹{{ number_format($project->final_project_amount, 2) }}</td>
                         </tr>
                     </table>
                 </div>
