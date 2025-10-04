@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Oct 03, 2025 at 11:38 AM
--- Server version: 8.3.0
--- PHP Version: 8.2.18
+-- Host: localhost:3306
+-- Generation Time: Oct 04, 2025 at 02:31 PM
+-- Server version: 5.7.23-23
+-- PHP Version: 8.1.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `erp_laravel`
+-- Database: `utetmvmy_hiren_db`
 --
 
 -- --------------------------------------------------------
@@ -27,11 +27,10 @@ SET time_zone = "+00:00";
 -- Table structure for table `bills`
 --
 
-DROP TABLE IF EXISTS `bills`;
-CREATE TABLE IF NOT EXISTS `bills` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `bills` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `bill_number` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `customer_id` bigint UNSIGNED DEFAULT NULL,
+  `customer_id` bigint(20) UNSIGNED DEFAULT NULL,
   `bill_date` date NOT NULL,
   `subtotal` decimal(15,2) NOT NULL DEFAULT '0.00',
   `tax_rate` decimal(5,2) NOT NULL DEFAULT '0.00',
@@ -41,10 +40,7 @@ CREATE TABLE IF NOT EXISTS `bills` (
   `status` enum('draft','sent','paid') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
   `is_gst` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `bills_bill_number_unique` (`bill_number`),
-  KEY `bills_customer_id_foreign` (`customer_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -53,19 +49,15 @@ CREATE TABLE IF NOT EXISTS `bills` (
 -- Table structure for table `bill_items`
 --
 
-DROP TABLE IF EXISTS `bill_items`;
-CREATE TABLE IF NOT EXISTS `bill_items` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `bill_id` bigint UNSIGNED NOT NULL,
-  `product_id` bigint UNSIGNED NOT NULL,
-  `quantity` int NOT NULL,
+CREATE TABLE `bill_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `bill_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `quantity` int(11) NOT NULL,
   `unit_price` decimal(10,2) NOT NULL,
   `total_price` decimal(15,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `bill_items_bill_id_foreign` (`bill_id`),
-  KEY `bill_items_product_id_foreign` (`product_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -74,12 +66,10 @@ CREATE TABLE IF NOT EXISTS `bill_items` (
 -- Table structure for table `cache`
 --
 
-DROP TABLE IF EXISTS `cache`;
-CREATE TABLE IF NOT EXISTS `cache` (
+CREATE TABLE `cache` (
   `key` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `expiration` int NOT NULL,
-  PRIMARY KEY (`key`)
+  `expiration` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -88,12 +78,10 @@ CREATE TABLE IF NOT EXISTS `cache` (
 -- Table structure for table `cache_locks`
 --
 
-DROP TABLE IF EXISTS `cache_locks`;
-CREATE TABLE IF NOT EXISTS `cache_locks` (
+CREATE TABLE `cache_locks` (
   `key` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `owner` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `expiration` int NOT NULL,
-  PRIMARY KEY (`key`)
+  `expiration` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -102,17 +90,15 @@ CREATE TABLE IF NOT EXISTS `cache_locks` (
 -- Table structure for table `customers`
 --
 
-DROP TABLE IF EXISTS `customers`;
-CREATE TABLE IF NOT EXISTS `customers` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `customers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `address` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `gst` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `pan_card` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone_no` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -121,17 +107,15 @@ CREATE TABLE IF NOT EXISTS `customers` (
 -- Table structure for table `dealers`
 --
 
-DROP TABLE IF EXISTS `dealers`;
-CREATE TABLE IF NOT EXISTS `dealers` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `dealers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `dealer_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mobile_no` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `gst` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -140,19 +124,16 @@ CREATE TABLE IF NOT EXISTS `dealers` (
 -- Table structure for table `dealer_bank_accounts`
 --
 
-DROP TABLE IF EXISTS `dealer_bank_accounts`;
-CREATE TABLE IF NOT EXISTS `dealer_bank_accounts` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `dealer_id` bigint UNSIGNED NOT NULL,
+CREATE TABLE `dealer_bank_accounts` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `dealer_id` bigint(20) UNSIGNED NOT NULL,
   `account_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `account_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `bank_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ifsc` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `notes` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `dealer_bank_accounts_dealer_id_foreign` (`dealer_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -161,9 +142,8 @@ CREATE TABLE IF NOT EXISTS `dealer_bank_accounts` (
 -- Table structure for table `employees`
 --
 
-DROP TABLE IF EXISTS `employees`;
-CREATE TABLE IF NOT EXISTS `employees` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `employees` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `designation` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mobile_no` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -177,8 +157,7 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `account_no` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ifsc` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -187,16 +166,12 @@ CREATE TABLE IF NOT EXISTS `employees` (
 -- Table structure for table `employee_project`
 --
 
-DROP TABLE IF EXISTS `employee_project`;
-CREATE TABLE IF NOT EXISTS `employee_project` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `employee_id` bigint UNSIGNED NOT NULL,
-  `project_id` bigint UNSIGNED NOT NULL,
+CREATE TABLE `employee_project` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `employee_id` bigint(20) UNSIGNED NOT NULL,
+  `project_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `employee_project_employee_id_project_id_unique` (`employee_id`,`project_id`),
-  KEY `employee_project_project_id_foreign` (`project_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -205,12 +180,10 @@ CREATE TABLE IF NOT EXISTS `employee_project` (
 -- Table structure for table `expenses`
 --
 
-DROP TABLE IF EXISTS `expenses`;
-CREATE TABLE IF NOT EXISTS `expenses` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `expenses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -219,17 +192,14 @@ CREATE TABLE IF NOT EXISTS `expenses` (
 -- Table structure for table `failed_jobs`
 --
 
-DROP TABLE IF EXISTS `failed_jobs`;
-CREATE TABLE IF NOT EXISTS `failed_jobs` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `uuid` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -238,14 +208,12 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 -- Table structure for table `incomings`
 --
 
-DROP TABLE IF EXISTS `incomings`;
-CREATE TABLE IF NOT EXISTS `incomings` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `incomings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `incomings`
@@ -264,10 +232,9 @@ INSERT INTO `incomings` (`id`, `name`, `created_at`, `updated_at`) VALUES
 -- Table structure for table `invoices`
 --
 
-DROP TABLE IF EXISTS `invoices`;
-CREATE TABLE IF NOT EXISTS `invoices` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `dealer_id` bigint UNSIGNED NOT NULL,
+CREATE TABLE `invoices` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `dealer_id` bigint(20) UNSIGNED NOT NULL,
   `bill_no` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `original_amount` decimal(12,2) NOT NULL,
@@ -276,8 +243,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `invoices_dealer_id_foreign` (`dealer_id`)
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -286,17 +252,14 @@ CREATE TABLE IF NOT EXISTS `invoices` (
 -- Table structure for table `jobs`
 --
 
-DROP TABLE IF EXISTS `jobs`;
-CREATE TABLE IF NOT EXISTS `jobs` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `queue` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `attempts` tinyint UNSIGNED NOT NULL,
-  `reserved_at` int UNSIGNED DEFAULT NULL,
-  `available_at` int UNSIGNED NOT NULL,
-  `created_at` int UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `jobs_queue_index` (`queue`)
+  `attempts` tinyint(3) UNSIGNED NOT NULL,
+  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
+  `available_at` int(10) UNSIGNED NOT NULL,
+  `created_at` int(10) UNSIGNED NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -305,19 +268,17 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 -- Table structure for table `job_batches`
 --
 
-DROP TABLE IF EXISTS `job_batches`;
-CREATE TABLE IF NOT EXISTS `job_batches` (
+CREATE TABLE `job_batches` (
   `id` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `total_jobs` int NOT NULL,
-  `pending_jobs` int NOT NULL,
-  `failed_jobs` int NOT NULL,
+  `total_jobs` int(11) NOT NULL,
+  `pending_jobs` int(11) NOT NULL,
+  `failed_jobs` int(11) NOT NULL,
   `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `options` mediumtext COLLATE utf8mb4_unicode_ci,
-  `cancelled_at` int DEFAULT NULL,
-  `created_at` int NOT NULL,
-  `finished_at` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `cancelled_at` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `finished_at` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -326,13 +287,11 @@ CREATE TABLE IF NOT EXISTS `job_batches` (
 -- Table structure for table `migrations`
 --
 
-DROP TABLE IF EXISTS `migrations`;
-CREATE TABLE IF NOT EXISTS `migrations` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `migrations` (
+  `id` int(10) UNSIGNED NOT NULL,
   `migration` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `batch` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -388,7 +347,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (52, '2025_10_03_072006_remove_bank_columns_from_dealers_table', 25),
 (53, '2025_10_03_073809_rename_third_party_name_to_agency_name_in_sub_contractors_table', 26),
 (54, '2025_10_03_085631_update_contractor_type_column_final', 27),
-(55, '2025_10_03_095118_add_soft_deletes_to_transactions_table', 28);
+(55, '2025_10_03_095118_add_soft_deletes_to_transactions_table', 28),
+(56, '2025_10_04_064905_add_soft_deletes_to_invoices_table', 29);
 
 -- --------------------------------------------------------
 
@@ -396,14 +356,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- Table structure for table `outgoings`
 --
 
-DROP TABLE IF EXISTS `outgoings`;
-CREATE TABLE IF NOT EXISTS `outgoings` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `outgoings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `outgoings`
@@ -426,12 +384,10 @@ INSERT INTO `outgoings` (`id`, `name`, `created_at`, `updated_at`) VALUES
 -- Table structure for table `password_reset_tokens`
 --
 
-DROP TABLE IF EXISTS `password_reset_tokens`;
-CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
+CREATE TABLE `password_reset_tokens` (
   `email` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`email`)
+  `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -440,15 +396,13 @@ CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
 -- Table structure for table `products`
 --
 
-DROP TABLE IF EXISTS `products`;
-CREATE TABLE IF NOT EXISTS `products` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `products` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `product_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `hsn_code` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -457,9 +411,8 @@ CREATE TABLE IF NOT EXISTS `products` (
 -- Table structure for table `projects`
 --
 
-DROP TABLE IF EXISTS `projects`;
-CREATE TABLE IF NOT EXISTS `projects` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `projects` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `department_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount_project` decimal(12,2) NOT NULL,
@@ -471,8 +424,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `remark` text COLLATE utf8mb4_unicode_ci,
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -481,16 +433,12 @@ CREATE TABLE IF NOT EXISTS `projects` (
 -- Table structure for table `project_employee`
 --
 
-DROP TABLE IF EXISTS `project_employee`;
-CREATE TABLE IF NOT EXISTS `project_employee` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `project_id` bigint UNSIGNED NOT NULL,
-  `employee_id` bigint UNSIGNED NOT NULL,
+CREATE TABLE `project_employee` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `project_id` bigint(20) UNSIGNED NOT NULL,
+  `employee_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `project_employee_project_id_foreign` (`project_id`),
-  KEY `project_employee_employee_id_foreign` (`employee_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -499,19 +447,15 @@ CREATE TABLE IF NOT EXISTS `project_employee` (
 -- Table structure for table `project_expenses`
 --
 
-DROP TABLE IF EXISTS `project_expenses`;
-CREATE TABLE IF NOT EXISTS `project_expenses` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `project_id` bigint UNSIGNED NOT NULL,
-  `outgoing_id` bigint UNSIGNED NOT NULL,
+CREATE TABLE `project_expenses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `project_id` bigint(20) UNSIGNED NOT NULL,
+  `outgoing_id` bigint(20) UNSIGNED NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `date` date NOT NULL,
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `project_expenses_project_id_foreign` (`project_id`),
-  KEY `project_expenses_outgoing_id_foreign` (`outgoing_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -520,19 +464,15 @@ CREATE TABLE IF NOT EXISTS `project_expenses` (
 -- Table structure for table `project_incomes`
 --
 
-DROP TABLE IF EXISTS `project_incomes`;
-CREATE TABLE IF NOT EXISTS `project_incomes` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `project_id` bigint UNSIGNED NOT NULL,
-  `incoming_id` bigint UNSIGNED NOT NULL,
+CREATE TABLE `project_incomes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `project_id` bigint(20) UNSIGNED NOT NULL,
+  `incoming_id` bigint(20) UNSIGNED NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `date` date NOT NULL,
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `project_incomes_project_id_foreign` (`project_id`),
-  KEY `project_incomes_incoming_id_foreign` (`incoming_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -541,13 +481,12 @@ CREATE TABLE IF NOT EXISTS `project_incomes` (
 -- Table structure for table `r_a_bills`
 --
 
-DROP TABLE IF EXISTS `r_a_bills`;
-CREATE TABLE IF NOT EXISTS `r_a_bills` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `r_a_bills` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `bill_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` date NOT NULL,
-  `customer_id` bigint UNSIGNED NOT NULL,
-  `project_id` bigint UNSIGNED DEFAULT NULL,
+  `customer_id` bigint(20) UNSIGNED NOT NULL,
+  `project_id` bigint(20) UNSIGNED DEFAULT NULL,
   `ra_bill_amount` decimal(15,2) NOT NULL,
   `dept_taxes_overheads` decimal(15,2) NOT NULL,
   `tds_1_percent` decimal(15,2) NOT NULL,
@@ -563,10 +502,7 @@ CREATE TABLE IF NOT EXISTS `r_a_bills` (
   `net_amount` decimal(15,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `r_a_bills_customer_id_foreign` (`customer_id`),
-  KEY `r_a_bills_project_id_foreign` (`project_id`)
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -575,17 +511,13 @@ CREATE TABLE IF NOT EXISTS `r_a_bills` (
 -- Table structure for table `sessions`
 --
 
-DROP TABLE IF EXISTS `sessions`;
-CREATE TABLE IF NOT EXISTS `sessions` (
+CREATE TABLE `sessions` (
   `id` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
   `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_agent` text COLLATE utf8mb4_unicode_ci,
   `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_activity` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sessions_user_id_index` (`user_id`),
-  KEY `sessions_last_activity_index` (`last_activity`)
+  `last_activity` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -594,9 +526,8 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 -- Table structure for table `sub_contractors`
 --
 
-DROP TABLE IF EXISTS `sub_contractors`;
-CREATE TABLE IF NOT EXISTS `sub_contractors` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `sub_contractors` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `contractor_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `contractor_type` enum('self','agency') COLLATE utf8mb4_unicode_ci NOT NULL,
   `agency_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -609,9 +540,7 @@ CREATE TABLE IF NOT EXISTS `sub_contractors` (
   `work_order_date` date DEFAULT NULL,
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sub_contractors_contractor_type_contractor_name_index` (`contractor_type`,`contractor_name`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -620,18 +549,15 @@ CREATE TABLE IF NOT EXISTS `sub_contractors` (
 -- Table structure for table `sub_contractor_bills`
 --
 
-DROP TABLE IF EXISTS `sub_contractor_bills`;
-CREATE TABLE IF NOT EXISTS `sub_contractor_bills` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `sub_contractor_bills` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `bill_no` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sub_contractor_id` bigint UNSIGNED NOT NULL,
+  `sub_contractor_id` bigint(20) UNSIGNED NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `date` date NOT NULL,
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sub_contractor_bills_sub_contractor_id_foreign` (`sub_contractor_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -640,9 +566,8 @@ CREATE TABLE IF NOT EXISTS `sub_contractor_bills` (
 -- Table structure for table `tenders`
 --
 
-DROP TABLE IF EXISTS `tenders`;
-CREATE TABLE IF NOT EXISTS `tenders` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tenders` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `work_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `department` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount_emd_fdr` decimal(10,2) NOT NULL,
@@ -653,8 +578,7 @@ CREATE TABLE IF NOT EXISTS `tenders` (
   `date` date NOT NULL,
   `result` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -663,28 +587,21 @@ CREATE TABLE IF NOT EXISTS `tenders` (
 -- Table structure for table `transactions`
 --
 
-DROP TABLE IF EXISTS `transactions`;
-CREATE TABLE IF NOT EXISTS `transactions` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `transactions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `type` enum('incoming','outgoing') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `project_id` bigint UNSIGNED DEFAULT NULL,
-  `dealer_id` bigint UNSIGNED DEFAULT NULL,
-  `sub_contractor_id` bigint UNSIGNED DEFAULT NULL,
-  `incoming_id` bigint UNSIGNED DEFAULT NULL,
-  `outgoing_id` bigint UNSIGNED DEFAULT NULL,
+  `project_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `dealer_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `sub_contractor_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `incoming_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `outgoing_id` bigint(20) UNSIGNED DEFAULT NULL,
   `amount` decimal(10,2) NOT NULL,
   `date` date NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `transactions_project_id_foreign` (`project_id`),
-  KEY `transactions_dealer_id_foreign` (`dealer_id`),
-  KEY `transactions_incoming_id_foreign` (`incoming_id`),
-  KEY `transactions_outgoing_id_foreign` (`outgoing_id`),
-  KEY `transactions_sub_contractor_id_foreign` (`sub_contractor_id`)
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -693,10 +610,9 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 -- Table structure for table `upads`
 --
 
-DROP TABLE IF EXISTS `upads`;
-CREATE TABLE IF NOT EXISTS `upads` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `employee_id` bigint UNSIGNED NOT NULL,
+CREATE TABLE `upads` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `employee_id` bigint(20) UNSIGNED NOT NULL,
   `date` date NOT NULL,
   `salary` decimal(10,2) NOT NULL,
   `salary_paid` tinyint(1) NOT NULL DEFAULT '0',
@@ -704,9 +620,7 @@ CREATE TABLE IF NOT EXISTS `upads` (
   `upad_paid` tinyint(1) NOT NULL DEFAULT '0',
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `upads_employee_id_foreign` (`employee_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -715,19 +629,16 @@ CREATE TABLE IF NOT EXISTS `upads` (
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -735,6 +646,386 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Ansh', 'anshgalani@yahoo.com', NULL, '$2y$12$e63VF4Z10IFUeGjHc9E1tOm/5.qp3Tb2vaGt6OFjCmNyJiOTuFv9C', NULL, '2025-09-13 05:46:52', '2025-09-15 05:57:56');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `bills`
+--
+ALTER TABLE `bills`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `bills_bill_number_unique` (`bill_number`),
+  ADD KEY `bills_customer_id_foreign` (`customer_id`);
+
+--
+-- Indexes for table `bill_items`
+--
+ALTER TABLE `bill_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `bill_items_bill_id_foreign` (`bill_id`),
+  ADD KEY `bill_items_product_id_foreign` (`product_id`);
+
+--
+-- Indexes for table `cache`
+--
+ALTER TABLE `cache`
+  ADD PRIMARY KEY (`key`);
+
+--
+-- Indexes for table `cache_locks`
+--
+ALTER TABLE `cache_locks`
+  ADD PRIMARY KEY (`key`);
+
+--
+-- Indexes for table `customers`
+--
+ALTER TABLE `customers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dealers`
+--
+ALTER TABLE `dealers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dealer_bank_accounts`
+--
+ALTER TABLE `dealer_bank_accounts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `dealer_bank_accounts_dealer_id_foreign` (`dealer_id`);
+
+--
+-- Indexes for table `employees`
+--
+ALTER TABLE `employees`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `employee_project`
+--
+ALTER TABLE `employee_project`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `employee_project_employee_id_project_id_unique` (`employee_id`,`project_id`),
+  ADD KEY `employee_project_project_id_foreign` (`project_id`);
+
+--
+-- Indexes for table `expenses`
+--
+ALTER TABLE `expenses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Indexes for table `incomings`
+--
+ALTER TABLE `incomings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `invoices`
+--
+ALTER TABLE `invoices`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `invoices_dealer_id_foreign` (`dealer_id`),
+  ADD KEY `invoices_deleted_at_index` (`deleted_at`);
+
+--
+-- Indexes for table `jobs`
+--
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jobs_queue_index` (`queue`);
+
+--
+-- Indexes for table `job_batches`
+--
+ALTER TABLE `job_batches`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `outgoings`
+--
+ALTER TABLE `outgoings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `projects`
+--
+ALTER TABLE `projects`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `project_employee`
+--
+ALTER TABLE `project_employee`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `project_employee_project_id_foreign` (`project_id`),
+  ADD KEY `project_employee_employee_id_foreign` (`employee_id`);
+
+--
+-- Indexes for table `project_expenses`
+--
+ALTER TABLE `project_expenses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `project_expenses_project_id_foreign` (`project_id`),
+  ADD KEY `project_expenses_outgoing_id_foreign` (`outgoing_id`);
+
+--
+-- Indexes for table `project_incomes`
+--
+ALTER TABLE `project_incomes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `project_incomes_project_id_foreign` (`project_id`),
+  ADD KEY `project_incomes_incoming_id_foreign` (`incoming_id`);
+
+--
+-- Indexes for table `r_a_bills`
+--
+ALTER TABLE `r_a_bills`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `r_a_bills_customer_id_foreign` (`customer_id`),
+  ADD KEY `r_a_bills_project_id_foreign` (`project_id`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sessions_user_id_index` (`user_id`),
+  ADD KEY `sessions_last_activity_index` (`last_activity`);
+
+--
+-- Indexes for table `sub_contractors`
+--
+ALTER TABLE `sub_contractors`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sub_contractors_contractor_type_contractor_name_index` (`contractor_type`,`contractor_name`);
+
+--
+-- Indexes for table `sub_contractor_bills`
+--
+ALTER TABLE `sub_contractor_bills`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sub_contractor_bills_sub_contractor_id_foreign` (`sub_contractor_id`);
+
+--
+-- Indexes for table `tenders`
+--
+ALTER TABLE `tenders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `transactions_project_id_foreign` (`project_id`),
+  ADD KEY `transactions_dealer_id_foreign` (`dealer_id`),
+  ADD KEY `transactions_incoming_id_foreign` (`incoming_id`),
+  ADD KEY `transactions_outgoing_id_foreign` (`outgoing_id`),
+  ADD KEY `transactions_sub_contractor_id_foreign` (`sub_contractor_id`);
+
+--
+-- Indexes for table `upads`
+--
+ALTER TABLE `upads`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `upads_employee_id_foreign` (`employee_id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `bills`
+--
+ALTER TABLE `bills`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `bill_items`
+--
+ALTER TABLE `bill_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `customers`
+--
+ALTER TABLE `customers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `dealers`
+--
+ALTER TABLE `dealers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `dealer_bank_accounts`
+--
+ALTER TABLE `dealer_bank_accounts`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `employees`
+--
+ALTER TABLE `employees`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `employee_project`
+--
+ALTER TABLE `employee_project`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `expenses`
+--
+ALTER TABLE `expenses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `incomings`
+--
+ALTER TABLE `incomings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `invoices`
+--
+ALTER TABLE `invoices`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT for table `outgoings`
+--
+ALTER TABLE `outgoings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `projects`
+--
+ALTER TABLE `projects`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `project_employee`
+--
+ALTER TABLE `project_employee`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `project_expenses`
+--
+ALTER TABLE `project_expenses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `project_incomes`
+--
+ALTER TABLE `project_incomes`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `r_a_bills`
+--
+ALTER TABLE `r_a_bills`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `sub_contractors`
+--
+ALTER TABLE `sub_contractors`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `sub_contractor_bills`
+--
+ALTER TABLE `sub_contractor_bills`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tenders`
+--
+ALTER TABLE `tenders`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `upads`
+--
+ALTER TABLE `upads`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
