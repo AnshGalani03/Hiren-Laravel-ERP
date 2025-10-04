@@ -343,7 +343,9 @@ class DealerController extends Controller
                         <a href="' . route('invoices.edit', $invoice->id) . '" class="btn btn-warning btn-sm">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <button class="btn btn-danger btn-sm delete-invoice" data-id="' . $invoice->id . '">
+                        <button type="button" class="btn btn-danger btn-sm delete-invoice" 
+                                data-id="' . $invoice->id . '" 
+                                onclick="deleteInvoice(' . $invoice->id . ')" title="Delete">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     ';

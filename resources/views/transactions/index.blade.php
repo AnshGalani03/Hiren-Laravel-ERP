@@ -11,6 +11,9 @@
                 <a href="{{ route('transactions.create', ['type' => 'outgoing']) }}" class="btn btn-success btn-sm">
                     Add Outgoing
                 </a>
+                <a href="{{ route('transactions.trashed') }}" class="btn btn-danger btn-sm">
+                    Trashed
+                </a>
             </div>
         </div>
     </x-slot>

@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'dealer_id',
         'bill_no',
@@ -21,6 +23,7 @@ class Invoice extends Model
     {
         return [
             'date' => 'date',
+            'deleted_at' => 'datetime',
             'amount' => 'decimal:2',
             'original_amount' => 'decimal:2',
             'gst_rate' => 'decimal:2',

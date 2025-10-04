@@ -166,7 +166,7 @@ class TransactionController extends Controller
                     ->rawColumns(['action', 'amount'])
                     ->make(true);
             } catch (\Exception $e) {
-                Log::error('Trashed DataTable error: ' . $e->getMessage());
+                // Log::error('Trashed DataTable error: ' . $e->getMessage());
                 return response()->json(['error' => 'Error loading trashed data: ' . $e->getMessage()], 500);
             }
         }
@@ -186,7 +186,7 @@ class TransactionController extends Controller
                 ->route('transactions.trashed')
                 ->with('success', 'Transaction restored successfully');
         } catch (\Exception $e) {
-            Log::error('Restore error: ' . $e->getMessage());
+            // Log::error('Restore error: ' . $e->getMessage());
 
             return back()
                 ->withErrors(['error' => 'Failed to restore Transaction: ' . $e->getMessage()]);
@@ -205,7 +205,7 @@ class TransactionController extends Controller
                 ->route('transactions.trashed')
                 ->with('success', 'Transaction permanently deleted: ' . $description);
         } catch (\Exception $e) {
-            Log::error('Force delete error: ' . $e->getMessage());
+            // Log::error('Force delete error: ' . $e->getMessage());
 
             return back()
                 ->withErrors(['error' => 'Failed to permanently delete Transaction: ' . $e->getMessage()]);
@@ -359,7 +359,7 @@ class TransactionController extends Controller
                 ->with('success', 'Transaction moved to trash You can restore it from the trash.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Delete error: ' . $e->getMessage());
+            // Log::error('Delete error: ' . $e->getMessage());
 
             return redirect()
                 ->route('transactions.index')

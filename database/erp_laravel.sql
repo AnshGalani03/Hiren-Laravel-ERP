@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 03, 2025 at 09:20 AM
+-- Generation Time: Oct 03, 2025 at 11:38 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -45,14 +45,7 @@ CREATE TABLE IF NOT EXISTS `bills` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `bills_bill_number_unique` (`bill_number`),
   KEY `bills_customer_id_foreign` (`customer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `bills`
---
-
-INSERT INTO `bills` (`id`, `bill_number`, `customer_id`, `bill_date`, `subtotal`, `tax_rate`, `tax_amount`, `total_amount`, `notes`, `status`, `is_gst`, `created_at`, `updated_at`) VALUES
-(2, 'SHN25001', 1, '2025-10-02', 10450.00, 18.00, 1881.00, 12331.00, NULL, 'draft', 1, '2025-10-02 23:25:41', '2025-10-02 23:26:09');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -73,15 +66,7 @@ CREATE TABLE IF NOT EXISTS `bill_items` (
   PRIMARY KEY (`id`),
   KEY `bill_items_bill_id_foreign` (`bill_id`),
   KEY `bill_items_product_id_foreign` (`product_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `bill_items`
---
-
-INSERT INTO `bill_items` (`id`, `bill_id`, `product_id`, `quantity`, `unit_price`, `total_price`, `created_at`, `updated_at`) VALUES
-(8, 2, 1, 5, 2000.00, 10000.00, '2025-10-02 23:26:09', '2025-10-02 23:26:09'),
-(7, 2, 2, 3, 150.00, 450.00, '2025-10-02 23:26:09', '2025-10-02 23:26:09');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -128,14 +113,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `customers`
---
-
-INSERT INTO `customers` (`id`, `name`, `address`, `gst`, `pan_card`, `phone_no`, `created_at`, `updated_at`) VALUES
-(1, 'Naitik', 'Surat', 'GSTPANFH4585GST', 'BAJPC4350M', '4525658525', '2025-09-13 05:55:15', '2025-09-24 01:49:47');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -154,16 +132,7 @@ CREATE TABLE IF NOT EXISTS `dealers` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `dealers`
---
-
-INSERT INTO `dealers` (`id`, `dealer_name`, `mobile_no`, `gst`, `address`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Ansh', '4525658545', 'GST4565GST45', 'Surat, Gujarat', '2025-09-13 05:47:38', '2025-10-03 01:48:20', NULL),
-(3, 'Jay', '8545856525', 'GSHTHI54595JPS', 'Gujarat', '2025-09-30 23:35:14', '2025-09-30 23:35:14', NULL),
-(5, 'Raj', '45856582545', 'GST4565GST', 'Surat, gujrat', '2025-10-03 01:33:33', '2025-10-03 01:36:41', NULL);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -184,17 +153,7 @@ CREATE TABLE IF NOT EXISTS `dealer_bank_accounts` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `dealer_bank_accounts_dealer_id_foreign` (`dealer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `dealer_bank_accounts`
---
-
-INSERT INTO `dealer_bank_accounts` (`id`, `dealer_id`, `account_name`, `account_no`, `bank_name`, `ifsc`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 4, 'Raj', '45856582585', 'ICICI', 'ICICI4585', 'Demo Not', '2025-10-03 01:16:10', '2025-10-03 01:17:04'),
-(2, 4, 'Raj Demo', '4585689858458', 'SBI', 'SBI4585SB', 'SBI', '2025-10-03 01:16:10', '2025-10-03 01:17:04'),
-(3, 5, 'Raj ICICi', '45856582585', 'ICIC', 'ICICI45IC', NULL, '2025-10-03 01:33:33', '2025-10-03 01:36:41'),
-(4, 5, 'Raj SBI', '45856525856', 'SBI', 'SBHIICI', 'Demo', '2025-10-03 01:33:33', '2025-10-03 01:36:41');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -220,14 +179,7 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `employees`
---
-
-INSERT INTO `employees` (`id`, `name`, `designation`, `mobile_no`, `alt_contact_no`, `pan_no`, `aadhar_no`, `salary`, `pf`, `esic`, `bank_name`, `account_no`, `ifsc`, `created_at`, `updated_at`) VALUES
-(1, 'Milan', 'CEO', '4585652545', '2545856585', 'PAN456PAN', '4525685458565', 50000.00, 'PF123PF', 'ESIC458565ESIC', 'Demo', '52365458565', 'Demo4525', '2025-09-13 05:53:52', '2025-09-13 05:53:52');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -245,14 +197,7 @@ CREATE TABLE IF NOT EXISTS `employee_project` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `employee_project_employee_id_project_id_unique` (`employee_id`,`project_id`),
   KEY `employee_project_project_id_foreign` (`project_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `employee_project`
---
-
-INSERT INTO `employee_project` (`id`, `employee_id`, `project_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '2025-09-13 05:55:58', '2025-09-13 05:55:58');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -333,17 +278,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `invoices_dealer_id_foreign` (`dealer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `invoices`
---
-
-INSERT INTO `invoices` (`id`, `dealer_id`, `bill_no`, `amount`, `original_amount`, `gst_rate`, `date`, `remark`, `created_at`, `updated_at`) VALUES
-(5, 5, '05', 900.00, 5000.00, 18.00, '2025-10-03', NULL, '2025-10-03 01:51:09', '2025-10-03 01:51:09'),
-(2, 2, '05', 90000.00, 500000.00, 18.00, '2025-09-01', 'Demo', '2025-09-24 07:01:21', '2025-10-01 00:10:31'),
-(3, 3, '05', 900.00, 5000.00, 18.00, '2025-10-01', NULL, '2025-10-01 00:09:29', '2025-10-01 00:09:29'),
-(4, 3, '06', 1080.00, 6000.00, 18.00, '2025-09-29', 'Demo', '2025-10-01 00:09:49', '2025-10-01 00:09:49');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -397,7 +332,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -452,7 +387,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (51, '2025_10_03_060918_create_dealer_bank_accounts_table', 24),
 (52, '2025_10_03_072006_remove_bank_columns_from_dealers_table', 25),
 (53, '2025_10_03_073809_rename_third_party_name_to_agency_name_in_sub_contractors_table', 26),
-(54, '2025_10_03_085631_update_contractor_type_column_final', 27);
+(54, '2025_10_03_085631_update_contractor_type_column_final', 27),
+(55, '2025_10_03_095118_add_soft_deletes_to_transactions_table', 28);
 
 -- --------------------------------------------------------
 
@@ -513,15 +449,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `products`
---
-
-INSERT INTO `products` (`id`, `product_name`, `hsn_code`, `date`, `created_at`, `updated_at`) VALUES
-(1, 'Cement', 'HSNCEMENT', '2025-09-13', '2025-09-13 06:02:48', '2025-09-13 06:02:48'),
-(2, 'Still', 'STILL56', '2025-09-13', '2025-09-13 06:02:57', '2025-09-13 06:02:57');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -545,15 +473,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `projects`
---
-
-INSERT INTO `projects` (`id`, `name`, `department_name`, `amount_project`, `percentage`, `final_project_amount`, `time_limit`, `emd_fdr_detail`, `work_order_date`, `remark`, `active`, `created_at`, `updated_at`) VALUES
-(1, 'Surat', 'Road', 500000.00, '15', 5500000.00, '6 month', '5000', '2025-09-09', NULL, 1, '2025-09-13 05:55:49', '2025-10-03 00:23:03'),
-(2, 'Bardoli', 'SIP', 500000.00, '25', 600000.00, '6 month', '2000', '2025-10-09', 'Surat', 1, '2025-10-03 00:11:42', '2025-10-03 00:23:39');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -647,15 +567,7 @@ CREATE TABLE IF NOT EXISTS `r_a_bills` (
   PRIMARY KEY (`id`),
   KEY `r_a_bills_customer_id_foreign` (`customer_id`),
   KEY `r_a_bills_project_id_foreign` (`project_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `r_a_bills`
---
-
-INSERT INTO `r_a_bills` (`id`, `bill_no`, `date`, `customer_id`, `project_id`, `ra_bill_amount`, `dept_taxes_overheads`, `tds_1_percent`, `rmd_amount`, `welfare_cess`, `testing_charges`, `total_c`, `sgst_9_percent`, `cgst_9_percent`, `igst_0_percent`, `total_with_gst`, `total_deductions`, `net_amount`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'HSNRA25001', '2025-09-02', 1, 1, 2506964.00, 95711.00, 23113.00, 90300.00, 28402.00, 36200.00, 2411253.00, 217012.77, 217012.77, 0.00, 2845278.54, 178015.00, 2667263.54, '2025-09-24 00:18:36', '2025-09-27 00:43:20', NULL),
-(2, 'HSNRA25002', '2025-09-24', 1, 1, 2406964.00, 95711.00, 123113.00, 90300.00, 28402.00, 36200.00, 2311253.00, 208012.77, 208012.77, 0.00, 2727278.54, 278015.00, 2449263.54, '2025-09-24 04:22:47', '2025-09-30 06:45:32', '2025-09-30 06:45:32');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -700,16 +612,7 @@ CREATE TABLE IF NOT EXISTS `sub_contractors` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `sub_contractors_contractor_type_contractor_name_index` (`contractor_type`,`contractor_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `sub_contractors`
---
-
-INSERT INTO `sub_contractors` (`id`, `contractor_name`, `contractor_type`, `agency_name`, `date`, `project_name`, `department_name`, `amount_project`, `time_limit`, `emd_fdr_detail`, `work_order_date`, `remark`, `created_at`, `updated_at`) VALUES
-(1, 'Milan', 'self', NULL, '2025-09-07', 'Surat', 'Road', 5000.00, '6 Month', '2000', '2025-09-04', NULL, '2025-09-13 05:57:44', '2025-09-13 05:57:44'),
-(2, 'Ansh', 'agency', 'Demo', '2025-09-18', 'Demo', 'Road', 500000.00, '6 Month', 'Demo', '2025-09-10', 'Demo Remark', '2025-09-20 04:17:52', '2025-09-20 04:17:52'),
-(3, 'Milan', 'self', 'Demo1', '2025-10-08', 'Demo', 'Demo1', 500100.00, '6 month1', '2000', '2025-09-30', 'Demo', '2025-10-03 03:27:32', '2025-10-03 03:30:25');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -752,14 +655,7 @@ CREATE TABLE IF NOT EXISTS `tenders` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `tenders`
---
-
-INSERT INTO `tenders` (`id`, `work_name`, `department`, `amount_emd_fdr`, `amount_dd`, `above_below`, `remark`, `return_detail`, `date`, `result`, `created_at`, `updated_at`) VALUES
-(1, 'Road', 'Road', 2000.00, 1000.00, 'Above', 'Surat', 'Demo', '2025-09-03', 'Pending', '2025-09-13 05:56:48', '2025-09-13 05:56:48');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -782,21 +678,14 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `remark` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `transactions_project_id_foreign` (`project_id`),
   KEY `transactions_dealer_id_foreign` (`dealer_id`),
   KEY `transactions_incoming_id_foreign` (`incoming_id`),
   KEY `transactions_outgoing_id_foreign` (`outgoing_id`),
   KEY `transactions_sub_contractor_id_foreign` (`sub_contractor_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `transactions`
---
-
-INSERT INTO `transactions` (`id`, `type`, `project_id`, `dealer_id`, `sub_contractor_id`, `incoming_id`, `outgoing_id`, `amount`, `date`, `description`, `remark`, `created_at`, `updated_at`) VALUES
-(4, 'outgoing', NULL, 5, NULL, NULL, 9, 3000.00, '2025-10-01', 'demo', NULL, '2025-10-03 01:52:15', '2025-10-03 01:52:15'),
-(3, 'incoming', NULL, NULL, 1, 5, NULL, 200.00, '2025-09-01', 'demo', NULL, '2025-09-13 06:01:49', '2025-09-13 06:01:49');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -818,15 +707,7 @@ CREATE TABLE IF NOT EXISTS `upads` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `upads_employee_id_foreign` (`employee_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `upads`
---
-
-INSERT INTO `upads` (`id`, `employee_id`, `date`, `salary`, `salary_paid`, `upad`, `upad_paid`, `remark`, `created_at`, `updated_at`) VALUES
-(1, 1, '2025-09-02', 50000.00, 0, 2000.00, 0, NULL, '2025-09-13 05:54:06', '2025-09-13 05:54:06'),
-(2, 1, '2025-08-01', 50000.00, 0, 10000.00, 0, 'Demo', '2025-09-13 05:54:33', '2025-09-13 05:54:33');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 

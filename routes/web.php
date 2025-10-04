@@ -57,6 +57,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
     Route::get('invoices/summary', [InvoiceController::class, 'summary'])->name('invoices.summary');
 
+    // Invoice Trash Routes
+    Route::get('invoices-trashed', [InvoiceController::class, 'trashed'])->name('invoices.trashed');
+    Route::post('invoices/{id}/restore', [InvoiceController::class, 'restore'])->name('invoices.restore');
+    Route::delete('invoices/{id}/force-delete', [InvoiceController::class, 'forceDelete'])->name('invoices.force-delete');
+
     // Employee Routes
     Route::resource('employees', EmployeeController::class);
     Route::get('employees/{employee}/monthly-upads', [UpadController::class, 'monthlyView'])->name('employees.monthly-upads');

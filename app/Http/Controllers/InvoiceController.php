@@ -11,6 +11,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class InvoiceController extends Controller
 {
@@ -67,8 +68,10 @@ class InvoiceController extends Controller
                         <a href="' . route('invoices.edit', $invoice->id) . '" class="btn btn-sm btn-warning">
                             Edit
                         </a>
-                        <button class="btn btn-sm btn-danger delete-invoice" data-id="' . $invoice->id . '">
-                            Delete
+                        <button type="button" class="btn btn-danger btn-sm delete-invoice" 
+                                data-id="' . $invoice->id . '" 
+                                onclick="deleteInvoice(' . $invoice->id . ')" title="Delete">
+                            <i class="fas fa-trash"></i> Delete
                         </button>';
                 })
                 ->addIndexColumn()
@@ -79,6 +82,100 @@ class InvoiceController extends Controller
         $dealers = Dealer::orderBy('dealer_name')->get();
         return view('invoices.index', compact('dealers'));
     }
+
+
+    // Show Trashed Invoices
+    public function trashed(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+                $trashedInvoices = Invoice::onlyTrashed()
+                    ->with('dealer')
+                    ->select([
+                        'id',
+                        'dealer_id',
+                        'bill_no',
+                        'original_amount',
+                        'amount',
+                        'date',
+                        'deleted_at'
+                    ]);
+
+                return DataTables::of($trashedInvoices)
+                    ->editColumn('date', function ($invoice) {
+                        return $invoice->date ? $invoice->date->format('d/m/Y') : '';
+                    })
+                    ->editColumn('deleted_at', function ($invoice) {
+                        return $invoice->deleted_at ? $invoice->deleted_at->format('d/m/Y') : '';
+                    })
+                    ->addColumn('dealer_name', function ($invoice) {
+                        return $invoice->dealer ? $invoice->dealer->dealer_name : 'N/A';
+                    })
+                    ->editColumn('original_amount', function ($invoice) {
+                        // 🔧 FIX: Handle null/empty original_amount properly
+                        $amount = $invoice->original_amount ?? 0;
+                        return '₹' . number_format((float)$amount, 2);
+                    })
+                    ->addColumn('action', function ($invoice) {
+                        return '
+                        <div class="">
+                            <button type="button" class="btn btn-success btn-sm" onclick="restoreInvoice(' . $invoice->id . ')" title="Restore">
+                                <i class="fas fa-undo"></i> Restore
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteInvoicePermanently(' . $invoice->id . ')" title="Delete Forever">
+                                <i class="fas fa-trash-alt"></i> Delete Forever
+                            </button>
+                        </div>';
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            } catch (\Exception $e) {
+                // Log::error('Trashed DataTable error: ' . $e->getMessage());
+                return response()->json(['error' => 'Error loading trashed data: ' . $e->getMessage()], 500);
+            }
+        }
+
+        return view('invoices.trashed');
+    }
+
+
+    // Restore Deleted Invoice
+    public function restore($id): RedirectResponse
+    {
+        try {
+            $invoice = Invoice::onlyTrashed()->findOrFail($id);
+            $invoice->restore();
+
+            return redirect()
+                ->route('invoices.trashed')
+                ->with('success', 'Invoice restored successfully: ' . $invoice->bill_no);
+        } catch (\Exception $e) {
+            // Log::error('Restore error: ' . $e->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to restore Invoice: ' . $e->getMessage()]);
+        }
+    }
+
+    // Permanently Delete Invoice
+    public function forceDelete($id): RedirectResponse
+    {
+        try {
+            $invoice = Invoice::onlyTrashed()->findOrFail($id);
+            $billNo = $invoice->bill_no;
+            $invoice->forceDelete();
+
+            return redirect()
+                ->route('invoices.trashed')
+                ->with('success', 'Invoice permanently deleted: ' . $billNo);
+        } catch (\Exception $e) {
+            // Log::error('Force delete error: ' . $e->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to permanently delete Invoice: ' . $e->getMessage()]);
+        }
+    }
+
 
     public function create(Request $request): View
     {
@@ -178,21 +275,21 @@ class InvoiceController extends Controller
         }
     }
 
+    // UPDATED: Now uses soft delete
     public function destroy(Invoice $invoice): JsonResponse
     {
         DB::beginTransaction();
-
         try {
-            $invoice->delete();
-
+            $invoice->delete(); // This will soft delete
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Invoice deleted successfully.'
+                'message' => 'Invoice moved to trash successfully.'
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+            // Log::error('Invoice delete error: ' . $e->getMessage());
 
             return response()->json([
                 'success' => false,
