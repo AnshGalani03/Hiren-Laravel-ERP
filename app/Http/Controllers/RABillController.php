@@ -166,7 +166,7 @@ class RABillController extends Controller
                 ->with('success', 'R.A. Bill restored successfully: ' . $raBill->bill_no);
 
         } catch (\Exception $e) {
-            Log::error('Restore error: ' . $e->getMessage());
+            // Log::error('Restore error: ' . $e->getMessage());
 
             return back()
                 ->withErrors(['error' => 'Failed to restore R.A. Bill: ' . $e->getMessage()]);
@@ -325,7 +325,7 @@ class RABillController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Delete error: ' . $e->getMessage());
+            // Log::error('Delete error: ' . $e->getMessage());
 
             return back()
                 ->withErrors(['error' => 'Failed to delete R.A. Bill: ' . $e->getMessage()]);

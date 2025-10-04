@@ -109,7 +109,7 @@ class SubContractorController extends Controller
                 'remark' => 'nullable|string|max:1000',
             ]);
 
-            Log::info('SubContractor Validated Data:', $validated);
+            // Log::info('SubContractor Validated Data:', $validated);
 
             DB::beginTransaction();
 

@@ -17,7 +17,6 @@ use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
 
 
-
 class TransactionController extends Controller
 {
     public function index(Request $request)
@@ -86,8 +85,6 @@ class TransactionController extends Controller
 
         return view('transactions.index', compact('projects', 'dealers', 'subContractors'));
     }
-
-
 
     // Show Trashed (Deleted) Transactions
     public function trashed(Request $request)
@@ -174,8 +171,7 @@ class TransactionController extends Controller
         return view('transactions.trashed');
     }
 
-
-    // 🔄 NEW: Restore Deleted Transaction
+    // Restore Deleted Transaction
     public function restore($id): RedirectResponse
     {
         try {
@@ -193,7 +189,7 @@ class TransactionController extends Controller
         }
     }
 
-    // ❌ NEW: Permanently Delete Transaction
+    // Permanently Delete Transaction
     public function forceDelete($id): RedirectResponse
     {
         try {
@@ -345,7 +341,7 @@ class TransactionController extends Controller
         ]);
     }
 
-    // 🗑️ UPDATED: Now uses soft delete and redirects with flash message
+    // Now uses soft delete and redirects with flash message
     public function destroy(Transaction $transaction)
     {
         try {

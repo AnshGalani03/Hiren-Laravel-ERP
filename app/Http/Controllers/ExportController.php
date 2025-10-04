@@ -219,10 +219,10 @@ class ExportController extends Controller
 
             return $pdf->download($filename);
         } catch (\Exception $e) {
-            Log::error('Transactions Report Error: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-                'request_data' => $request->all()
-            ]);
+            // Log::error('Transactions Report Error: ' . $e->getMessage(), [
+            //     'trace' => $e->getTraceAsString(),
+            //     'request_data' => $request->all()
+            // ]);
 
             if ($request->ajax()) {
                 return response()->json(['error' => 'Error generating report: ' . $e->getMessage()], 500);
