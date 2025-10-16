@@ -85,7 +85,7 @@ class TransactionController extends Controller
         // Load filter data
         $projects = Project::where('active', true)->orderBy('name')->get();
         $dealers = Dealer::orderBy('dealer_name')->get();
-        $subContractors = SubContractor::orderBy('contractor_name')->get(); // Add this
+        $subContractors = SubContractor::orderBy('contractor_name')->get();
         $customers = Customer::orderBy('name')->get();
 
         return view('transactions.index', compact('projects', 'dealers', 'subContractors', 'customers'));

@@ -22,8 +22,8 @@
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4">
         <div class="p-4">
             <form id="filter-form">
-                <div class="row">
-                    <div class="col-md-2 mb-3">
+                <div class="row gy-3">
+                    <div class="col-md-4">
                         <div class="transactions-filter-wrapper">
                             <label for="project_filter" class="form-label">Project</label>
                             <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="project_filter" name="project_id">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-4">
                         <div class="transactions-filter-wrapper">
                             <label for="dealer_filter" class="form-label">Dealer</label>
                             <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="dealer_filter" name="dealer_id">
@@ -47,7 +47,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-4">
                         <div class="transactions-filter-wrapper">
                             <label for="sub_contractor_id" class="form-label">Sub-Contractor</label>
                             <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="sub_contractor_id" name="sub_contractor_id">
@@ -59,7 +59,19 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-4">
+                        <div class="transactions-filter-wrapper">
+                            <label for="customer_filter" class="form-label">Customer</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="customer_filter" name="customer_id">
+                                <option value="">All Customers</option>
+                                @foreach($customers as $customer)
+                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
                         <label for="type_filter" class="form-label">Type</label>
                         <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="type_filter" name="type">
                             <option value="">All Types</option>
@@ -68,19 +80,8 @@
                         </select>
                     </div>
 
-                    <!-- Customer Filter -->
-                    <div class="col-md-2">
-                        <label for="customer_filter" class="form-label">Customer</label>
-                        <select class="form-select" id="customer_filter" name="customer_id">
-                            <option value="">All Customers</option>
-                            @foreach($customers as $customer)
-                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
 
-
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4">
                         <label for="daterange" class="form-label">Date Range</label>
                         <div id="daterange" class="form-control" style="cursor: pointer;">
                             <i class="fas fa-calendar"></i>
@@ -89,13 +90,10 @@
                         </div>
                     </div>
 
-                    <div class="col-md-1 mb-3">
-                        <label class="form-label">&nbsp;</label>
-                        <div>
-                            <button type="button" class="btn btn-secondary w-100" id="reset_filters">
-                                Reset
-                            </button>
-                        </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-secondary w-100" id="reset_filters">
+                            Reset
+                        </button>
                     </div>
                 </div>
             </form>
@@ -216,6 +214,7 @@
                         d.project_id = $('#project_filter').val();
                         d.dealer_id = $('#dealer_filter').val();
                         d.sub_contractor_id = $('#sub_contractor_id').val();
+                        d.customer_id = $('#customer_filter').val();
                         d.type = $('#type_filter').val();
                         d.from_date = $('#daterange').data('daterangepicker').startDate.format('YYYY-MM-DD');
                         d.to_date = $('#daterange').data('daterangepicker').endDate.format('YYYY-MM-DD');
@@ -280,8 +279,9 @@
             });
 
             // Filter event handlers
-            $('#project_filter, #dealer_filter, #type_filter, #sub_contractor_id', '#customer_filter').change(function() {
+            $('#project_filter, #dealer_filter, #type_filter, #sub_contractor_id, #customer_filter').change(function() {
                 table.draw();
+                // table.ajax.reload();
             });
 
             $('#daterange').on('apply.daterangepicker', function(ev, picker) {

@@ -116,6 +116,9 @@ Route::middleware('auth')->group(function () {
 
     // Customer Routes
     Route::resource('customers', CustomerController::class);
+    // Customer Transactions Data Route
+    Route::get('customers/{customer}/transactions-data', [CustomerController::class, 'transactionsData'])
+        ->name('customers.transactions-data');
 
     // Bills Routes (Fixed: Moved to end to avoid conflicts)
     Route::resource('bills', BillController::class);

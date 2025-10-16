@@ -11,9 +11,14 @@ class Customer extends Model
 
     protected $fillable = [
         'name',
-        'address', 
+        'address',
         'gst',
         'pan_card', // Added PAN card field
         'phone_no'
     ];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }
