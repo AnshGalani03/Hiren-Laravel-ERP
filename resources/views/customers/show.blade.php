@@ -220,7 +220,7 @@
                     }
                 ],
                 order: [
-                    [6, 'desc']
+                    [1, 'desc']
                 ], // Order by date descending
                 pageLength: 25,
                 responsive: true,

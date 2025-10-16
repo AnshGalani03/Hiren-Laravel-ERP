@@ -229,17 +229,17 @@
                         name: 'DT_RowIndex',
                         searchable: false,
                         orderable: false,
-                        responsivePriority: 1
+                        responsivePriority: 3
                     },
                     {
                         data: 'type',
                         name: 'type',
-                        responsivePriority: 2
+                        responsivePriority: 1
                     },
                     {
                         data: 'category',
                         name: 'category',
-                        responsivePriority: 4
+                        responsivePriority: 2
                     },
                     {
                         data: 'description',
@@ -249,17 +249,17 @@
                     {
                         data: 'amount',
                         name: 'amount',
-                        responsivePriority: 2
+                        responsivePriority: 1
                     },
                     {
                         data: 'date',
                         name: 'date',
-                        responsivePriority: 3
+                        responsivePriority: 1
                     },
                     {
                         data: 'linked_to',
                         name: 'linked_to',
-                        responsivePriority: 5
+                        responsivePriority: 4
                     },
                     {
                         data: 'action',

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 14, 2025 at 12:42 PM
+-- Generation Time: Oct 16, 2025 at 11:00 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -342,7 +342,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -399,7 +399,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (53, '2025_10_03_073809_rename_third_party_name_to_agency_name_in_sub_contractors_table', 26),
 (54, '2025_10_03_085631_update_contractor_type_column_final', 27),
 (55, '2025_10_03_095118_add_soft_deletes_to_transactions_table', 28),
-(56, '2025_10_04_064905_add_soft_deletes_to_invoices_table', 29);
+(56, '2025_10_04_064905_add_soft_deletes_to_invoices_table', 29),
+(57, '2025_10_16_050902_add_customer_id_to_transactions_table', 30);
 
 -- --------------------------------------------------------
 
@@ -681,6 +682,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `project_id` bigint UNSIGNED DEFAULT NULL,
   `dealer_id` bigint UNSIGNED DEFAULT NULL,
   `sub_contractor_id` bigint UNSIGNED DEFAULT NULL,
+  `customer_id` bigint UNSIGNED DEFAULT NULL,
   `incoming_id` bigint UNSIGNED DEFAULT NULL,
   `outgoing_id` bigint UNSIGNED DEFAULT NULL,
   `amount` decimal(10,2) NOT NULL,
@@ -695,8 +697,9 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   KEY `transactions_dealer_id_foreign` (`dealer_id`),
   KEY `transactions_incoming_id_foreign` (`incoming_id`),
   KEY `transactions_outgoing_id_foreign` (`outgoing_id`),
-  KEY `transactions_sub_contractor_id_foreign` (`sub_contractor_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `transactions_sub_contractor_id_foreign` (`sub_contractor_id`),
+  KEY `transactions_customer_id_foreign` (`customer_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
