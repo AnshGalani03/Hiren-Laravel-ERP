@@ -68,6 +68,18 @@
                         </select>
                     </div>
 
+                    <!-- Customer Filter -->
+                    <div class="col-md-2">
+                        <label for="customer_filter" class="form-label">Customer</label>
+                        <select class="form-select" id="customer_filter" name="customer_id">
+                            <option value="">All Customers</option>
+                            @foreach($customers as $customer)
+                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
                     <div class="col-md-3 mb-3">
                         <label for="daterange" class="form-label">Date Range</label>
                         <div id="daterange" class="form-control" style="cursor: pointer;">
@@ -268,7 +280,7 @@
             });
 
             // Filter event handlers
-            $('#project_filter, #dealer_filter, #type_filter, #sub_contractor_id').change(function() {
+            $('#project_filter, #dealer_filter, #type_filter, #sub_contractor_id', '#customer_filter').change(function() {
                 table.draw();
             });
 
@@ -282,6 +294,7 @@
                 $('#dealer_filter').val(null).trigger('change');
                 $('#type_filter').val(null).trigger('change');
                 $('#sub_contractor_id').val(null).trigger('change');
+                $('#customer_filter').val(null).trigger('change');
 
                 // Reset date range to last 30 days
                 var start = moment().subtract(30, 'days');

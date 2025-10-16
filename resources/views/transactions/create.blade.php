@@ -142,7 +142,7 @@
                             @else
                             <div class="col-md-6">
                                 <div class="transactions-filter-wrapper">
-                                    <label for="sub_contractor_id" class="form-label">Sub-Contractor (Optional)</label>
+                                    <label for="sub_contractor_id" class="form-label">Sub-Contractor</label>
                                     <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="sub_contractor_id" name="sub_contractor_id">
                                         <option value="">Select Sub-Contractor</option>
                                         @foreach($subContractors as $subContractor)
@@ -154,6 +154,21 @@
                                 </div>
                             </div>
                             @endif
+
+                            <div class="col-md-6 mb-3">
+                                <div class="transactions-filter-wrapper">
+                                    <label for="customer_id" class="form-label">Customer</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="customer_id" name="customer_id">
+                                        <option value="">Select Customer</option>
+                                        @foreach($customers as $customer)
+                                        <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
+                                            {{ $customer->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

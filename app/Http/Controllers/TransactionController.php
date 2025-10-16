@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Dealer;
 use App\Models\SubContractor;
 use App\Models\Incoming;
+use App\Models\Customer;
 use App\Models\Outgoing;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -23,7 +24,7 @@ class TransactionController extends Controller
     {
         if ($request->ajax()) {
             // Base query - start fresh
-            $query = Transaction::with(['project', 'dealer', 'subContractor', 'incoming', 'outgoing']);
+            $query = Transaction::with(['project', 'dealer', 'subContractor', 'customer', 'incoming', 'outgoing']);
 
             // Apply filters consistently
             $query = $this->applyFilters($query, $request);
@@ -56,6 +57,9 @@ class TransactionController extends Controller
                     if ($transaction->subContractor) {
                         $linked[] = '<span class="badge bg-warning">Sub-Contractor: ' . $transaction->subContractor->contractor_name . '</span>';
                     }
+                    if ($transaction->customer) {
+                        $linked[] = '<span class="badge bg-success">Customer: ' . $transaction->customer->name . '</span>';
+                    }
                     return implode(' ', $linked) ?: 'None';
                 })
                 ->editColumn('type', function ($transaction) {
@@ -82,8 +86,9 @@ class TransactionController extends Controller
         $projects = Project::where('active', true)->orderBy('name')->get();
         $dealers = Dealer::orderBy('dealer_name')->get();
         $subContractors = SubContractor::orderBy('contractor_name')->get(); // Add this
+        $customers = Customer::orderBy('name')->get();
 
-        return view('transactions.index', compact('projects', 'dealers', 'subContractors'));
+        return view('transactions.index', compact('projects', 'dealers', 'subContractors', 'customers'));
     }
 
     // Show Trashed (Deleted) Transactions
@@ -92,7 +97,7 @@ class TransactionController extends Controller
         if ($request->ajax()) {
             try {
                 $trashedTransactions = Transaction::onlyTrashed() // Only show soft deleted records
-                    ->with(['project', 'dealer', 'subContractor', 'incoming', 'outgoing'])
+                    ->with(['project', 'dealer', 'subContractor', 'customer', 'incoming', 'outgoing'])
                     ->select([
                         'id',
                         'type',
@@ -102,6 +107,7 @@ class TransactionController extends Controller
                         'project_id',
                         'dealer_id',
                         'sub_contractor_id',
+                        'customer_id',
                         'incoming_id',
                         'outgoing_id',
                         'deleted_at'
@@ -136,6 +142,9 @@ class TransactionController extends Controller
                         }
                         if ($transaction->subContractor) {
                             $linked[] = 'Sub-Contractor: ' . $transaction->subContractor->contractor_name;
+                        }
+                        if ($transaction->customer) {
+                            $linked[] = 'Customer: ' . $transaction->customer->name;
                         }
                         return implode(', ', $linked) ?: 'None';
                     })
@@ -227,6 +236,11 @@ class TransactionController extends Controller
             $query->where('sub_contractor_id', $request->sub_contractor_id);
         }
 
+        // Customer filter
+        if ($request->filled('customer_id')) {
+            $query->where('customer_id', $request->customer_id);
+        }
+
         // Type filter
         if ($request->filled('type') && $request->type != '') {
             $query->where('type', $request->type);
@@ -252,10 +266,11 @@ class TransactionController extends Controller
         $projects = Project::where('active', true)->orderBy('name')->get();
         $dealers = Dealer::orderBy('dealer_name')->get();
         $subContractors = SubContractor::orderBy('contractor_name')->get(); // Add this
+        $customers = Customer::orderBy('name')->get();
         $incomings = Incoming::all();
         $outgoings = Outgoing::all();
 
-        return view('transactions.create', compact('type', 'projects', 'dealers', 'subContractors', 'incomings', 'outgoings'));
+        return view('transactions.create', compact('type', 'projects', 'dealers', 'subContractors', 'customers', 'incomings', 'outgoings'));
     }
 
     public function store(Request $request)
@@ -270,6 +285,7 @@ class TransactionController extends Controller
             'project_id' => 'nullable|exists:projects,id',
             'dealer_id' => 'nullable|exists:dealers,id',
             'sub_contractor_id' => 'nullable|exists:sub_contractors,id', // Add this
+            'customer_id' => 'nullable|exists:customers,id',
         ]);
 
         // Additional validation: if project is selected, ensure it's active
@@ -289,10 +305,11 @@ class TransactionController extends Controller
         $projects = Project::where('active', true)->orderBy('name')->get();
         $dealers = Dealer::orderBy('dealer_name')->get();
         $subContractors = SubContractor::orderBy('contractor_name')->get();
+        $customers = Customer::orderBy('name')->get();
         $incomings = Incoming::all();
         $outgoings = Outgoing::all();
 
-        return view('transactions.edit', compact('transaction', 'projects', 'dealers', 'subContractors', 'incomings', 'outgoings'));
+        return view('transactions.edit', compact('transaction', 'projects', 'dealers', 'subContractors', 'customers', 'incomings', 'outgoings'));
     }
 
     public function update(Request $request, Transaction $transaction)
@@ -302,11 +319,12 @@ class TransactionController extends Controller
             'amount' => 'required|numeric|min:0',
             'date' => 'required|date',
             'description' => 'required|string|max:255',
-            'incoming_id' => 'required_if:type,incoming|exists:incomings,id',
-            'outgoing_id' => 'required_if:type,outgoing|exists:outgoings,id',
+            // 'incoming_id' => 'required_if:type,incoming|exists:incomings,id',
+            // 'outgoing_id' => 'required_if:type,outgoing|exists:outgoings,id',
             'project_id' => 'nullable|exists:projects,id',
             'dealer_id' => 'nullable|exists:dealers,id',
             'sub_contractor_id' => 'nullable|exists:sub_contractors,id',
+            'customer_id' => 'nullable|exists:customers,id',
         ]);
 
         // Additional validation: if project is selected, ensure it's active
