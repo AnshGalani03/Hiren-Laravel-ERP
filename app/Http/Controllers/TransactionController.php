@@ -49,16 +49,16 @@ class TransactionController extends Controller
                 ->addColumn('linked_to', function ($transaction) {
                     $linked = [];
                     if ($transaction->project) {
-                        $linked[] = '<span class="badge bg-primary">Project: ' . $transaction->project->name . '</span>';
+                        $linked[] = '<span class="badge bg-primary link-title">Project: ' . $transaction->project->name . '</span>';
                     }
                     if ($transaction->dealer) {
-                        $linked[] = '<span class="badge bg-info">Dealer: ' . $transaction->dealer->dealer_name . '</span>';
+                        $linked[] = '<span class="badge bg-info link-title">Dealer: ' . $transaction->dealer->dealer_name . '</span>';
                     }
                     if ($transaction->subContractor) {
-                        $linked[] = '<span class="badge bg-warning">Sub-Contractor: ' . $transaction->subContractor->contractor_name . '</span>';
+                        $linked[] = '<span class="badge bg-warning link-title">Sub-Contractor: ' . $transaction->subContractor->contractor_name . '</span>';
                     }
                     if ($transaction->customer) {
-                        $linked[] = '<span class="badge bg-success">Customer: ' . $transaction->customer->name . '</span>';
+                        $linked[] = '<span class="badge bg-success link-title">Customer: ' . $transaction->customer->name . '</span>';
                     }
                     return implode(' ', $linked) ?: 'None';
                 })
