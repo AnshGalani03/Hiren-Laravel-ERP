@@ -141,7 +141,7 @@ Route::middleware('auth')->group(function () {
     Route::post('ra-bills/calculate', [RABillController::class, 'calculateAmounts'])
         ->name('ra-bills.calculate');
 
-    // RA Bill Recovery Route
+    // RA Bill Recovery Routes
     Route::get('ra-bills-trashed', [RABillController::class, 'trashed'])->name('ra-bills.trashed');
     Route::post('ra-bills/{id}/restore', [RABillController::class, 'restore'])->name('ra-bills.restore');
     Route::delete('ra-bills/{id}/force-delete', [RABillController::class, 'forceDelete'])->name('ra-bills.force-delete');
