@@ -387,6 +387,14 @@ class TransactionController extends Controller
             $transaction->delete(); // This will soft delete
             DB::commit();
 
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Transaction moved to trash successfully!"
+                ]);
+            }
+
+            // For non-AJAX requests
             return redirect()
                 ->route('transactions.index')
                 ->with('success', 'Transaction moved to trash You can restore it from the trash.');
@@ -394,6 +402,15 @@ class TransactionController extends Controller
             DB::rollBack();
             // Log::error('Delete error: ' . $e->getMessage());
 
+            // For AJAX requests
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to delete transaction: ' . $e->getMessage()
+                ], 500);
+            }
+
+            // For non-AJAX requests
             return redirect()
                 ->route('transactions.index')
                 ->withErrors(['error' => 'Failed to delete Transaction: ' . $e->getMessage()]);

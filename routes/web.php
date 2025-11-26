@@ -66,6 +66,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('employees', EmployeeController::class);
     Route::get('employees/{employee}/monthly-upads', [UpadController::class, 'monthlyView'])->name('employees.monthly-upads');
     Route::get('employees/{employee}/monthly-overview', [EmployeeController::class, 'monthlyOverview'])->name('employees.monthly-overview');
+    Route::get('employees/{employee}/transactions-data', [EmployeeController::class, 'transactionsData'])
+    ->name('employees.transactions-data');
 
     // Upad Routes
     Route::resource('upads', UpadController::class);

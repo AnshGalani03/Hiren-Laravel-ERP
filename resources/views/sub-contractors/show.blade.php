@@ -369,30 +369,29 @@
             });
 
             // Handle delete button click
-            $(document).on('click', '.delete-transaction', function(e) {
+            $(document).on('click', '.delete-sb-transaction', function(e) {
                 e.preventDefault();
                 var transactionId = $(this).data('id');
 
                 if (confirm('Are you sure you want to delete this transaction?')) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
                     $.ajax({
                         url: '/transactions/' + transactionId,
-                        type: 'DELETE',
+                        type: 'POST',
+                        data: {
+                            _method: 'DELETE',
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        dataType: 'json',
                         success: function(response) {
                             if (response.success) {
-                                transactionsTable.ajax.reload();
                                 alert(response.message);
+                                transactionsTable.ajax.reload();
                             } else {
                                 alert('Error: ' + response.message);
                             }
                         },
                         error: function(xhr) {
-                            console.log('Delete Error:', xhr.responseText);
+                            // console.log('Delete Error:', xhr.responseText);
                             alert('An error occurred while deleting the transaction.');
                         }
                     });

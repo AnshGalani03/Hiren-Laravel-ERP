@@ -103,7 +103,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-3 d-flex align-items-end">
                         <button type="button" class="btn btn-secondary w-100" id="reset_filters">
                             Reset
                         </button>

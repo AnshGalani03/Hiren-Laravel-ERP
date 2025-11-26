@@ -144,4 +144,19 @@ class Employee extends Model
 
         return array_reverse($summary);
     }
+
+    // Transaction relationship
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+
+    // Calculate pending salary
+    public function getPendingSalaryAttribute()
+    {
+        return $this->upads()
+            ->where('payment_status', 'pending')
+            ->sum('total_amount');
+    }
 }

@@ -211,12 +211,9 @@ class SubContractorController extends Controller
                         <a href="' . route('transactions.edit', $transaction) . '" class="btn btn-sm btn-warning">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <form action="' . route('transactions.destroy', $transaction->id) . '" method="POST" style="display:inline;" class="delete-form">
-                            ' . csrf_field() . method_field('DELETE') . '
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure? This will move to trash.\')" title="Delete">
-                                Delete
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-danger btn-sm delete-sb-transaction" data-id="' . $transaction->id . '" title="Delete Transaction">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
                     ';
                 })
                 ->rawColumns(['action', 'type', 'amount'])

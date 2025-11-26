@@ -8,10 +8,10 @@
                 <a href="{{ route('customers.edit', $customer) }}" class="btn btn-warning btn-sm">
                     Edit Customer
                 </a>
-                <a href="{{ route('transactions.create', ['type' => 'incoming']) }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('transactions.create', ['type' => 'incoming']) }}" class="btn btn-primary btn-sm d-none">
                     Add Incoming
                 </a>
-                <a href="{{ route('transactions.create', ['type' => 'outgoing']) }}" class="btn btn-success btn-sm">
+                <a href="{{ route('transactions.create', ['type' => 'outgoing']) }}" class="btn btn-success btn-sm d-none">
                     Add Outgoing
                 </a>
             </div>
@@ -260,6 +260,36 @@
                 $('#total-records').text(data.summary.total_records || 0);
             }
         }
+
+        // Handle delete button click
+        $(document).on('click', '.delete-customer-transaction', function(e) {
+            e.preventDefault();
+            var transactionId = $(this).data('id');
+
+            if (confirm('Are you sure you want to delete this transaction?')) {
+                $.ajax({
+                    url: '/transactions/' + transactionId,
+                    type: 'POST',
+                    data: {
+                        _method: 'DELETE',
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            transactionsTable.ajax.reload();
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        // console.log('Delete Error:', xhr.responseText);
+                        alert('An error occurred while deleting the transaction.');
+                    }
+                });
+            }
+        });
     </script>
     @endpush
 </x-app-layout>
