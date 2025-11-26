@@ -72,6 +72,19 @@
                     </div>
 
                     <div class="col-md-4">
+                        <div class="transactions-filter-wrapper">
+                            <label for="employee_filter" class="form-label">Employee</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="employee_filter">
+                                <option value="">All Employees</option>
+                                @foreach($employees as $employee)
+                                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
                         <label for="type_filter" class="form-label">Type</label>
                         <select class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm form-control" id="type_filter" name="type">
                             <option value="">All Types</option>
@@ -215,6 +228,7 @@
                         d.dealer_id = $('#dealer_filter').val();
                         d.sub_contractor_id = $('#sub_contractor_id').val();
                         d.customer_id = $('#customer_filter').val();
+                        d.employee_id = $('#employee_filter').val();
                         d.type = $('#type_filter').val();
                         d.from_date = $('#daterange').data('daterangepicker').startDate.format('YYYY-MM-DD');
                         d.to_date = $('#daterange').data('daterangepicker').endDate.format('YYYY-MM-DD');
@@ -279,7 +293,7 @@
             });
 
             // Filter event handlers
-            $('#project_filter, #dealer_filter, #type_filter, #sub_contractor_id, #customer_filter').change(function() {
+            $('#project_filter, #dealer_filter, #type_filter, #sub_contractor_id, #customer_filter, #employee_filter').change(function() {
                 table.draw();
                 // table.ajax.reload();
             });
@@ -295,6 +309,7 @@
                 $('#type_filter').val(null).trigger('change');
                 $('#sub_contractor_id').val(null).trigger('change');
                 $('#customer_filter').val(null).trigger('change');
+                $('#employee_filter').val(null).trigger('change');
 
                 // Reset date range to last 30 days
                 var start = moment().subtract(30, 'days');

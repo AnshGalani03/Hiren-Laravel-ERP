@@ -20,6 +20,7 @@ class Transaction extends Model
         'dealer_id',
         'sub_contractor_id',
         'customer_id',
+        'employee_id',
         'incoming_id',
         'outgoing_id'
     ];
@@ -46,7 +47,10 @@ class Transaction extends Model
     {
         return $this->belongsTo(SubContractor::class);
     }
-
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
     public function incoming()
     {
         return $this->belongsTo(Incoming::class);

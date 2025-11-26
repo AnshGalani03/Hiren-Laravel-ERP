@@ -9,6 +9,7 @@ use App\Models\SubContractor;
 use App\Models\Incoming;
 use App\Models\Customer;
 use App\Models\Outgoing;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -24,7 +25,7 @@ class TransactionController extends Controller
     {
         if ($request->ajax()) {
             // Base query - start fresh
-            $query = Transaction::with(['project', 'dealer', 'subContractor', 'customer', 'incoming', 'outgoing']);
+            $query = Transaction::with(['project', 'dealer', 'subContractor', 'customer', 'employee', 'incoming', 'outgoing']);
 
             // Apply filters consistently
             $query = $this->applyFilters($query, $request);
@@ -60,6 +61,9 @@ class TransactionController extends Controller
                     if ($transaction->customer) {
                         $linked[] = '<span class="badge bg-success link-title">Customer: ' . $transaction->customer->name . '</span>';
                     }
+                    if ($transaction->employee) {
+                        $linked[] = '<span class="badge bg-secondary link-title">Employee: ' . $transaction->employee->name . '</span>';
+                    }
                     return implode(' ', $linked) ?: 'None';
                 })
                 ->editColumn('type', function ($transaction) {
@@ -86,9 +90,10 @@ class TransactionController extends Controller
         $projects = Project::where('active', true)->orderBy('name')->get();
         $dealers = Dealer::orderBy('dealer_name')->get();
         $subContractors = SubContractor::orderBy('contractor_name')->get();
+        $employees = Employee::orderBy('name')->get();
         $customers = Customer::orderBy('name')->get();
 
-        return view('transactions.index', compact('projects', 'dealers', 'subContractors', 'customers'));
+        return view('transactions.index', compact('projects', 'dealers', 'subContractors', 'employees', 'customers'));
     }
 
     // Show Trashed (Deleted) Transactions
@@ -97,7 +102,7 @@ class TransactionController extends Controller
         if ($request->ajax()) {
             try {
                 $trashedTransactions = Transaction::onlyTrashed() // Only show soft deleted records
-                    ->with(['project', 'dealer', 'subContractor', 'customer', 'incoming', 'outgoing'])
+                    ->with(['project', 'dealer', 'subContractor', 'customer', 'incoming', 'outgoing', 'employee'])
                     ->select([
                         'id',
                         'type',
@@ -109,11 +114,13 @@ class TransactionController extends Controller
                         'sub_contractor_id',
                         'customer_id',
                         'incoming_id',
+                        'employee_id',
                         'outgoing_id',
                         'deleted_at'
                     ]);
 
                 return DataTables::of($trashedTransactions)
+                    ->addIndexColumn() // Add index column
                     ->editColumn('date', function ($transaction) {
                         return $transaction->date ? $transaction->date->format('d/m/Y') : '';
                     })
@@ -146,6 +153,9 @@ class TransactionController extends Controller
                         if ($transaction->customer) {
                             $linked[] = 'Customer: ' . $transaction->customer->name;
                         }
+                        if ($transaction->employee) {
+                            $linked[] = 'Employee: ' . $transaction->employee->name;
+                        }
                         return implode(', ', $linked) ?: 'None';
                     })
                     ->editColumn('type', function ($transaction) {
@@ -169,7 +179,7 @@ class TransactionController extends Controller
                         </div>
                         ';
                     })
-                    ->rawColumns(['action', 'amount'])
+                    ->rawColumns(['action', 'amount', 'linked_to', 'type'])
                     ->make(true);
             } catch (\Exception $e) {
                 // Log::error('Trashed DataTable error: ' . $e->getMessage());
@@ -246,6 +256,11 @@ class TransactionController extends Controller
             $query->where('type', $request->type);
         }
 
+        // Employee Filter
+        if ($request->filled('employee_id') && $request->employee_id !== '' && $request->employee_id !== 'all') {
+            $query->where('employee_id', $request->employee_id);
+        }
+
         // Date range filter
         if ($request->filled('from_date') && $request->filled('to_date')) {
             try {
@@ -265,12 +280,13 @@ class TransactionController extends Controller
         $type = $request->get('type', 'incoming');
         $projects = Project::where('active', true)->orderBy('name')->get();
         $dealers = Dealer::orderBy('dealer_name')->get();
-        $subContractors = SubContractor::orderBy('contractor_name')->get(); // Add this
+        $subContractors = SubContractor::orderBy('contractor_name')->get();
+        $employees = Employee::orderBy('name')->get();
         $customers = Customer::orderBy('name')->get();
         $incomings = Incoming::all();
         $outgoings = Outgoing::all();
 
-        return view('transactions.create', compact('type', 'projects', 'dealers', 'subContractors', 'customers', 'incomings', 'outgoings'));
+        return view('transactions.create', compact('type', 'projects', 'dealers', 'subContractors', 'employees', 'customers', 'incomings', 'outgoings'));
     }
 
     public function store(Request $request)
@@ -284,7 +300,8 @@ class TransactionController extends Controller
             'outgoing_id' => 'required_if:type,outgoing|exists:outgoings,id',
             'project_id' => 'nullable|exists:projects,id',
             'dealer_id' => 'nullable|exists:dealers,id',
-            'sub_contractor_id' => 'nullable|exists:sub_contractors,id', // Add this
+            'employee_id' => 'nullable|exists:employees,id',
+            'sub_contractor_id' => 'nullable|exists:sub_contractors,id',
             'customer_id' => 'nullable|exists:customers,id',
         ]);
 
@@ -306,10 +323,11 @@ class TransactionController extends Controller
         $dealers = Dealer::orderBy('dealer_name')->get();
         $subContractors = SubContractor::orderBy('contractor_name')->get();
         $customers = Customer::orderBy('name')->get();
+        $employees = Employee::orderBy('name')->get();
         $incomings = Incoming::all();
         $outgoings = Outgoing::all();
 
-        return view('transactions.edit', compact('transaction', 'projects', 'dealers', 'subContractors', 'customers', 'incomings', 'outgoings'));
+        return view('transactions.edit', compact('transaction', 'projects', 'dealers', 'subContractors', 'employees', 'customers', 'incomings', 'outgoings'));
     }
 
     public function update(Request $request, Transaction $transaction)
@@ -323,6 +341,7 @@ class TransactionController extends Controller
             // 'outgoing_id' => 'required_if:type,outgoing|exists:outgoings,id',
             'project_id' => 'nullable|exists:projects,id',
             'dealer_id' => 'nullable|exists:dealers,id',
+            'employee_id' => 'nullable|exists:employees,id',
             'sub_contractor_id' => 'nullable|exists:sub_contractors,id',
             'customer_id' => 'nullable|exists:customers,id',
         ]);

@@ -169,6 +169,23 @@
                                 </div>
                             </div>
 
+
+                            <div class="col-md-6 mb-3">
+                                <div class="transactions-filter-wrapper">
+                                    <label for="employee_id" class="form-label">Employee (Optional)</label>
+                                    <select class="form-select @error('employee_id') is-invalid @enderror" id="employee_id" name="employee_id">
+                                        <option value="">Select Employee</option>
+                                        @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}" {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
+                                            {{ $employee->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                            </div>
+
+
                         </div>
                     </div>
                 </div>

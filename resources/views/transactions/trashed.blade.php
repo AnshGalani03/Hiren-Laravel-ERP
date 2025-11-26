@@ -22,12 +22,14 @@
                     <table id="trashed-transactions-table" class="table table-bordered" style="width:100%">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th>Date</th>
+                                <th>Sr. No</th>
+                                <!-- <th>Date</th> -->
                                 <th>Type</th>
-                                <th>Description</th>
+                                <!-- <th>Description</th> -->
                                 <th>Category</th>
+                                <th>Linked To</th>
                                 <th>Amount</th>
-                                <!-- <th>Linked To</th> -->
+                                
                                 <th>Deleted At</th>
                                 <th>Actions</th>
                             </tr>
@@ -49,46 +51,53 @@
                 autoWidth: false,
                 ajax: "{{ route('transactions.trashed') }}",
                 columns: [{
-                        data: 'date',
-                        name: 'date',
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
                         responsivePriority: 1
                     },
+                    // {
+                    //     data: 'date',
+                    //     name: 'date'
+                    // },
                     {
                         data: 'type',
                         name: 'type',
-                        responsivePriority: 1
-                    },
-                    {
-                        data: 'description',
-                        name: 'description',
-                        responsivePriority: 4
+                         responsivePriority: 2
                     },
                     {
                         data: 'category',
                         name: 'category',
                         responsivePriority: 3
                     },
+                    // {
+                    //     data: 'description',
+                    //     name: 'description'
+                    // },
+                    {
+                        data: 'linked_to',
+                        name: 'linked_to',
+                        orderable: false,
+                        searchable: false,
+                        responsivePriority: 4
+                    },
                     {
                         data: 'amount',
                         name: 'amount',
-                        responsivePriority: 2
+                        responsivePriority: 5
                     },
-                    // {
-                    //     data: 'linked_to',
-                    //     name: 'linked_to',
-                    //     responsivePriority: 6
-                    // },
                     {
                         data: 'deleted_at',
                         name: 'deleted_at',
-                        responsivePriority: 7
+                        responsivePriority: 6
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false,
-                        responsivePriority: 1
+                        responsivePriority: 2
                     }
                 ],
                 order: [

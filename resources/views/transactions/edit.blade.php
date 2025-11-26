@@ -147,6 +147,23 @@
                             </div>
                         </div>
 
+                        {{-- 🔥 ADDED: Employee Selection --}}
+                        <div class="col-md-6">
+                            <div class="transactions-filter-wrapper">
+                                <label for="employee_id" class="form-label">Employee</label>
+                                <select class="form-select @error('employee_id') is-invalid @enderror" id="employee_id" name="employee_id">
+                                    <option value="">Select Employee</option>
+                                    @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}"
+                                        {{ old('employee_id', $transaction->employee_id) == $employee->id ? 'selected' : '' }}>
+                                        {{ $employee->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+
                     </div>
 
                     <div class="mb-3">
