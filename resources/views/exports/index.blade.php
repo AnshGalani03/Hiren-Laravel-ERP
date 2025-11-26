@@ -5,8 +5,8 @@
         </h2>
     </x-slot>
 
-    <div class="row" style="row-gap: 30px;">
-        <div class="col-lg-6">
+    <div class="row justify-content-center" style="row-gap: 30px;">
+        <div class="col-lg-6 d-none">
             <!-- Employee Upad Report -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
@@ -79,7 +79,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+
+        <div class="col-lg-10">
             <!-- Transactions Report -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
@@ -94,8 +95,8 @@
                         @csrf
 
                         <!-- First Row: Type, Project, Dealer, Sub-Contractor -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <div class="mb-2">
+                        <div class="row gy-3">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
                                 <label for="trans_type" class="block text-sm font-medium text-gray-700 mb-2">
                                     Transaction Type
                                 </label>
@@ -107,7 +108,7 @@
                                 </select>
                             </div>
 
-                            <div class="mb-2">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
                                 <label for="trans_project" class="block text-sm font-medium text-gray-700 mb-2">
                                     Project
                                 </label>
@@ -122,7 +123,7 @@
                                 </div>
                             </div>
 
-                            <div class="mb-2">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
                                 <label for="trans_dealer" class="block text-sm font-medium text-gray-700 mb-2">
                                     Dealer
                                 </label>
@@ -137,7 +138,7 @@
                                 </div>
                             </div>
 
-                            <div class="mb-2">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
                                 <label for="trans_sub_contractor" class="block text-sm font-medium text-gray-700 mb-2">
                                     Sub-Contractor
                                 </label>
@@ -151,11 +152,37 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Second Row: Date Range and Export Button -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="mb-2">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <label for="trans_customer" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Customer
+                                </label>
+                                <div class="product-list">
+                                    <select name="customer_id" id="trans_customer"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                        <option value="">All Customers</option>
+                                        @foreach(\App\Models\Customer::orderBy('name')->get() as $customer)
+                                        <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <label for="trans_employee" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Employee
+                                </label>
+                                <div class="product-list">
+                                    <select name="employee_id" id="trans_employee"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                        <option value="">All Employees</option>
+                                        @foreach(\App\Models\Employee::orderBy('name')->get() as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
                                 <label for="trans_start_date" class="block text-sm font-medium text-gray-700 mb-2">
                                     Start Date <span class="text-red-500">*</span>
                                 </label>
@@ -163,7 +190,7 @@
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
                             </div>
 
-                            <div class="mb-2">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
                                 <label for="trans_end_date" class="block text-sm font-medium text-gray-700 mb-2">
                                     End Date <span class="text-red-500">*</span>
                                 </label>
@@ -202,7 +229,7 @@
 
 
     <!-- Success/Error Messages -->
-    <div id="successMessage" class="hidden fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg shadow-lg z-50">
+    <div id="successMessage" class="hidden fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg shadow-lg z-50 d-none">
         <div class="flex items-center">
             <i class="fas fa-check-circle mr-2"></i>
             <span>Report generated successfully!</span>
@@ -363,12 +390,12 @@
             const errorMsg = document.getElementById('errorMessage');
 
             if (type === 'success') {
-                successMsg.classList.remove('hidden');
+                // successMsg.classList.remove('hidden');
                 setTimeout(() => {
                     successMsg.classList.add('hidden');
                 }, 4000);
             } else {
-                errorMsg.classList.remove('hidden');
+                // errorMsg.classList.remove('hidden');
                 setTimeout(() => {
                     errorMsg.classList.add('hidden');
                 }, 4000);

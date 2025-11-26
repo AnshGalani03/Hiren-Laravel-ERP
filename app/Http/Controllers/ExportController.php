@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\Project;
 use App\Models\Dealer;
 use App\Models\SubContractor;
+use App\Models\Customer;
 
 class ExportController extends Controller
 {
@@ -25,7 +26,8 @@ class ExportController extends Controller
         $projects = Project::orderBy('name')->get();
         $dealers = Dealer::orderBy('dealer_name')->get();
         $subContractors = SubContractor::orderBy('contractor_name')->get();
-        return view('exports.index', compact('employees', 'projects', 'dealers', 'subContractors'));
+        $customers = Customer::orderBy('name')->get();
+        return view('exports.index', compact('employees', 'projects', 'dealers', 'subContractors', 'customers'));
     }
 
     /**
@@ -102,6 +104,26 @@ class ExportController extends Controller
     }
 
     /**
+     * Show Transactions Report Form
+     */
+    public function transactionsReport()
+    {
+        $projects = Project::orderBy('name')->get();
+        $dealers = Dealer::orderBy('dealer_name')->get();
+        $subContractors = SubContractor::orderBy('contractor_name')->get();
+        $customers = Customer::orderBy('name')->get(); // 🔥 ADDED
+        $employees = Employee::orderBy('name')->get(); // 🔥 ADDED
+
+        return view('exports.transactions-report', compact(
+            'projects',
+            'dealers',
+            'subContractors',
+            'customers', // 🔥 ADDED
+            'employees'  // 🔥 ADDED
+        ));
+    }
+
+    /**
      * Export Transactions Report
      */
     public function exportTransactionsReport(Request $request)
@@ -114,6 +136,8 @@ class ExportController extends Controller
                 'project_id' => 'nullable|exists:projects,id',
                 'dealer_id' => 'nullable|exists:dealers,id',          // Add dealer validation
                 'sub_contractor_id' => 'nullable|exists:sub_contractors,id', // Add sub-contractor validation
+                'customer_id' => 'nullable|exists:customers,id', // 🔥 ADDED
+                'employee_id' => 'nullable|exists:employees,id', // 🔥 ADDED
             ]);
 
             // Add small delay for progress demo
@@ -125,7 +149,7 @@ class ExportController extends Controller
             $endDate = Carbon::parse($request->end_date);
 
             // Build query with relationships loaded
-            $query = Transaction::with(['incoming', 'outgoing', 'project', 'dealer', 'subContractor'])
+            $query = Transaction::with(['incoming', 'outgoing', 'project', 'dealer', 'subContractor', 'customer', 'employee'])
                 ->whereBetween('date', [$startDate, $endDate]);
 
             // Filter by type
@@ -154,6 +178,20 @@ class ExportController extends Controller
                 $subContractor = \App\Models\SubContractor::find($request->sub_contractor_id);
             }
 
+            // Customer filter
+            $customer = null;
+            if ($request->filled('customer_id')) {
+                $query->where('customer_id', $request->customer_id);
+                $customer = \App\Models\Customer::find($request->customer_id);
+            }
+
+            // Employee filter
+            $employee = null;
+            if ($request->filled('employee_id')) {
+                $query->where('employee_id', $request->employee_id);
+                $employee = \App\Models\Employee::find($request->employee_id);
+            }
+
             // Build title based on filters
             $titleParts = [];
             if ($request->type) {
@@ -163,15 +201,21 @@ class ExportController extends Controller
             }
             $titleParts[] = 'Transactions';
 
-            if ($project) {
-                $titleParts[] = '- ' . $project->name;
-            }
-            if ($dealer) {
-                $titleParts[] = '- ' . $dealer->dealer_name; // Changed to dealer_name
-            }
-            if ($subContractor) {
-                $titleParts[] = '- ' . $subContractor->contractor_name; // Changed to contractor_name
-            }
+            // if ($project) {
+            //     $titleParts[] = '- (Porject) ' . $project->name;
+            // }
+            // if ($dealer) {
+            //     $titleParts[] = '- (Dealer) ' . $dealer->dealer_name;
+            // }
+            // if ($subContractor) {
+            //     $titleParts[] = '- (Sub-Contractor) ' . $subContractor->contractor_name;
+            // }
+            // if ($customer) {
+            //     $titleParts[] = '- (Customer) ' . $customer->name;
+            // }
+            // if ($employee) {
+            //     $titleParts[] = '- (Employee) ' . $employee->name;
+            // }
 
             $title = implode(' ', $titleParts) . ' Report';
 
@@ -191,6 +235,8 @@ class ExportController extends Controller
                 'project' => $project,
                 'dealer' => $dealer,
                 'sub_contractor' => $subContractor,
+                'customer' => $customer,
+                'employee' => $employee,
                 'total_incoming' => $totalIncoming,
                 'total_outgoing' => $totalOutgoing,
                 'net_amount' => $netAmount,
@@ -214,6 +260,12 @@ class ExportController extends Controller
             }
             if ($subContractor) {
                 $filename .= '-' . Str::slug($subContractor->contractor_name);
+            }
+            if ($customer) {
+                $filename .= '-' . Str::slug($customer->name);
+            }
+            if ($employee) {
+                $filename .= '-' . Str::slug($employee->name);
             }
             $filename .= '.pdf';
 

@@ -56,7 +56,7 @@ class TransactionController extends Controller
                         $linked[] = '<span class="badge bg-info link-title">Dealer: ' . $transaction->dealer->dealer_name . '</span>';
                     }
                     if ($transaction->subContractor) {
-                        $linked[] = '<span class="badge bg-warning link-title">Sub-Contractor: ' . $transaction->subContractor->contractor_name . '</span>';
+                        $linked[] = '<span class="badge bg-warning link-title">Sub-Con: ' . $transaction->subContractor->contractor_name . '</span>';
                     }
                     if ($transaction->customer) {
                         $linked[] = '<span class="badge bg-success link-title">Customer: ' . $transaction->customer->name . '</span>';
