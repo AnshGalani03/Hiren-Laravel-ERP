@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 16, 2025 at 11:00 AM
--- Server version: 8.3.0
--- PHP Version: 8.2.18
+-- Generation Time: Nov 27, 2025 at 10:13 AM
+-- Server version: 9.1.0
+-- PHP Version: 8.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,15 +30,15 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `bills`;
 CREATE TABLE IF NOT EXISTS `bills` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `bill_number` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bill_number` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `customer_id` bigint UNSIGNED DEFAULT NULL,
   `bill_date` date NOT NULL,
   `subtotal` decimal(15,2) NOT NULL DEFAULT '0.00',
   `tax_rate` decimal(5,2) NOT NULL DEFAULT '0.00',
   `tax_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
   `total_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `notes` text COLLATE utf8mb4_unicode_ci,
-  `status` enum('draft','sent','paid') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `status` enum('draft','sent','paid') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
   `is_gst` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -76,8 +76,8 @@ CREATE TABLE IF NOT EXISTS `bill_items` (
 
 DROP TABLE IF EXISTS `cache`;
 CREATE TABLE IF NOT EXISTS `cache` (
-  `key` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -98,8 +98,8 @@ INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
 
 DROP TABLE IF EXISTS `cache_locks`;
 CREATE TABLE IF NOT EXISTS `cache_locks` (
-  `key` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -113,11 +113,11 @@ CREATE TABLE IF NOT EXISTS `cache_locks` (
 DROP TABLE IF EXISTS `customers`;
 CREATE TABLE IF NOT EXISTS `customers` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `address` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `gst` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `pan_card` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone_no` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gst` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pan_card` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone_no` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -132,10 +132,10 @@ CREATE TABLE IF NOT EXISTS `customers` (
 DROP TABLE IF EXISTS `dealers`;
 CREATE TABLE IF NOT EXISTS `dealers` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `dealer_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `mobile_no` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `gst` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dealer_name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mobile_no` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gst` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -152,11 +152,11 @@ DROP TABLE IF EXISTS `dealer_bank_accounts`;
 CREATE TABLE IF NOT EXISTS `dealer_bank_accounts` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `dealer_id` bigint UNSIGNED NOT NULL,
-  `account_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `account_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `bank_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ifsc` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `notes` text COLLATE utf8mb4_unicode_ci,
+  `account_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `account_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bank_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ifsc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -172,18 +172,18 @@ CREATE TABLE IF NOT EXISTS `dealer_bank_accounts` (
 DROP TABLE IF EXISTS `employees`;
 CREATE TABLE IF NOT EXISTS `employees` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `designation` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `mobile_no` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `alt_contact_no` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `pan_no` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `aadhar_no` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `designation` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mobile_no` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `alt_contact_no` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pan_no` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `aadhar_no` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `salary` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `pf` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `esic` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `bank_name` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `account_no` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ifsc` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pf` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `esic` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bank_name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `account_no` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ifsc` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -230,11 +230,11 @@ CREATE TABLE IF NOT EXISTS `expenses` (
 DROP TABLE IF EXISTS `failed_jobs`;
 CREATE TABLE IF NOT EXISTS `failed_jobs` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 DROP TABLE IF EXISTS `incomings`;
 CREATE TABLE IF NOT EXISTS `incomings` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -276,12 +276,12 @@ DROP TABLE IF EXISTS `invoices`;
 CREATE TABLE IF NOT EXISTS `invoices` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `dealer_id` bigint UNSIGNED NOT NULL,
-  `bill_no` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bill_no` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `original_amount` decimal(12,2) NOT NULL,
   `gst_rate` decimal(5,2) NOT NULL DEFAULT '18.00',
   `date` date NOT NULL,
-  `remark` text COLLATE utf8mb4_unicode_ci,
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -299,8 +299,8 @@ CREATE TABLE IF NOT EXISTS `invoices` (
 DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE IF NOT EXISTS `jobs` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `queue` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `attempts` tinyint UNSIGNED NOT NULL,
   `reserved_at` int UNSIGNED DEFAULT NULL,
   `available_at` int UNSIGNED NOT NULL,
@@ -317,13 +317,13 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 
 DROP TABLE IF EXISTS `job_batches`;
 CREATE TABLE IF NOT EXISTS `job_batches` (
-  `id` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `total_jobs` int NOT NULL,
   `pending_jobs` int NOT NULL,
   `failed_jobs` int NOT NULL,
-  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `options` mediumtext COLLATE utf8mb4_unicode_ci,
+  `failed_job_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `cancelled_at` int DEFAULT NULL,
   `created_at` int NOT NULL,
   `finished_at` int DEFAULT NULL,
@@ -339,10 +339,10 @@ CREATE TABLE IF NOT EXISTS `job_batches` (
 DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE IF NOT EXISTS `migrations` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `migration` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -400,7 +400,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (54, '2025_10_03_085631_update_contractor_type_column_final', 27),
 (55, '2025_10_03_095118_add_soft_deletes_to_transactions_table', 28),
 (56, '2025_10_04_064905_add_soft_deletes_to_invoices_table', 29),
-(57, '2025_10_16_050902_add_customer_id_to_transactions_table', 30);
+(57, '2025_10_16_050902_add_customer_id_to_transactions_table', 30),
+(58, '2025_11_26_051553_add_employee_id_to_transactions_table', 31);
 
 -- --------------------------------------------------------
 
@@ -411,7 +412,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 DROP TABLE IF EXISTS `outgoings`;
 CREATE TABLE IF NOT EXISTS `outgoings` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -440,8 +441,8 @@ INSERT INTO `outgoings` (`id`, `name`, `created_at`, `updated_at`) VALUES
 
 DROP TABLE IF EXISTS `password_reset_tokens`;
 CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
-  `email` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -455,8 +456,8 @@ CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
 DROP TABLE IF EXISTS `products`;
 CREATE TABLE IF NOT EXISTS `products` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `product_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `hsn_code` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `product_name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `hsn_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -472,15 +473,15 @@ CREATE TABLE IF NOT EXISTS `products` (
 DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `department_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `department_name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount_project` decimal(12,2) NOT NULL,
-  `percentage` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `percentage` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `final_project_amount` decimal(15,2) DEFAULT NULL,
-  `time_limit` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `emd_fdr_detail` text COLLATE utf8mb4_unicode_ci,
+  `time_limit` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `emd_fdr_detail` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `work_order_date` date DEFAULT NULL,
-  `remark` text COLLATE utf8mb4_unicode_ci,
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -518,7 +519,7 @@ CREATE TABLE IF NOT EXISTS `project_expenses` (
   `outgoing_id` bigint UNSIGNED NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `date` date NOT NULL,
-  `remark` text COLLATE utf8mb4_unicode_ci,
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -539,7 +540,7 @@ CREATE TABLE IF NOT EXISTS `project_incomes` (
   `incoming_id` bigint UNSIGNED NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `date` date NOT NULL,
-  `remark` text COLLATE utf8mb4_unicode_ci,
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -556,7 +557,7 @@ CREATE TABLE IF NOT EXISTS `project_incomes` (
 DROP TABLE IF EXISTS `r_a_bills`;
 CREATE TABLE IF NOT EXISTS `r_a_bills` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `bill_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bill_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` date NOT NULL,
   `customer_id` bigint UNSIGNED NOT NULL,
   `project_id` bigint UNSIGNED DEFAULT NULL,
@@ -589,11 +590,11 @@ CREATE TABLE IF NOT EXISTS `r_a_bills` (
 
 DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE IF NOT EXISTS `sessions` (
-  `id` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint UNSIGNED DEFAULT NULL,
-  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_agent` text COLLATE utf8mb4_unicode_ci,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip_address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_activity` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sessions_user_id_index` (`user_id`),
@@ -609,17 +610,17 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 DROP TABLE IF EXISTS `sub_contractors`;
 CREATE TABLE IF NOT EXISTS `sub_contractors` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `contractor_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contractor_type` enum('self','agency') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `agency_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contractor_name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contractor_type` enum('self','agency') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `agency_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` date NOT NULL,
-  `project_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `department_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `project_name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `department_name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount_project` decimal(12,2) NOT NULL,
-  `time_limit` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `emd_fdr_detail` text COLLATE utf8mb4_unicode_ci,
+  `time_limit` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `emd_fdr_detail` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `work_order_date` date DEFAULT NULL,
-  `remark` text COLLATE utf8mb4_unicode_ci,
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -635,11 +636,11 @@ CREATE TABLE IF NOT EXISTS `sub_contractors` (
 DROP TABLE IF EXISTS `sub_contractor_bills`;
 CREATE TABLE IF NOT EXISTS `sub_contractor_bills` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `bill_no` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bill_no` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sub_contractor_id` bigint UNSIGNED NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `date` date NOT NULL,
-  `remark` text COLLATE utf8mb4_unicode_ci,
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -655,15 +656,15 @@ CREATE TABLE IF NOT EXISTS `sub_contractor_bills` (
 DROP TABLE IF EXISTS `tenders`;
 CREATE TABLE IF NOT EXISTS `tenders` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `work_name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `department` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `work_name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `department` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount_emd_fdr` decimal(10,2) NOT NULL,
   `amount_dd` decimal(10,2) NOT NULL,
-  `above_below` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remark` text COLLATE utf8mb4_unicode_ci,
-  `return_detail` text COLLATE utf8mb4_unicode_ci,
+  `above_below` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `return_detail` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `date` date NOT NULL,
-  `result` varchar(125) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `result` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -678,17 +679,18 @@ CREATE TABLE IF NOT EXISTS `tenders` (
 DROP TABLE IF EXISTS `transactions`;
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `type` enum('incoming','outgoing') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('incoming','outgoing') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `project_id` bigint UNSIGNED DEFAULT NULL,
   `dealer_id` bigint UNSIGNED DEFAULT NULL,
   `sub_contractor_id` bigint UNSIGNED DEFAULT NULL,
   `customer_id` bigint UNSIGNED DEFAULT NULL,
+  `employee_id` bigint UNSIGNED DEFAULT NULL,
   `incoming_id` bigint UNSIGNED DEFAULT NULL,
   `outgoing_id` bigint UNSIGNED DEFAULT NULL,
   `amount` decimal(10,2) NOT NULL,
   `date` date NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
-  `remark` text COLLATE utf8mb4_unicode_ci,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -698,7 +700,8 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   KEY `transactions_incoming_id_foreign` (`incoming_id`),
   KEY `transactions_outgoing_id_foreign` (`outgoing_id`),
   KEY `transactions_sub_contractor_id_foreign` (`sub_contractor_id`),
-  KEY `transactions_customer_id_foreign` (`customer_id`)
+  KEY `transactions_customer_id_foreign` (`customer_id`),
+  KEY `transactions_employee_id_foreign` (`employee_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -716,7 +719,7 @@ CREATE TABLE IF NOT EXISTS `upads` (
   `salary_paid` tinyint(1) NOT NULL DEFAULT '0',
   `upad` decimal(10,2) NOT NULL,
   `upad_paid` tinyint(1) NOT NULL DEFAULT '0',
-  `remark` text COLLATE utf8mb4_unicode_ci,
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -732,11 +735,11 @@ CREATE TABLE IF NOT EXISTS `upads` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(125) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
